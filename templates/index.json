@@ -101,7 +101,7 @@
       "type": "dk-navratri-edit",
       "settings": {
         "eyebrow": "✦ THE FESTIVE COLLECTION ✦",
-        "heading": "A Little More Colour.<br class=\"dk-ne__br\"> <em>A Little More Celebration.</em>",
+        "heading": "A Little More Colour. A Little More Celebration.",
         "subheading": "",
         "btn_text": "EXPLORE FESTIVE COLLECTION →",
         "btn_link": "/collections/all",
@@ -184,7 +184,7 @@
       "type": "dk-why-delisha",
       "settings": {
         "eyebrow": "✦ THE DELISHA PROMISE ✦",
-        "heading": "Not Just Made.<br> <em>Made Meaningful.</em>",
+        "heading": "Not Just Made. Made Meaningful.",
         "description": "Every Delisha Karigari piece begins with a celebration in mind — a doorway waiting to be adorned, a gift waiting to be opened, or a moment waiting to be remembered.",
         "bg_color": "#FFFFFF",
         "p1_title": "Thoughtfully Designed",
@@ -201,7 +201,7 @@
       "type": "dk-numbers",
       "settings": {
         "eyebrow": "✦ CRAFTED WITH LOVE & TRUST ✦",
-        "heading": "Little Things We’ve Made.<br> <em>Big Moments We’ve Been Part Of.</em>",
+        "heading": "Little Things We’ve Made. Big Moments We’ve Been Part Of.",
         "subheading": "Every number represents a celebration touched by our hands and cherished in a home.",
         "bg_color": "#FAF6F0",
         "stat_1_num": 1000,
@@ -235,8 +235,8 @@
       "type": "dk-local-trust",
       "settings": {
         "eyebrow": "CRAFTED IN DELHI · SENT ACROSS INDIA",
-        "heading": "Made in Delhi.<br> <em>Meant for celebrations everywhere.</em>",
-        "copy": "From our Delhi workspace, every Delisha Karigari piece begins with an eye for detail and a love for Indian celebrations. Our collections bring together handmade décor, thoughtful gifting and festive traditions—carefully prepared and packed for homes across India.",
+        "heading": "Made in Delhi. Meant for celebrations everywhere.",
+        "copy": "From our Delhi workspace, every Delisha Karigari piece begins with an eye for detail and a love for Indian celebrations.",
         "trust_line": "A Delhi-rooted brand, creating for celebrations across India.",
         "address_line1": "DELISHA KARIGARI",
         "address_line2": "New Delhi, Delhi, India",

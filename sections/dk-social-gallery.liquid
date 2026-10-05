@@ -459,66 +459,7 @@
   }
 </style>
 
-<script>
-  (function() {
-    var grid = document.getElementById('dkSocialGrid-{{ section.id }}');
-    if (!grid) return;
-
-    var feedUrl = grid.getAttribute('data-feed-url');
-    var handle = grid.getAttribute('data-ig-handle') || 'delishakarigari';
-
-    if (feedUrl && feedUrl.trim() !== '') {
-      fetch(feedUrl)
-        .then(function(res) {
-          if (!res.ok) throw new Error('Feed fetch failed');
-          return res.json();
-        })
-        .then(function(data) {
-          var posts = [];
-          if (Array.isArray(data)) {
-            posts = data;
-          } else if (data.data && Array.isArray(data.data)) {
-            posts = data.data;
-          } else if (data.posts && Array.isArray(data.posts)) {
-            posts = data.posts;
-          }
-
-          if (posts.length > 0) {
-            var html = '';
-            var count = Math.min(posts.length, 6);
-
-            for (var i = 0; i < count; i++) {
-              var p = posts[i];
-              var imgUrl = p.mediaUrl || p.media_url || p.thumbnailUrl || p.thumbnail_url || (p.images && p.images.standard_resolution && p.images.standard_resolution.url);
-              var permalink = p.permalink || p.link || ('https://www.instagram.com/' + handle + '/');
-              var caption = p.caption || p.text || 'Delisha Karigari Instagram Post';
-
-              if (!imgUrl) continue;
-
-              html += '<a href="' + permalink + '" target="_blank" rel="noopener noreferrer" class="dk-ig-card" aria-label="View post on Instagram">';
-              html += '  <div class="dk-ig-card__frame">';
-              html += '    <img src="' + imgUrl + '" alt="' + caption.replace(/"/g, '&quot;').slice(0, 80) + '" class="dk-ig-card__img" loading="lazy" width="600" height="600">';
-              html += '    <div class="dk-ig-card__overlay">';
-              html += '      <span class="dk-ig-card__icon-ring">';
-              html += '        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>';
-              html += '      </span>';
-              html += '      <span class="dk-ig-card__btn-pill">VIEW POST &nearr;</span>';
-              html += '    </div>';
-              html += '  </div>';
-              html += '</a>';
-            }
-
-            if (html !== '') {
-              grid.innerHTML = html;
-            }
-          }
-        })
-        .catch(function(err) {
-          console.warn('Delisha Karigari live Instagram feed notice:', err);
-        });
-    }
-  })();
-</script>
+<script src="{{ 'dk-social-gallery.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {

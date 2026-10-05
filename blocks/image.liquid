@@ -1,0 +1,16 @@
+{% if block.settings.image != blank %}
+  <img src="{{ block.settings.image | image_url: width: 1200 }}" alt="{{ block.settings.image.alt | default: 'Custom Image' | escape }}" loading="lazy" width="1200" height="800" style="max-width: 100%; height: auto; border-radius: 8px;">
+{% endif %}
+
+{% schema %}
+{
+  "name": "Custom Image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Select Image"
+    }
+  ]
+}
+{% endschema %}

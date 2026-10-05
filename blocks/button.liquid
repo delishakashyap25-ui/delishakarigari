@@ -1,0 +1,36 @@
+{% if block.settings.btn_link != blank and block.settings.btn_text != blank %}
+  <a href="{{ block.settings.btn_link }}" class="btn custom-btn-block" style="background-color: {{ block.settings.btn_bg_color }}; color: {{ block.settings.btn_text_color }}; margin: 10px 0;">
+    {{ block.settings.btn_text }}
+  </a>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Custom Button",
+  "settings": [
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg_color",
+      "label": "Background Color",
+      "default": "#caa25d"
+    },
+    {
+      "type": "color",
+      "id": "btn_text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    }
+  ]
+}
+{% endschema %}

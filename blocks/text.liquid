@@ -1,0 +1,23 @@
+<div class="custom-text-block" style="color: {{ block.settings.text_color }}; margin-bottom: 15px;">
+  {{ block.settings.text }}
+</div>
+
+{% schema %}
+{
+  "name": "Custom Text",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text Content",
+      "default": "<p>Add your custom text here.</p>"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#333333"
+    }
+  ]
+}
+{% endschema %}

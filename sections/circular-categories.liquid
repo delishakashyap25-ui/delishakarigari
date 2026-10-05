@@ -1,0 +1,174 @@
+<div class="circular-categories-section padding-{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
+  <div class="circular-container">
+    <div class="circular-scroll-wrapper">
+      {% for block in section.blocks %}
+        <div class="circular-item" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.link | default: '#' }}" class="circular-link">
+            <div class="circular-image-wrap">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.title | escape }}" loading="lazy" width="300" height="300">
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+            <span class="circular-title">{{ block.settings.title }}</span>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+.circular-categories-section {
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+  border-bottom: 1px solid #eaeaea;
+}
+.circular-container {
+  width: 95%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.circular-scroll-wrapper {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px; /* space for scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #d8a85e #f0f0f0;
+}
+.circular-scroll-wrapper::-webkit-scrollbar {
+  height: 4px;
+}
+.circular-scroll-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+.circular-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: #d8a85e;
+  border-radius: 10px;
+}
+.circular-item {
+  flex: 0 0 auto;
+  text-align: center;
+  width: 110px; /* Adjust size based on preference */
+}
+.circular-link {
+  text-decoration: none;
+  display: block;
+}
+.circular-image-wrap {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 10px auto;
+  border: 2px solid transparent;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.circular-link:hover .circular-image-wrap {
+  border-color: #d8a85e;
+  transform: scale(1.05);
+}
+.circular-image-wrap img, .circular-image-wrap svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.circular-title {
+  font-family: var(--font-body, sans-serif);
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  transition: color 0.3s ease;
+}
+.circular-link:hover .circular-title {
+  color: #d8a85e;
+}
+
+@media (max-width: 768px) {
+  .circular-item {
+    width: 90px;
+  }
+  .circular-image-wrap {
+    width: 80px;
+    height: 80px;
+  }
+  .circular-title {
+    font-size: 12px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Circular Categories",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20,
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category Name"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Circular Categories",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,454 @@
+{% paginate search.results by 12 %}
+<div class="search-page-container">
+
+  <div class="search-header-banner">
+    <div class="search-header-content">
+      <span class="search-subtitle">Search Results</span>
+      <h1 class="search-title">
+        {% if search.performed %}
+        For: "{{ search.terms | escape }}"
+        {% else %}
+        Search Our Store
+        {% endif %}
+      </h1>
+      <p class="search-lead">
+        {% if search.performed %}
+        We found {{ search.results_count }} {% if search.results_count == 1 %}result{% else %}results{% endif %} for
+        your search query.
+        {% else %}
+        Looking for something specific? Enter your search query below.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="search-results-section">
+    {% if search.performed %}
+    {% if search.results_count > 0 %}
+    <div class="product-grid">
+      {% for item in search.results %}
+      {% if item.object_type == 'product' %}
+      {% render 'product-card', product: item %}
+      {% else %}
+      <div class="search-item-card-wrapper">
+        <div class="search-item-card">
+          <span class="item-badge">{{ item.object_type | capitalize }}</span>
+          <h3 class="item-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+          <p class="item-excerpt">{{ item.content | strip_html | truncatewords: 30 }}</p>
+          <a href="{{ item.url }}" class="item-readmore-btn">Read More</a>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if paginate.pages > 1 %}
+    <div class="pagination-container">
+      <div class="pagination">
+        {{ paginate | default_pagination }}
+      </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <!-- No results found -->
+    <div class="no-results-container">
+      <div class="no-results-icon">🔍</div>
+      <h2>No Results Found</h2>
+      <p>We couldn't find anything matching "{{ search.terms | escape }}". Check spelling, or try searching for another
+        term.</p>
+
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-page-retry-form">
+        <div class="retry-input-group">
+          <input type="hidden" name="type" value="product">
+          <input
+                type="search"
+                name="q"
+                value="{{ search.terms | escape }}"
+                placeholder="Search for something else..."
+                class="retry-input"
+                required
+              >
+          <button type="submit" class="retry-submit-btn">Search</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+    {% else %}
+    <!-- Form for initial search if someone visits /search directly without terms -->
+    <div class="initial-search-container">
+      <div class="no-results-icon">🔍</div>
+      <h2>Find Products</h2>
+      <p>Type your query below to search our entire store collection.</p>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-page-retry-form">
+        <div class="retry-input-group">
+          <input type="hidden" name="type" value="product">
+          <input
+              type="search"
+              name="q"
+              placeholder="What are you looking for?"
+              class="retry-input"
+              required
+            >
+          <button type="submit" class="retry-submit-btn">Search</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endpaginate %}
+
+<style>
+  .search-page-container {
+    font-family: 'Poppins', sans-serif;
+    color: #222222;
+    background-color: #f8f3ea;
+    min-height: 70vh;
+    box-sizing: border-box;
+  }
+
+  /* Search Header */
+  .search-header-banner {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.75) 100%),
+      url('https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&q=80&w=1600') no-repeat center center;
+    background-size: cover;
+    padding: 150px 20px 110px 20px;
+    text-align: center;
+    color: #ffffff;
+  }
+
+  .search-header-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .search-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #caa25d;
+    margin-bottom: 15px;
+    display: block;
+  }
+
+  .search-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .search-lead {
+    font-size: 16px;
+    opacity: 0.9;
+    font-weight: 300;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Results Section */
+  .search-results-section {
+    padding: 85px 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* Product Grid */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+  }
+
+  @media(max-width: 992px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media(max-width: 768px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+  }
+
+  /* Non-Product Search Results Cards */
+  .search-item-card-wrapper {
+    background: #ffffff;
+    border: 1px solid rgba(202, 162, 93, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    height: 100%;
+  }
+
+  .search-item-card-wrapper:hover {
+    transform: translateY(-5px);
+    border-color: #caa25d;
+    box-shadow: 0 15px 35px rgba(202, 162, 93, 0.1);
+  }
+
+  .search-item-card {
+    padding: 35px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .item-badge {
+    background: rgba(202, 162, 93, 0.1);
+    color: #caa25d;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    margin-bottom: 15px;
+  }
+
+  .item-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    line-height: 1.3;
+  }
+
+  .item-title a {
+    color: #222222;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .item-title a:hover {
+    color: #caa25d;
+  }
+
+  .item-excerpt {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #666666;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+  }
+
+  .item-readmore-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #caa25d;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+  }
+
+  .item-readmore-btn:hover {
+    color: #222222;
+  }
+
+  /* Retry Search Form */
+  .no-results-container,
+  .initial-search-container {
+    text-align: center;
+    max-width: 580px;
+    margin: 40px auto;
+    padding: 60px 40px;
+    background: #ffffff;
+    border-radius: 24px;
+    border: 1px solid rgba(202, 162, 93, 0.15);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+  }
+
+  .no-results-icon {
+    font-size: 55px;
+    margin-bottom: 20px;
+  }
+
+  .no-results-container h2,
+  .initial-search-container h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+  }
+
+  .no-results-container p,
+  .initial-search-container p {
+    font-size: 15px;
+    color: #666666;
+    line-height: 1.6;
+    margin-bottom: 35px;
+  }
+
+  .search-page-retry-form {
+    width: 100%;
+  }
+
+  .retry-input-group {
+    display: flex;
+    background: #fbfbf9;
+    border: 1px solid #e2e0da;
+    border-radius: 50px;
+    padding: 6px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+
+  .retry-input-group:focus-within {
+    border-color: #caa25d;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(202, 162, 93, 0.12);
+  }
+
+  .retry-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 25px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: #222222;
+    outline: none;
+    width: 100%;
+  }
+
+  .retry-submit-btn {
+    background: #222222;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .retry-submit-btn:hover {
+    background: #caa25d;
+    box-shadow: 0 5px 15px rgba(202, 162, 93, 0.25);
+  }
+
+  /* Pagination */
+  .pagination-container {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .pagination {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .pagination a,
+  .pagination .current,
+  .pagination .deco {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .pagination a {
+    color: #222222;
+    border: 1px solid #e2e0da;
+    background: #ffffff;
+  }
+
+  .pagination a:hover {
+    background: #caa25d;
+    color: #ffffff;
+    border-color: #caa25d;
+  }
+
+  .pagination .current {
+    background: #caa25d;
+    color: #ffffff;
+    border: 1px solid #caa25d;
+  }
+
+  .pagination .deco {
+    color: #999999;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .search-header-banner {
+      padding: 110px 20px 80px 20px;
+    }
+
+    .search-title {
+      font-size: 32px;
+    }
+
+    .search-results-section {
+      padding: 50px 20px;
+    }
+
+    .no-results-container,
+    .initial-search-container {
+      padding: 40px 20px;
+      margin: 20px auto;
+    }
+
+    .no-results-container h2,
+    .initial-search-container h2 {
+      font-size: 26px;
+    }
+
+    .retry-input-group {
+      flex-direction: column;
+      background: transparent;
+      border: none;
+      gap: 12px;
+      padding: 0;
+    }
+
+    .retry-input-group:focus-within {
+      box-shadow: none;
+    }
+
+    .retry-input {
+      background: #fbfbf9;
+      border: 1px solid #e2e0da;
+      border-radius: 50px;
+      padding: 14px 20px;
+    }
+
+    .retry-input:focus {
+      border-color: #caa25d;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(202, 162, 93, 0.12);
+    }
+
+    .retry-submit-btn {
+      width: 100%;
+      padding: 14px;
+    }
+  }
+</style>

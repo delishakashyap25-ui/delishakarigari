@@ -1,0 +1,444 @@
+<div class="product-tabs-wrapper" style="background: {{ section.settings.bg_color | default: '#FFFFFF' }};">
+  <div class="tabs-container">
+    
+    <!-- TIFFANY & CO. MINIMAL LUXURY DESCRIPTION TABS HEADER -->
+    <div class="tabs-header" role="tablist">
+      <button
+        type="button"
+        class="tab-btn active"
+        role="tab"
+        aria-selected="true"
+        onclick="openProductTab(event, 'TabDesc-{{ section.id }}')"
+      >
+        <span>Description &amp; Highlights</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-btn"
+        role="tab"
+        aria-selected="false"
+        onclick="openProductTab(event, 'TabCraft-{{ section.id }}')"
+      >
+        <span>Artisanal Craftsmanship</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-btn"
+        role="tab"
+        aria-selected="false"
+        onclick="openProductTab(event, 'TabSpecs-{{ section.id }}')"
+      >
+        <span>Dimensions &amp; Placement</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-btn"
+        role="tab"
+        aria-selected="false"
+        onclick="openProductTab(event, 'TabCare-{{ section.id }}')"
+      >
+        <span>Care Guide</span>
+      </button>
+
+      <button
+        type="button"
+        class="tab-btn"
+        role="tab"
+        aria-selected="false"
+        onclick="openProductTab(event, 'TabShipping-{{ section.id }}')"
+      >
+        <span>Gifting &amp; Delivery</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: DESCRIPTION & HIGHLIGHTS -->
+    <div id="TabDesc-{{ section.id }}" class="tab-content active" role="tabpanel">
+      <div class="dk-tab-editorial">
+        <div class="dk-tab-text">
+          <h3 class="dk-tab-heading">Bespoke Festive Handmade Creation</h3>
+          <div class="dk-tab-body">
+            {% if product.description != blank %}
+              {{ product.description }}
+            {% else %}
+              <p>Handcrafted with heartfelt devotion, this exclusive <strong>Delisha Karigari</strong> creation brings warmth, auspicious blessings, and timeless tradition to your celebrations.</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="dk-tab-card">
+          <h4>Artisanal Highlights</h4>
+          <ul>
+            <li>✦ 100% Mindfully Handcrafted in India</li>
+            <li>✦ Festive &amp; Spiritual Significance</li>
+            <li>✦ High-Grade Materials for Lasting Celebrations</li>
+            <li>✦ Signature Delisha Karigari Gift Packaging</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ARTISANAL CRAFTSMANSHIP & MATERIALS -->
+    <div id="TabCraft-{{ section.id }}" class="tab-content" role="tabpanel">
+      <div class="dk-tab-editorial">
+        <div class="dk-tab-text">
+          <h3 class="dk-tab-heading">Soulful Indian Karigari &amp; Heritage Materials</h3>
+          <div class="dk-tab-body">
+            <p>Every piece is thoughtfully conceptualized and created by master Indian artisans with meticulous attention to detail. We hand-select premium gota patti, genuine Kundan stones, traditional pearls, brass bells (ghungroos), lustrous resham threads, and rich fabrics.</p>
+            <p>Rather than mass-produced machine goods, each creation carries the warmth, soul, and unique character of authentic human touch — making every gift truly one of a kind.</p>
+          </div>
+        </div>
+        <div class="dk-tab-card">
+          <h4>Materials &amp; Finish</h4>
+          <ul>
+            <li>✦ <strong>Embellishments:</strong> Kundan, gotta patti, glass beads</li>
+            <li>✦ <strong>Tassels &amp; Cords:</strong> Hand-twisted resham &amp; zari</li>
+            <li>✦ <strong>Metal Accents:</strong> Golden brass ghungroos &amp; rings</li>
+            <li>✦ <strong>Base Fabric:</strong> Pure velvet, silk, or cotton cord</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: DIMENSIONS & SPECIFICATIONS -->
+    <div id="TabSpecs-{{ section.id }}" class="tab-content" role="tabpanel">
+      <div class="dk-tab-editorial">
+        <div class="dk-tab-text">
+          <h3 class="dk-tab-heading">Specifications &amp; Placement Guide</h3>
+          <div class="dk-tab-body">
+            <p>Specially calibrated to gracefully adorn standard Indian entrance doorways, gate pillars, pooja rooms, and temple shrines.</p>
+            <ul class="dk-spec-detailed">
+              <li><strong>Placement Recommendations:</strong> Main entrance door, toran hooks, mandir backdrop, wall decor, or festive gifting tray.</li>
+              <li><strong>Fastening Method:</strong> Pre-fitted reinforced artisan loops for effortless hanging on screws, adhesive hooks, or nails.</li>
+              <li><strong>Careful Packaging:</strong> Dispatched in protective cushioned casing so every tassel and bead reaches you in flawless shape.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dk-tab-card">
+          <h4>Quality Guarantee</h4>
+          <ul>
+            <li>✦ Multi-point quality inspection</li>
+            <li>✦ Weight-balanced for graceful drape</li>
+            <li>✦ End-to-end protective transit wrap</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: CARE INSTRUCTIONS -->
+    <div id="TabCare-{{ section.id }}" class="tab-content" role="tabpanel">
+      <div class="dk-tab-editorial">
+        <div class="dk-tab-text">
+          <h3 class="dk-tab-heading">Preserving Your Handcrafted Treasure</h3>
+          <div class="dk-tab-body">
+            <p>With simple, gentle care, your Delisha Karigari creation will continue to illuminate your family's festivals for years to come:</p>
+            <ul class="dk-spec-detailed">
+              <li><strong>Cleaning:</strong> Always dry clean with a soft microfibre cloth or gentle feather duster. Do not wash or submerge in water.</li>
+              <li><strong>Protection:</strong> Keep away from moisture, heavy monsoon dampness, direct liquid sprays, perfumes, and chemical cleaners.</li>
+              <li><strong>Storage:</strong> After the festive season, store neatly flat in the provided Delisha Karigari breathable cotton pouch.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dk-tab-card">
+          <h4>Care Summary</h4>
+          <ul>
+            <li>✦ Dry wipe only</li>
+            <li>✦ Keep away from moisture</li>
+            <li>✦ Store in dry breathable pouch</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: COMPLIMENTARY GIFTING & DELIVERY -->
+    <div id="TabShipping-{{ section.id }}" class="tab-content" role="tabpanel">
+      <div class="dk-tab-editorial">
+        <div class="dk-tab-text">
+          <h3 class="dk-tab-heading">Complimentary Festive Gifting &amp; Pan-India Delivery</h3>
+          <div class="dk-tab-body">
+            <p>At <strong>Delisha Karigari</strong>, we believe that a gift is more than just an item — it is a feeling, an emotion, and a personal gesture of affection. Every order is packed in our signature luxury presentation box, ready to gift right out of the courier carton.</p>
+            <ul class="dk-spec-detailed">
+              <li><strong>Dispatch Time:</strong> Ready orders are dispatched within 24–48 business hours.</li>
+              <li><strong>Pan-India Shipping:</strong> Fast, tracked courier delivery across all 28 states and union territories.</li>
+              <li><strong>Personalised Handwritten Notes:</strong> Simply leave your custom message at checkout and our team will handwrite it on a luxury artisan gift card.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dk-tab-card">
+          <h4>Delivery Highlights</h4>
+          <ul>
+            <li>✦ Free Pan-India Shipping on orders above ₹499</li>
+            <li>✦ Live WhatsApp tracking &amp; concierge updates</li>
+            <li>✦ 100% damage-proof transit insurance</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* ==========================================================================
+   TIFFANY & CO. MINIMAL LUXURY PRODUCT DESCRIPTION TABS
+   ========================================================================== */
+.product-tabs-wrapper {
+  background: #FFFFFF;
+  padding: 60px 0 80px 0;
+  border-top: 1px solid #EAEAEA;
+}
+
+.tabs-container {
+  width: 92%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.tabs-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(16px, 3vw, 44px);
+  border-bottom: 1px solid #EAEAEA;
+  margin-bottom: 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+.tabs-header::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--dk-font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  padding: 16px 4px;
+  color: #777777;
+  position: relative;
+  letter-spacing: 0.02em;
+  transition: color 0.25s ease;
+}
+
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 0;
+  height: 2px;
+  background: #111111;
+  transition: width 0.25s ease;
+}
+
+.tab-btn:hover {
+  color: #111111;
+}
+
+.tab-btn.active {
+  color: #111111;
+  font-weight: 600;
+}
+
+.tab-btn.active::after {
+  width: 100%;
+}
+
+.tab-content {
+  display: none;
+  animation: dkFadeTab 0.35s ease-in-out;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes dkFadeTab {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dk-tab-editorial {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.dk-tab-heading {
+  font-family: var(--dk-font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 1.45rem;
+  font-weight: 500;
+  color: #111111;
+  margin: 0 0 16px 0;
+}
+
+.dk-tab-body {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.96rem;
+  line-height: 1.85;
+  color: #444444;
+}
+
+.dk-tab-body p {
+  margin: 0 0 16px 0;
+}
+
+.dk-tab-card {
+  background: #FAFAFA;
+  border: 1px solid #EAEAEA;
+  border-radius: 4px;
+  padding: 28px 24px;
+}
+
+.dk-tab-card h4 {
+  font-family: var(--dk-font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #111111;
+  margin: 0 0 16px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.dk-tab-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dk-tab-card li {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #444444;
+  margin-bottom: 10px;
+}
+
+.dk-spec-detailed {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+}
+
+.dk-spec-detailed li {
+  margin-bottom: 8px;
+  line-height: 1.7;
+}
+
+@media(max-width: 860px) {
+  .dk-tab-editorial {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+</style>
+
+<script>
+function openProductTab(evt, tabId) {
+  const container = evt.currentTarget.closest('.tabs-container');
+  if (!container) return;
+
+  const tabs = container.querySelectorAll('.tab-btn');
+  const panels = container.querySelectorAll('.tab-content');
+
+  tabs.forEach(btn => {
+    btn.classList.remove('active');
+    btn.setAttribute('aria-selected', 'false');
+  });
+
+  panels.forEach(p => p.classList.remove('active'));
+
+  evt.currentTarget.classList.add('active');
+  evt.currentTarget.setAttribute('aria-selected', 'true');
+
+  const activePanel = document.getElementById(tabId);
+  if (activePanel) activePanel.classList.add('active');
+}
+</script>
+
+{% schema %}
+{
+  "name": "Product Description Tabs",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "active_color",
+      "label": "Active Indicator Color",
+      "default": "#111111"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping",
+      "label": "Show Shipping Information",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show Reviews",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Tab Font Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "content_font_size",
+      "min": 13,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Content Font Size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Description Tabs"
+    }
+  ]
+}
+{% endschema %}

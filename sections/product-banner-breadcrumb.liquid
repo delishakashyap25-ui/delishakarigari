@@ -1,0 +1,215 @@
+<div class="product-hero-banner {% if section.settings.background_type == 'color' %}banner-color{% endif %}" style="
+  {% if section.settings.background_type == 'image' and section.settings.banner_image != blank %}
+    background-image:url('{{ section.settings.banner_image | image_url: width: 2000 }}');
+  {% else %}
+    background-color: {{ section.settings.banner_bg_color }};
+  {% endif %}
+  color: {{ section.settings.banner_text_color }};
+">
+
+  <div class="prod-container">
+
+    {% if section.settings.show_title %}
+    <h1 class="prod-hero-title">
+      {{ product.title }}
+    </h1>
+    {% endif %}
+
+    {% if section.settings.show_breadcrumb %}
+  <nav class="prod-hero-breadcrumb">
+    <a href="{{ routes.root_url }}">Home</a>
+    <span class="sep">›</span>
+
+    <a href="{{ routes.all_products_collection_url }}">Catalog</a>
+    <span class="sep">›</span>
+
+    <span class="current">{{ product.title }}</span>
+  </nav>
+{% endif %}
+  </div>
+</div>
+
+<style>
+  .product-hero-banner {
+    padding: 22px 0 10px 0;
+    text-align: left;
+    background-color: #FFFFFF !important;
+    position: relative;
+    border-bottom: 1px solid #EAEAEA;
+  }
+
+  .product-hero-banner::before {
+    display: none !important;
+  }
+
+  .product-hero-banner.banner-color::before {
+    display: none;
+  }
+
+  .product-hero-banner .prod-container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .prod-container {
+    width: 92%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .prod-hero-title {
+    display: none;
+  }
+
+  .prod-hero-breadcrumb {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: #777777;
+    margin: 0;
+  }
+
+  .prod-hero-breadcrumb a {
+    color: #666666;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .prod-hero-breadcrumb a:hover {
+    color: #111111;
+    text-decoration: underline;
+  }
+
+  .prod-hero-breadcrumb .sep {
+    margin: 0 8px;
+    color: #AAAAAA;
+  }
+
+  .prod-hero-breadcrumb .current {
+    color: #111111;
+    font-weight: 500;
+  }
+
+  @media(max-width:768px) {
+    .product-hero-banner {
+      padding: 16px 0 8px 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+"name": "Product Banner",
+"settings": [
+{
+"type": "select",
+"id": "background_type",
+"label": "Background Type",
+"options": [
+{
+"value": "image",
+"label": "Background Image"
+},
+{
+"value": "color",
+"label": "Background Color"
+}
+],
+"default": "image"
+},
+{
+"type": "image_picker",
+"id": "banner_image",
+"label": "Banner Background Image"
+},
+{
+"type": "color",
+"id": "banner_bg_color",
+"label": "Background Color",
+"default": "#1a1a1a"
+},
+{
+"type": "color",
+"id": "banner_text_color",
+"label": "Text Color",
+"default": "#ffffff"
+},
+{
+"type": "range",
+"id": "overlay_opacity",
+"label": "Image Overlay Opacity",
+"min": 0,
+"max": 1,
+"step": 0.1,
+"default": 0.6
+},
+{
+"type": "header",
+"content": "Product Title Settings"
+},
+{
+"type": "checkbox",
+"id": "show_title",
+"label": "Show Product Title",
+"default": true
+},
+{
+"type": "range",
+"id": "title_size",
+"label": "Title Font Size",
+"min": 20,
+"max": 80,
+"step": 2,
+"unit": "px",
+"default": 48
+},
+{
+"type": "header",
+"content": "Breadcrumb Settings"
+},
+{
+"type": "checkbox",
+"id": "show_breadcrumb",
+"label": "Show Breadcrumb",
+"default": true
+},
+{
+"type": "range",
+"id": "breadcrumb_size",
+"label": "Breadcrumb Font Size",
+"min": 10,
+"max": 24,
+"step": 1,
+"unit": "px",
+"default": 14
+},
+{
+  "type": "range",
+  "id": "breadcrumb_top_spacing",
+  "label": "Breadcrumb Top Spacing",
+  "min": 0,
+  "max": 200,
+  "step": 5,
+  "unit": "px",
+  "default": 40
+},
+{
+  "type": "range",
+  "id": "breadcrumb_bottom_spacing",
+  "label": "Breadcrumb Bottom Spacing",
+  "min": 0,
+  "max": 200,
+  "step": 5,
+  "unit": "px",
+  "default": 0
+}
+],
+"presets": [
+{
+"name": "Product Banner"
+}
+]
+}
+{% endschema %}

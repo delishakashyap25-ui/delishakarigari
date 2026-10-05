@@ -1,0 +1,433 @@
+{%- if section.settings.show_announcement_bar -%}
+  {%- assign bg_color = section.settings.background_color | default: '#6E1F2A' -%}
+  {%- assign text_color = section.settings.text_color | default: '#FFFFFF' -%}
+  {%- assign font_size = section.settings.font_size | default: 12 -%}
+  {%- assign auto_play = section.settings.auto_play -%}
+  {%- assign auto_play_delay = section.settings.auto_play_delay | default: 4 | times: 1000 -%}
+  {%- assign pause_on_hover = section.settings.pause_on_hover -%}
+
+  <div
+    id="AnnouncementBar-{{ section.id }}"
+    class="dk-announcement-bar-section"
+    data-section-id="{{ section.id }}"
+    data-auto-play="{{ auto_play }}"
+    data-auto-play-delay="{{ auto_play_delay }}"
+    data-pause-on-hover="{{ pause_on_hover }}"
+    style="background-color: {{ bg_color }}; color: {{ text_color }}; font-size: {{ font_size }}px;"
+    role="region"
+    aria-label="Announcement"
+  >
+    <div class="dk-announcement-bar__container">
+      {%- if section.settings.show_arrows and section.blocks.size > 1 -%}
+        <button
+          type="button"
+          class="dk-announcement-bar__arrow dk-announcement-bar__prev"
+          aria-label="Previous announcement"
+          onclick="dkAnnouncementPrev('{{ section.id }}')"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+      {%- endif -%}
+
+      <div class="dk-announcement-bar__slider" id="AnnouncementSlider-{{ section.id }}">
+        <div class="dk-announcement-bar__track">
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              <div
+                class="dk-announcement-bar__item {% if forloop.first %}is-active{% endif %}"
+                data-index="{{ forloop.index0 }}"
+                {{ block.shopify_attributes }}
+              >
+                <div class="dk-announcement-bar__content text-{{ section.settings.text_alignment | default: 'center' }}">
+                  {%- if block.settings.link != blank -%}
+                    <a href="{{ block.settings.link }}" class="dk-announcement-bar__link">
+                  {%- endif -%}
+
+                  <span class="dk-announcement-bar__text">
+                    {{ block.settings.text | default: '✦ FREE SHIPPING ON ORDERS ABOVE ₹999 ✦' }}
+                  </span>
+
+                  {%- if block.settings.link != blank -%}
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            <div class="dk-announcement-bar__item is-active" data-index="0">
+              <div class="dk-announcement-bar__content text-{{ section.settings.text_alignment | default: 'center' }}">
+                {%- if section.settings.fallback_link != blank -%}
+                  <a href="{{ section.settings.fallback_link }}" class="dk-announcement-bar__link">
+                {%- endif -%}
+
+                <span class="dk-announcement-bar__text">
+                  {{ section.settings.fallback_text | default: '✦ FREE SHIPPING ON ORDERS ABOVE ₹999 ✦' }}
+                </span>
+
+                {%- if section.settings.fallback_link != blank -%}
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if section.settings.show_arrows and section.blocks.size > 1 -%}
+        <button
+          type="button"
+          class="dk-announcement-bar__arrow dk-announcement-bar__next"
+          aria-label="Next announcement"
+          onclick="dkAnnouncementNext('{{ section.id }}')"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      {%- endif -%}
+
+      {%- if section.settings.show_close -%}
+        <button
+          type="button"
+          class="dk-announcement-bar__close"
+          aria-label="Close announcement bar"
+          onclick="document.getElementById('AnnouncementBar-{{ section.id }}').style.display='none';"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <style>
+    .dk-announcement-bar-section {
+      position: relative;
+      width: 100%;
+      z-index: 1001;
+      line-height: 1.3;
+      padding: 6px 0;
+      letter-spacing: 0.5px;
+      font-family: var(--dk-font-body, 'Poppins', sans-serif);
+      font-weight: 500;
+    }
+
+    .dk-announcement-bar__container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 35px;
+    }
+
+    .dk-announcement-bar__slider {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      min-height: 20px;
+    }
+
+    .dk-announcement-bar__track {
+      position: relative;
+      width: 100%;
+    }
+
+    .dk-announcement-bar__item {
+      display: none;
+      width: 100%;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .dk-announcement-bar__item.is-active {
+      display: block;
+      opacity: 1;
+    }
+
+    .dk-announcement-bar__content {
+      width: 100%;
+    }
+
+    .dk-announcement-bar__content.text-center { text-align: center; }
+    .dk-announcement-bar__content.text-left { text-align: left; }
+    .dk-announcement-bar__content.text-right { text-align: right; }
+
+    .dk-announcement-bar__link {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .dk-announcement-bar__link:hover {
+      opacity: 0.85;
+      text-decoration: underline;
+    }
+
+    .dk-announcement-bar__text {
+      display: inline-block;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    .dk-announcement-bar__arrow {
+      background: transparent;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      min-height: 32px;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+
+    .dk-announcement-bar__arrow:hover {
+      opacity: 1;
+    }
+
+    .dk-announcement-bar__close {
+      background: transparent;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      padding: 4px 8px;
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      min-height: 32px;
+      opacity: 0.8;
+      transition: opacity 0.2s ease;
+    }
+
+    .dk-announcement-bar__close:hover {
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .dk-announcement-bar-section {
+        padding: 5px 0;
+      }
+      .dk-announcement-bar__text {
+        font-size: 11px;
+        letter-spacing: 0.3px;
+      }
+      .dk-announcement-bar__container {
+        padding: 0 25px;
+      }
+    }
+  </style>
+
+  <script>
+    (function() {
+      const secId = '{{ section.id }}';
+      const sec = document.getElementById('AnnouncementBar-' + secId);
+      if (!sec) return;
+
+      const autoPlay = sec.getAttribute('data-auto-play') === 'true';
+      const delay = parseInt(sec.getAttribute('data-auto-play-delay')) || 4000;
+      const pauseOnHover = sec.getAttribute('data-pause-on-hover') === 'true';
+      const items = sec.querySelectorAll('.dk-announcement-bar__item');
+
+      if (items.length <= 1) return;
+
+      let currentIndex = 0;
+      let timer = null;
+
+      function showSlide(index) {
+        items.forEach((item, i) => {
+          if (i === index) {
+            item.classList.add('is-active');
+          } else {
+            item.classList.remove('is-active');
+          }
+        });
+        currentIndex = index;
+      }
+
+      window.dkAnnouncementNext = function(id) {
+        if (id !== secId) return;
+        let nextIndex = (currentIndex + 1) % items.length;
+        showSlide(nextIndex);
+      };
+
+      window.dkAnnouncementPrev = function(id) {
+        if (id !== secId) return;
+        let prevIndex = (currentIndex - 1 + items.length) % items.length;
+        showSlide(prevIndex);
+      };
+
+      function startTimer() {
+        if (!autoPlay) return;
+        stopTimer();
+        timer = setInterval(() => {
+          showSlide((currentIndex + 1) % items.length);
+        }, delay);
+      }
+
+      function stopTimer() {
+        if (timer) clearInterval(timer);
+      }
+
+      if (autoPlay) {
+        startTimer();
+        if (pauseOnHover) {
+          sec.addEventListener('mouseenter', stopTimer);
+          sec.addEventListener('mouseleave', startTimer);
+        }
+      }
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement_bar",
+      "label": "Enable Announcement Bar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_play",
+      "label": "Auto-rotate announcements",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "auto_play_delay",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Rotation speed (seconds)",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause rotation on hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close",
+      "label": "Show close button",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#6E1F2A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "label": "Font Size",
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "fallback_text",
+      "label": "Default Announcement Text",
+      "default": "✦ FREE SHIPPING ON ORDERS ABOVE ₹999 ✦"
+    },
+    {
+      "type": "url",
+      "id": "fallback_link",
+      "label": "Default Announcement Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Announcement Text",
+          "default": "✦ FREE SHIPPING ON ORDERS ABOVE ₹999 ✦"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar",
+      "blocks": [
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "✦ FREE SHIPPING ON ORDERS ABOVE ₹999 ✦"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "✦ CRAFTED WITH LOVE • MADE FOR SPECIAL MOMENTS ✦"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "✦ FESTIVE GIFTING MADE BEAUTIFUL ✦"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,461 @@
+<div class="customer-login-container">
+  <div class="login-card">
+    
+    <!-- LOGIN FORM -->
+    <div id="CustomerLoginForm" class="login-form-wrapper">
+      <h1 class="login-title">Sign In</h1>
+      <p class="login-subtitle">Welcome back! Please enter your details to sign in.</p>
+      
+      {% form 'customer_login', class: 'login-form' %}
+        {% if form.errors %}
+          <div class="errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="input-group">
+          <label for="CustomerEmail" class="input-label">Email Address</label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="CustomerEmail"
+            class="input-field {% if form.errors %}input-error{% endif %}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+
+        {% if form.password_needed %}
+          <div class="input-group">
+            <div class="label-row">
+              <label for="CustomerPassword" class="input-label">Password</label>
+              <a href="#recover" id="RecoverPassword" class="forgot-password-link">Forgot password?</a>
+            </div>
+            <input
+              type="password"
+              name="customer[password]"
+              id="CustomerPassword"
+              class="input-field {% if form.errors %}input-error{% endif %}"
+              autocomplete="current-password"
+              placeholder="Enter your password"
+              required
+            >
+          </div>
+        {% endif %}
+
+        <div class="action-btn-group">
+          <button type="submit" class="submit-btn">Sign In</button>
+        </div>
+
+        <div class="form-footer-text">
+          Don't have an account? <a href="{{ routes.account_register_url }}" class="register-link">Create one</a>
+        </div>
+      {% endform %}
+    </div>
+
+    <!-- RECOVER PASSWORD FORM -->
+    <div id="RecoverPasswordForm" class="login-form-wrapper hidden">
+      <h1 class="login-title">Reset Password</h1>
+      <p class="login-subtitle">We will send you an email to reset your password.</p>
+
+      {% form 'recover_customer_password', class: 'login-form' %}
+        {% if form.errors %}
+          <div class="errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        {% if form.posted_successfully? %}
+          <div class="success-message" id="ResetSuccess">
+            We've sent you an email with a link to update your password.
+          </div>
+        {% endif %}
+
+        <div class="input-group">
+          <label for="RecoverEmail" class="input-label">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            id="RecoverEmail"
+            class="input-field {% if form.errors %}input-error{% endif %}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+
+        <div class="action-btn-group">
+          <button type="submit" class="submit-btn">Submit</button>
+          <button type="button" id="HideRecoverPasswordLink" class="cancel-btn">Cancel</button>
+        </div>
+      {% endform %}
+    </div>
+
+    <!-- GUEST LOGIN FORM -->
+    {% if shop.checkout.guest_login %}
+      <div class="guest-login-wrapper">
+        <div class="divider-container">
+          <span class="divider-text">Or</span>
+        </div>
+        <h2 class="guest-title">Continue as Guest</h2>
+        {% form 'guest_login' %}
+          <button type="submit" class="submit-btn guest-btn">Continue</button>
+        {% endform %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<style>
+.customer-login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 75vh;
+  padding: 80px 20px;
+  background-color: #f8f3ea;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+.login-card {
+  background: #ffffff;
+  border: 1px solid rgba(202, 162, 93, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 460px;
+  padding: 50px 40px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.login-form-wrapper {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.login-form-wrapper.hidden {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: #222222;
+  margin: 0 0 10px 0;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #666666;
+  margin: 0 0 35px 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #222222;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.forgot-password-link {
+  font-size: 13px;
+  color: #caa25d;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: #8e6c38;
+  text-decoration: underline;
+}
+
+.input-field {
+  background: #fbfbf9;
+  border: 1px solid #e2e0da;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  color: #222222;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-field::placeholder {
+  color: #a4a29c;
+  opacity: 0.8;
+}
+
+.input-field:focus {
+  border-color: #caa25d;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(202, 162, 93, 0.12);
+}
+
+.input-field.input-error {
+  border-color: #d9534f;
+  box-shadow: 0 0 0 4px rgba(217, 83, 79, 0.1);
+}
+
+.errors, .errors * {
+  color: #9b1c1c !important;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.errors {
+  background: #fdf2f2;
+  border: 1px solid #f8b4b4;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 5px;
+}
+
+.errors ul {
+  margin: 5px 0 0 0;
+  padding-left: 20px;
+}
+
+.action-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.submit-btn {
+  background: #222222;
+  color: #ffffff;
+  border: 1px solid #222222;
+  border-radius: 50px;
+  padding: 15px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-btn:hover {
+  background: #caa25d;
+  border-color: #caa25d;
+  box-shadow: 0 5px 15px rgba(202, 162, 93, 0.3);
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  background: transparent;
+  color: #666666;
+  border: 1px solid #e2e0da;
+  border-radius: 50px;
+  padding: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.cancel-btn:hover {
+  background: #faf9f6;
+  color: #222222;
+  border-color: #caa25d;
+}
+
+.form-footer-text {
+  text-align: center;
+  font-size: 14px;
+  color: #666666;
+  margin-top: 15px;
+}
+
+.register-link {
+  color: #caa25d;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover {
+  color: #8e6c38;
+  text-decoration: underline;
+}
+
+.success-message {
+  background: #f3faf7;
+  border: 1px solid #def7ec;
+  color: #03543f;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+/* Guest login styles */
+.guest-login-wrapper {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.divider-container {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.divider-container::before, .divider-container::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e0da;
+}
+
+.divider-container:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.divider-container:not(:empty)::after {
+  margin-left: .5em;
+}
+
+.divider-text {
+  font-size: 13px;
+  color: #999999;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.guest-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  margin: 0 0 15px 0;
+  font-weight: 600;
+  color: #222222;
+}
+
+.guest-btn {
+  background: transparent;
+  color: #222222;
+  border-color: #222222;
+}
+
+.guest-btn:hover {
+  background: #222222;
+  color: #ffffff;
+  border-color: #222222;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .customer-login-container {
+    padding: 50px 15px;
+    min-height: 65vh;
+  }
+  
+  .login-card {
+    padding: 35px 25px;
+    border-radius: 20px;
+  }
+  
+  .login-title {
+    font-size: 28px;
+  }
+  
+  .input-field {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    padding: 13px;
+    font-size: 12px;
+  }
+  
+  .cancel-btn {
+    padding: 12px;
+    font-size: 11px;
+  }
+}
+</style>
+
+<script>
+  function showRecoverPasswordForm() {
+    document.getElementById('RecoverPasswordForm').classList.remove('hidden');
+    document.getElementById('CustomerLoginForm').classList.add('hidden');
+  }
+
+  function hideRecoverPasswordForm() {
+    document.getElementById('RecoverPasswordForm').classList.add('hidden');
+    document.getElementById('CustomerLoginForm').classList.remove('hidden');
+  }
+
+  // Check hash on load
+  if (window.location.hash === '#recover') {
+    showRecoverPasswordForm();
+  }
+
+  // Event listeners
+  const recoverBtn = document.getElementById('RecoverPassword');
+  if (recoverBtn) {
+    recoverBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      showRecoverPasswordForm();
+      window.location.hash = '#recover';
+    });
+  }
+
+  const hideRecoverBtn = document.getElementById('HideRecoverPasswordLink');
+  if (hideRecoverBtn) {
+    hideRecoverBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      hideRecoverPasswordForm();
+      window.location.hash = '';
+    });
+  }
+</script>

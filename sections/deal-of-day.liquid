@@ -1,0 +1,598 @@
+<section class="dod-section" id="dod-{{ section.id }}"
+  style="background-color: {{ section.settings.section_bg_color }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;">
+  <div class="container">
+    <div class="dod-container">
+
+      <!-- LEFT BANNER AREA -->
+      <div class="dod-left" style="background-color: {{ section.settings.left_bg_color }};">
+        <div class="dod-left-content">
+          {% if section.settings.title_image != blank %}
+          <img src="{{ section.settings.title_image | image_url: width: 400 }}" alt="Deal of the Day" class="dod-title-img" width="400" height="150">
+          {% else %}
+          <h2 class="dod-title-text">{{ section.settings.title_text }}</h2>
+          {% endif %}
+
+          <div class="dod-timer-wrapper">
+            <p class="dod-ends-in">{{ section.settings.ends_in_text }}</p>
+            <div class="dod-timer" data-endtime="{{ section.settings.end_time }}">
+              <div class="time-box"><span class="hours">00</span><span class="unit">h</span></div>
+              <span class="colon">:</span>
+              <div class="time-box"><span class="minutes">00</span><span class="unit">m</span></div>
+              <span class="colon">:</span>
+              <div class="time-box"><span class="seconds">00</span><span class="unit">s</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SLIDER AREA -->
+      <div class="dod-right">
+        {% assign collection = collections[section.settings.collection] %}
+
+        <div class="dod-slider-wrapper">
+          <button class="dod-nav prev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+
+          <div class="dod-slider" id="slider-{{ section.id }}">
+            {% if collection != blank and collection.products_count > 0 %}
+            {% for product in collection.products limit: section.settings.product_limit %}
+            {% assign discount_percentage = 0 %}
+            {% if product.compare_at_price > product.price %}
+            {% assign discount_percentage = product.compare_at_price | minus: product.price | times: 100.0 | divided_by:
+            product.compare_at_price | round %}
+            {% endif %}
+
+            <div class="dod-card">
+              <div class="dod-card-image">
+                <a href="{{ product.url }}">
+                  <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="400" height="400">
+                </a>
+                <button class="wishlist-btn" aria-label="Add to wishlist" data-product-handle="{{ product.handle }}">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </button>
+              </div>
+
+              <div class="dod-card-info">
+                <h3 class="dod-product-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+
+                {% if product.metafields.custom.size != blank %}
+                <p class="dod-product-meta">Size: {{ product.metafields.custom.size }}</p>
+                {% endif %}
+
+                <div class="dod-price-row">
+                  <span class="dod-price">{{ product.price | money }}</span>
+                  {% if product.compare_at_price > product.price %}
+                  <s class="dod-compare-price">{{ product.compare_at_price | money }}</s>
+                  <span class="dod-discount-tag">{{ discount_percentage }}% OFF</span>
+                  {% endif %}
+                </div>
+
+                <div class="dod-limited-tag">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  Limited Time Offer
+                </div>
+
+                <form method="post" action="{{ routes.cart_add_url }}" class="dod-add-form">
+                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                  <button type="button" class="dod-add-btn" onclick="if(typeof ShopifyCart !== 'undefined'){ ShopifyCart.addItem(this.closest('form')); } else { this.closest('form').submit(); }">Add To Cart</button>
+                </form>
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <!-- Placeholder Cards -->
+            {% for i in (1..6) %}
+            <div class="dod-card">
+              <div class="dod-card-image">
+                {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+              <div class="dod-card-info">
+                <h3 class="dod-product-title">Example Product Title {{ i }}</h3>
+                <div class="dod-price-row">
+                  <span class="dod-price">{{ 1999 | money }}</span>
+                  <s class="dod-compare-price">{{ 2999 | money }}</s>
+                  <span class="dod-discount-tag">33% OFF</span>
+                </div>
+                <div class="dod-limited-tag">Limited Time Offer</div>
+                <button class="dod-add-btn">Add To Cart</button>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+          </div>
+
+          <button class="dod-nav next" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Base Container */
+  .dod-section {
+    font-family: var(--font-body, 'Poppins', sans-serif);
+  }
+
+  .dod-container {
+    display: flex;
+    background: #F7F1EA;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #E7DCD4;
+  }
+
+  .dod-left {
+    width: 25%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow: hidden;
+    min-width: 280px;
+  }
+
+  .dod-left-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    width: 100%;
+  }
+
+  .dod-title-img {
+    max-width: 90%;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .dod-title-text {
+    font-family: var(--font-heading, serif);
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #35151F;
+    margin-bottom: 20px;
+  }
+
+  /* Timer */
+  .dod-ends-in {
+    color: #64142D;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .dod-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .time-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #35151F;
+    display: flex;
+    align-items: baseline;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .time-box .unit {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    margin-left: 2px;
+  }
+
+  .colon {
+    font-weight: bold;
+    color: #333;
+  }
+
+  /* Right Slider */
+  .dod-right {
+    width: 75%;
+    background: #fff;
+    padding: 20px;
+    position: relative;
+  }
+
+  .dod-slider-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .dod-slider {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    /* Firefox */
+    padding: 10px 0;
+  }
+
+  .dod-slider::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+  }
+
+  /* Slider Nav Arrows */
+  .dod-nav {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #eee;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    color: #333;
+    transition: all 0.2s;
+  }
+
+  .dod-nav:hover {
+    background: #f8f8f8;
+    transform: translateY(-50%) scale(1.05);
+  }
+
+  .dod-nav.prev {
+    left: -15px;
+  }
+
+  .dod-nav.next {
+    right: -15px;
+  }
+
+  /* Product Card */
+  .dod-card {
+    flex: 0 0 calc(33.333% - 10px);
+    scroll-snap-align: start;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dod-card-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .dod-card-image img,
+  .dod-card-image svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .wishlist-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    background: #fff;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    color: #333;
+  }
+
+  .wishlist-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .dod-card-info {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .dod-product-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .dod-product-title a {
+    color: #333;
+    text-decoration: none;
+  }
+
+  .dod-product-meta {
+    font-size: 11px;
+    color: #666;
+    margin: 0 0 10px 0;
+  }
+
+  .dod-price-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .dod-price {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .dod-compare-price {
+    font-size: 13px;
+    color: #999;
+  }
+
+  .dod-discount-tag {
+    background: #64142D;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 12px;
+  }
+
+  .dod-limited-tag {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #ffffff;
+    background: #64142D;
+    padding: 4px 8px;
+    border-radius: 12px;
+    width: fit-content;
+    margin-bottom: 15px;
+  }
+
+  .dod-limited-tag svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .dod-add-form {
+    margin-top: auto;
+  }
+
+  .dod-add-btn {
+    width: 100%;
+    padding: 8px 0;
+    background: transparent;
+    border: 1px solid #333;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .dod-add-btn:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  /* Responsive */
+  @media(max-width: 1024px) {
+    .dod-card {
+      flex: 0 0 calc(50% - 7.5px);
+    }
+  }
+
+  @media(max-width: 768px) {
+    .dod-container {
+      flex-direction: column;
+    }
+
+    .dod-left {
+      width: 100%;
+      padding: 20px 15px;
+    }
+
+    .dod-right {
+      width: 100%;
+    }
+
+    .dod-nav {
+      display: none;
+    }
+
+    .dod-slider {
+      padding: 15px;
+    }
+
+    /* Hide arrows on mobile, rely on swipe */
+    .dod-card {
+      flex: 0 0 calc(60% - 10px);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  // Slider Logic
+  const slider = document.getElementById('slider-{{ section.id }}');
+  const prevBtn = slider.parentElement.querySelector('.prev');
+  const nextBtn = slider.parentElement.querySelector('.next');
+  
+  if (prevBtn && nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: slider.offsetWidth / 2, behavior: 'smooth' });
+    });
+    prevBtn.addEventListener('click', () => {
+      slider.scrollBy({ left: -(slider.offsetWidth / 2), behavior: 'smooth' });
+    });
+  }
+
+  // Countdown Timer Logic
+  const timerEl = document.querySelector('#dod-{{ section.id }} .dod-timer');
+  if (timerEl) {
+    const endTimeString = timerEl.getAttribute('data-endtime');
+    let targetDate;
+    
+    if (endTimeString) {
+      targetDate = new Date(endTimeString).getTime();
+    } else {
+      // Default to end of current day if no date provided
+      const now = new Date();
+      targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59).getTime();
+    }
+
+    const hoursEl = timerEl.querySelector('.hours');
+    const minutesEl = timerEl.querySelector('.minutes');
+    const secondsEl = timerEl.querySelector('.seconds');
+
+    function updateTimer() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        hoursEl.innerText = '00';
+        minutesEl.innerText = '00';
+        secondsEl.innerText = '00';
+        return;
+      }
+
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      hoursEl.innerText = hours.toString().padStart(2, '0');
+      minutesEl.innerText = minutes.toString().padStart(2, '0');
+      secondsEl.innerText = seconds.toString().padStart(2, '0');
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  }
+});
+</script>
+
+{% schema %}
+{
+"name": "Deal of the Day",
+"settings": [
+{
+"type": "color",
+"id": "section_bg_color",
+"label": "Section Background",
+"default": "#ffffff"
+},
+{
+"type": "header",
+"content": "Left Banner Area"
+},
+{
+"type": "color",
+"id": "left_bg_color",
+"label": "Banner Background Color",
+"default": "#F7F1EA"
+},
+{
+"type": "image_picker",
+"id": "title_image",
+"label": "Title Image (replaces text)"
+},
+{
+"type": "text",
+"id": "title_text",
+"label": "Title Text",
+"default": "Deal of the DAY"
+},
+{
+"type": "text",
+"id": "ends_in_text",
+"label": "Timer Subtitle",
+"default": "Ends In"
+},
+{
+"type": "text",
+"id": "end_time",
+"label": "Timer End Date/Time",
+"info": "Format: YYYY-MM-DDTHH:MM:SS (e.g. 2026-12-31T23:59:59). Leave blank for end of current day."
+},
+{
+"type": "header",
+"content": "Products Slider"
+},
+{
+"type": "collection",
+"id": "collection",
+"label": "Collection"
+},
+{
+"type": "range",
+"id": "product_limit",
+"min": 4,
+"max": 24,
+"step": 1,
+"default": 12,
+"label": "Maximum products to show"
+},
+{
+"type": "header",
+"content": "Spacing"
+},
+{
+"type": "range",
+"id": "padding_top",
+"min": 0,
+"max": 100,
+"step": 5,
+"default": 40,
+"label": "Padding Top"
+},
+{
+"type": "range",
+"id": "padding_bottom",
+"min": 0,
+"max": 100,
+"step": 5,
+"default": 40,
+"label": "Padding Bottom"
+}
+],
+"presets": [
+{
+"name": "Deal of the Day"
+}
+]
+}
+{% endschema %}

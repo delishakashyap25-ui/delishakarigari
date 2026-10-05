@@ -1,0 +1,1005 @@
+<div class="product-main-wrapper" style="background-color: {{ section.settings.bg_color | default: '#F9F5EE' }};">
+  <div class="prod-container">
+    <div class="prod-layout">
+      
+      <!-- Left: Luxury Gallery with Cursor-Move Dynamic Zoom -->
+      <div class="prod-gallery">
+        <div class="prod-main-image-wrap" id="MainImageWrap">
+          {% if product.featured_image %}
+            <img
+              src="{{ product.featured_image | image_url: width: 1400 }}"
+              alt="{{ product.title | escape }}"
+              class="prod-main-image"
+              id="MainProductImage"
+              width="1400"
+              height="1400"
+              loading="eager"
+            >
+          {% else %}
+            {{ 'product-1' | placeholder_svg_tag: 'prod-placeholder' }}
+          {% endif %}
+          
+          <div class="dk-zoom-lens-badge" id="DkZoomBadge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              <line x1="11" y1="8" x2="11" y2="14"></line>
+              <line x1="8" y1="11" x2="14" y2="11"></line>
+            </svg>
+            <span>Roll cursor to zoom</span>
+          </div>
+        </div>
+        
+        <div class="prod-thumbnails" id="ProdThumbnails">
+          {% for image in product.images %}
+            <div
+              class="prod-thumb-item {% if forloop.first %}active{% endif %}"
+              onclick="updateProductImage(this, '{{ image | image_url: width: 1400 }}')"
+              role="button"
+              tabindex="0"
+              aria-label="View product image {{ forloop.index }}"
+            >
+              <img src="{{ image | image_url: width: 300 }}" alt="{{ image.alt | default: product.title | escape }}" width="300" height="300" loading="lazy">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Right: Info -->
+      <div class="prod-info">
+        <form method="post" action="{{ routes.cart_add_url }}" id="AddToCartForm" class="prod-form">
+          <input type="hidden" name="id" value="{{ product.selected_or_firstAvailable_variant.id | default: product.variants.first.id }}">
+          
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              
+              {%- when '@app' -%}
+                {% render block %}
+
+              {%- when 'title' -%}
+                <div class="prod-title-group" {{ block.shopify_attributes }}>
+                  <span class="prod-brand-tag">✦ DELISHA KARIGARI BESPOKE</span>
+                  <h1 class="prod-title-small">{{ product.title }}</h1>
+                </div>
+
+              {%- when 'rating' -%}
+                <div class="prod-rating" {{ block.shopify_attributes }}>
+                  <span class="stars">★★★★★</span>
+                  <span class="rating-count">Artisanal Verified (4.9 / 5)</span>
+                </div>
+
+              {%- when 'price' -%}
+                <div class="prod-price-box" {{ block.shopify_attributes }}>
+                  <span class="prod-price">{{ product.price | money }}</span>
+                  {% if product.compare_at_price > product.price %}
+                    <s class="prod-compare-price">{{ product.compare_at_price | money }}</s>
+                    {% assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round %}
+                    <span class="prod-discount-badge">{{ discount }}% Off</span>
+                  {% endif %}
+                  <span class="prod-tax-note">Inclusive of all taxes &bull; Free Pan-India Shipping</span>
+                </div>
+
+              {%- when 'description' -%}
+                <div class="prod-short-desc" {{ block.shopify_attributes }}>
+                  {{ product.description | strip_html | truncatewords: 35 }}
+                </div>
+
+              {%- when 'variant_picker' -%}
+                {% unless product.has_only_default_variant %}
+                  <div class="prod-variants" {{ block.shopify_attributes }}>
+                    {% for option in product.options_with_values %}
+                      <div class="variant-group">
+                        <label class="variant-label">{{ option.name }}: <span class="selected-val">{{ option.selected_value }}</span></label>
+                        <div class="variant-swatches">
+                          {% for value in option.values %}
+                            <div class="swatch-item">
+                              <input type="radio" id="{{ option.name }}-{{ value }}" name="options[{{ option.name }}]" value="{{ value }}" {% if option.selected_value == value %}checked{% endif %} onchange="updateVariantLabel(this)">
+                              <label for="{{ option.name }}-{{ value }}" class="swatch-label {% if option.name == 'Color' or option.name == 'color' %}color-swatch{% endif %}" style="{% if option.name == 'Color' or option.name == 'color' %}background-color: {{ value | downcase }};{% endif %}">
+                                {% unless option.name == 'Color' or option.name == 'color' %}{{ value }}{% endunless %}
+                              </label>
+                            </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endunless %}
+
+              {%- when 'buy_buttons' -%}
+                <div class="prod-buy-section" {{ block.shopify_attributes }}>
+                  <div class="prod-actions-row">
+                    <div class="qty-selector">
+                      <button type="button" onclick="changeQty(-1)" aria-label="Decrease quantity">&minus;</button>
+                      <input type="number" name="quantity" value="1" min="1" id="Quantity" aria-label="Quantity">
+                      <button type="button" onclick="changeQty(1)" aria-label="Increase quantity">&plus;</button>
+                    </div>
+                    <button type="button" class="add-to-cart-btn" onclick="ShopifyCart.addItem(this.closest('form'))">
+                      ADD TO BAG
+                    </button>
+                    <div class="action-icons">
+                      <button type="button" class="icon-btn wishlist-btn" data-product-handle="{{ product.handle }}" aria-label="Save to Wishlist" onclick="if(typeof window.toggleWishlist === 'function') { window.toggleWishlist('{{ product.handle }}'); } else if(typeof window.toggleWishlistItem === 'function') { window.toggleWishlistItem('{{ product.handle }}'); }">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <button type="button" class="buy-now-btn" onclick="if(typeof ShopifyCart !== 'undefined') { ShopifyCart.addItem(this.closest('form')); setTimeout(() => window.location.href='/checkout', 400); } else { this.closest('form').submit(); }">
+                    BUY IT NOW &bull; EXPRESS CHECKOUT
+                  </button>
+                </div>
+
+              {%- when 'trust_points' -%}
+                <div class="prod-trust-points" {{ block.shopify_attributes }}>
+                  <div class="trust-item">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    <span>Pan-India Express Dispatch within 24–48 Hours &bull; Free Delivery</span>
+                  </div>
+                  <div class="trust-item">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    <span>Complimentary Festive Gift Packaging & Personal Note Included</span>
+                  </div>
+                </div>
+
+              {%- when 'payment_methods' -%}
+                <div class="payment-methods" {{ block.shopify_attributes }}>
+                  <p class="pay-note">100% Safe &amp; Encrypted Checkout &bull; UPI, Cards, NetBanking</p>
+                </div>
+
+              {%- when 'return_policy' -%}
+                <div class="prod-return-policy" {{ block.shopify_attributes }}>
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#111111" stroke-width="1.8">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <div class="return-text">
+                    <strong>Safe Handcrafted Delivery</strong>
+                    <span>Inspected &amp; securely boxed for festive transit</span>
+                  </div>
+                </div>
+
+              {%- when 'accordion' -%}
+                <div class="info-box-wrapper" {{ block.shopify_attributes }}>
+                  <div class="info-box" onclick="toggleAccordion(this)">
+                    <span>{{ block.settings.heading | escape }}</span>
+                    <span class="acc-icon">&plus;</span>
+                  </div>
+                  <div class="info-box-content">
+                    {{ block.settings.content }}
+                  </div>
+                </div>
+
+            {%- endcase -%}
+          {%- endfor -%}
+
+          {%- comment -%} =====================================================
+            TIFFANY & CO. ALL DESCRIPTION CATEGORIES (EASY-TO-EXPLORE ACCORDIONS)
+          ==================================================== {%- endcomment -%}
+          <div class="dk-prod-description-categories">
+            
+            <!-- Category 1: Description & Details -->
+            <div class="info-box-wrapper is-open">
+              <div class="info-box" onclick="toggleAccordion(this)">
+                <span>Description &amp; Highlights</span>
+                <span class="acc-icon">&minus;</span>
+              </div>
+              <div class="info-box-content" style="display: block;">
+                <div class="dk-desc-rich">
+                  {{ product.description }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Category 2: Artisanal Craftsmanship & Materials -->
+            <div class="info-box-wrapper">
+              <div class="info-box" onclick="toggleAccordion(this)">
+                <span>Artisanal Craftsmanship &amp; Materials</span>
+                <span class="acc-icon">&plus;</span>
+              </div>
+              <div class="info-box-content">
+                <p>Every piece at <strong>Delisha Karigari</strong> is handcrafted with mindful devotion by skilled Indian artisans. We use authentic gota patti, hand-threaded pearls, vibrant resham threads, fine Kundan, brass ghungroos and traditional embellishments. Each design honors centuries-old Indian craft techniques, bringing warmth and timeless elegance into your home.</p>
+              </div>
+            </div>
+
+            <!-- Category 3: Dimensions & Placement Guide -->
+            <div class="info-box-wrapper">
+              <div class="info-box" onclick="toggleAccordion(this)">
+                <span>Dimensions &amp; Placement Guide</span>
+                <span class="acc-icon">&plus;</span>
+              </div>
+              <div class="info-box-content">
+                <p>Crafted to fit standard Indian doorways, entrance gates, walls, and home mandirs seamlessly.</p>
+                <ul class="dk-spec-list">
+                  <li><strong>Placement:</strong> Main entrance, pooja room, doors, mandir background or festive gifting.</li>
+                  <li><strong>Attachment:</strong> Secure pre-fitted artisanal hanging loops for effortless mounting.</li>
+                  <li><strong>Package Contents:</strong> Handcrafted creation packed with protective inner wrapping.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Category 4: Care Instructions -->
+            <div class="info-box-wrapper">
+              <div class="info-box" onclick="toggleAccordion(this)">
+                <span>Care &amp; Preservation Instructions</span>
+                <span class="acc-icon">&plus;</span>
+              </div>
+              <div class="info-box-content">
+                <p>To preserve the beauty and shine of your handcrafted piece across multiple celebrations:</p>
+                <ul class="dk-spec-list">
+                  <li>Gently wipe clean with a soft, dry cotton or microfibre cloth after use.</li>
+                  <li>Keep away from moisture, perfumes, water sprays, and direct chemical exposure.</li>
+                  <li>Store in the provided Delisha Karigari pouch in a cool, dry place.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Category 5: Complimentary Gifting & Pan-India Delivery -->
+            <div class="info-box-wrapper">
+              <div class="info-box" onclick="toggleAccordion(this)">
+                <span>Complimentary Gifting &amp; Delivery</span>
+                <span class="acc-icon">&plus;</span>
+              </div>
+              <div class="info-box-content">
+                <p><strong>Bespoke Gifting Experience:</strong> Every creation is placed in our signature luxury gift packaging with protective padding, ready to delight your loved ones. Dispatched in 24–48 business hours with tracked Pan-India delivery.</p>
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+      
+
+
+
+<style>
+/* ==========================================================================
+   DELISHA KARIGARI — LUXURY PRODUCT PAGE & CURSOR ZOOM
+   Tiffany & Co. Minimalist Luxury Standard
+   ========================================================================== */
+.product-main-wrapper {
+  padding: 60px 0 80px 0;
+  background-color: var(--dk-color-background, #F9F5EE);
+}
+
+.prod-container {
+  width: 92%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.prod-layout {
+  display: flex;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: flex-start;
+}
+
+/* 1. PRODUCT GALLERY & DYNAMIC CURSOR ZOOM */
+.prod-gallery {
+  flex: 0 0 52%;
+  max-width: 52%;
+  position: sticky;
+  top: 100px;
+}
+
+.prod-main-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #FFFFFF;
+  border: 1px solid #EAEAEA;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 18px;
+  cursor: crosshair;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.prod-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.15s ease-out;
+  will-change: transform, transform-origin;
+  pointer-events: none;
+}
+
+.dk-zoom-lens-badge {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 30px;
+  padding: 6px 14px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.prod-main-image-wrap.is-zoomed .dk-zoom-lens-badge {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* Thumbnails */
+.prod-thumbnails {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.prod-thumbnails::-webkit-scrollbar {
+  display: none;
+}
+
+.prod-thumb-item {
+  flex: 0 0 84px;
+  width: 84px;
+  height: 84px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1.5px solid #EAEAEA;
+  background-color: #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.prod-thumb-item:hover,
+.prod-thumb-item.active {
+  border-color: #111111;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.prod-thumb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* 2. PRODUCT INFO & DETAILS */
+.prod-info {
+  flex: 1 1 48%;
+}
+
+.prod-title-group {
+  margin-bottom: 12px;
+}
+
+.prod-brand-tag {
+  display: inline-block;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #B89552;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.prod-title-small {
+  font-family: var(--dk-font-heading, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.8rem, 2.4vw, 2.35rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: #111111;
+  margin: 0;
+}
+
+.prod-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.prod-rating .stars {
+  color: #B89552;
+  letter-spacing: 2px;
+}
+.prod-rating .rating-count {
+  color: #666666;
+  font-size: 12px;
+}
+
+.prod-price-box {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #EAEAEA;
+  flex-wrap: wrap;
+}
+
+.prod-price {
+  font-family: var(--dk-font-heading, 'Playfair Display', serif);
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: #111111;
+}
+
+.prod-compare-price {
+  font-size: 1.15rem;
+  color: #888888;
+  text-decoration: line-through;
+}
+
+.prod-discount-badge {
+  background-color: #6E1F2A;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.prod-tax-note {
+  width: 100%;
+  font-size: 12px;
+  color: #777777;
+  margin-top: 4px;
+}
+
+.prod-short-desc {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #444444;
+  margin-bottom: 28px;
+}
+
+/* Variants */
+.variant-group {
+  margin-bottom: 24px;
+}
+.variant-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  color: #222222;
+}
+.variant-swatches {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.swatch-item input {
+  display: none;
+}
+.swatch-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 2px;
+  border: 1px solid #EAEAEA;
+  background-color: #FFFFFF;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333333;
+  transition: all 0.2s ease;
+}
+.swatch-item input:checked + .swatch-label {
+  border-color: var(--dk-color-primary, #641A28);
+  background-color: var(--dk-color-primary, #641A28);
+  color: #FFFFFF;
+}
+
+/* Buy Actions */
+.prod-buy-section {
+  margin-bottom: 30px;
+}
+
+.prod-actions-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.qty-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(100, 26, 40, 0.4);
+  border-radius: 4px;
+  height: 50px;
+  background: #FFFFFF;
+}
+.qty-selector button {
+  width: 42px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--dk-color-primary, #641A28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+.qty-selector button:hover {
+  background-color: #FAF4EB;
+}
+.qty-selector input {
+  width: 42px;
+  border: none;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #252525;
+  outline: none;
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  height: 50px;
+  background-color: var(--dk-color-primary, #641A28);
+  color: #FFFFFF !important;
+  border: 1px solid var(--dk-color-primary, #641A28);
+  border-radius: 4px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 15px rgba(100, 26, 40, 0.25);
+}
+.add-to-cart-btn:hover {
+  background-color: #4A111C;
+  border-color: #4A111C;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(74, 17, 28, 0.35);
+}
+
+.action-icons {
+  display: flex;
+  gap: 8px;
+}
+.icon-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  border: 1px solid rgba(100, 26, 40, 0.18);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--dk-color-primary, #641A28);
+  transition: all 0.2s ease;
+}
+.icon-btn:hover {
+  border-color: var(--dk-color-primary, #641A28);
+  color: var(--dk-color-primary, #641A28);
+  background-color: #FAF4EB;
+}
+
+.buy-now-btn {
+  width: 100%;
+  height: 50px;
+  background-color: #FFFFFF;
+  color: var(--dk-color-primary, #641A28);
+  border: 1.5px solid var(--dk-color-primary, #641A28);
+  border-radius: 4px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.buy-now-btn:hover {
+  background-color: var(--dk-color-primary, #641A28);
+  color: #FFFFFF;
+}
+
+/* Trust Points */
+.prod-trust-points {
+  margin-bottom: 24px;
+  padding: 16px 0;
+  border-top: 1px solid #EAEAEA;
+  border-bottom: 1px solid #EAEAEA;
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: #444444;
+  margin-bottom: 8px;
+}
+.trust-item:last-child {
+  margin-bottom: 0;
+}
+.trust-item svg {
+  flex-shrink: 0;
+  color: #B89552;
+}
+
+.payment-methods {
+  margin-bottom: 20px;
+}
+.pay-note {
+  font-size: 12px;
+  color: #777777;
+  letter-spacing: 0.02em;
+}
+
+.prod-return-policy {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background-color: #FAFAFA;
+  border: 1px solid #EAEAEA;
+  border-radius: 2px;
+  margin-bottom: 28px;
+}
+.return-text strong {
+  display: block;
+  font-size: 13px;
+  color: #111111;
+}
+.return-text span {
+  font-size: 12px;
+  color: #666666;
+}
+
+/* 3. TIFFANY & CO. DESCRIPTION CATEGORIES ACCORDIONS */
+.dk-prod-description-categories {
+  border-top: 1px solid #EAEAEA;
+  margin-top: 24px;
+}
+
+.info-box-wrapper {
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.info-box {
+  padding: 18px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--dk-font-heading, 'Playfair Display', Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #111111;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.info-box:hover {
+  color: #6E1F2A;
+}
+
+.info-box .acc-icon {
+  font-family: var(--dk-font-body, sans-serif);
+  font-size: 18px;
+  color: #777777;
+  font-weight: 300;
+}
+
+.info-box-content {
+  display: none;
+  padding-bottom: 20px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: #444444;
+}
+
+.info-box-content p {
+  margin: 0 0 12px 0;
+}
+
+.dk-spec-list {
+  margin: 0;
+  padding-left: 20px;
+}
+.dk-spec-list li {
+  margin-bottom: 6px;
+}
+
+/* Responsive */
+@media(max-width: 991px) {
+  .prod-layout {
+    flex-direction: column;
+    gap: 36px;
+  }
+  .prod-gallery {
+    flex: 1 1 100%;
+    max-width: 100%;
+    position: static;
+  }
+}
+</style>
+
+<script>
+/* ==========================================================================
+   DYNAMIC CURSOR ZOOM ON PRODUCT GALLERY (TIFFANY & CO. STANDARD)
+   ========================================================================== */
+function initProductImageZoom() {
+  const wrap = document.getElementById('MainImageWrap');
+  const img = document.getElementById('MainProductImage');
+  if (!wrap || !img) return;
+
+  // Mousemove dynamic zoom
+  wrap.addEventListener('mousemove', function(e) {
+    const rect = wrap.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    img.style.transformOrigin = `${x}% ${y}%`;
+    img.style.transform = 'scale(2.35)';
+    wrap.classList.add('is-zoomed');
+  });
+
+  // Mouseleave smooth reset
+  wrap.addEventListener('mouseleave', function() {
+    img.style.transform = 'scale(1)';
+    img.style.transformOrigin = 'center center';
+    wrap.classList.remove('is-zoomed');
+  });
+
+  // Touch move for mobile
+  wrap.addEventListener('touchmove', function(e) {
+    if (e.touches && e.touches[0]) {
+      const touch = e.touches[0];
+      const rect = wrap.getBoundingClientRect();
+      const x = ((touch.clientX - rect.left) / rect.width) * 100;
+      const y = ((touch.clientY - rect.top) / rect.height) * 100;
+      img.style.transformOrigin = `${x}% ${y}%`;
+      img.style.transform = 'scale(2.2)';
+      wrap.classList.add('is-zoomed');
+    }
+  }, { passive: true });
+
+  wrap.addEventListener('touchend', function() {
+    img.style.transform = 'scale(1)';
+    img.style.transformOrigin = 'center center';
+    wrap.classList.remove('is-zoomed');
+  });
+}
+
+function updateProductImage(el, url) {
+  const img = document.getElementById('MainProductImage');
+  if (!img) return;
+  img.src = url;
+  img.style.transform = 'scale(1)';
+  img.style.transformOrigin = 'center center';
+
+  document.querySelectorAll('.prod-thumb-item').forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function updateVariantLabel(input) {
+  const val = input.value;
+  const parent = input.closest('.variant-group');
+  if (parent) {
+    const label = parent.querySelector('.selected-val');
+    if (label) label.innerText = val;
+  }
+}
+
+function changeQty(amt) {
+  const input = document.getElementById('Quantity');
+  if (!input) return;
+  let val = parseInt(input.value) + amt;
+  if (val < 1) val = 1;
+  input.value = val;
+}
+
+function toggleAccordion(el) {
+  const wrapper = el.closest('.info-box-wrapper');
+  const content = el.nextElementSibling;
+  const icon = el.querySelector('.acc-icon');
+  if (!content) return;
+
+  const isHidden = (content.style.display === 'none' || !content.style.display);
+  if (isHidden) {
+    content.style.display = 'block';
+    if (icon) icon.innerHTML = '&minus;';
+    if (wrapper) wrapper.classList.add('is-open');
+  } else {
+    content.style.display = 'none';
+    if (icon) icon.innerHTML = '&plus;';
+    if (wrapper) wrapper.classList.remove('is-open');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initProductImageZoom();
+});
+
+// Re-init on Shopify theme section events
+document.addEventListener('shopify:section:load', function() {
+  initProductImageZoom();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": [
+    {
+      "type": "color",
+      "id": "banner_bg_color",
+      "label": "Banner Background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "banner_text_color",
+      "label": "Banner Text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Page Background",
+      "default": "#fdfaf5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "title",
+      "name": "Product Title",
+      "limit": 1
+    },
+    {
+      "type": "rating",
+      "name": "Product Rating",
+      "limit": 1
+    },
+    {
+      "type": "price",
+      "name": "Product Price",
+      "limit": 1
+    },
+    {
+      "type": "description",
+      "name": "Product Description",
+      "limit": 1
+    },
+    {
+      "type": "variant_picker",
+      "name": "Variant Picker",
+      "limit": 1
+    },
+    {
+      "type": "buy_buttons",
+      "name": "Buy Buttons",
+      "limit": 1
+    },
+    {
+      "type": "trust_points",
+      "name": "Trust Points",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text_1",
+          "label": "Delivery Estimate Text",
+          "default": "Estimate delivery between 12-20 days [Free for all order]"
+        },
+        {
+          "type": "text",
+          "id": "text_2",
+          "label": "Return Policy Text",
+          "default": "Free return within 30 days of purchase"
+        }
+      ]
+    },
+    {
+      "type": "payment_methods",
+      "name": "Payment Methods",
+      "limit": 1
+    },
+    {
+      "type": "return_policy",
+      "name": "Return Policy Badge",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Days Text",
+          "default": "Easy 7 Days"
+        }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion/Info Box",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Collapsible Tab"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add detail text here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Information",
+      "blocks": [
+        {
+          "type": "title"
+        },
+        {
+          "type": "rating"
+        },
+        {
+          "type": "price"
+        },
+        {
+          "type": "description"
+        },
+        {
+          "type": "variant_picker"
+        },
+        {
+          "type": "buy_buttons"
+        },
+        {
+          "type": "trust_points"
+        },
+        {
+          "type": "return_policy"
+        },
+        {
+          "type": "payment_methods"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

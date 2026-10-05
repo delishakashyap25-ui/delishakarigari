@@ -1,0 +1,348 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#641A28">
+  <link rel="icon" type="image/png" href="{{ 'dk-favicon.png' | asset_url }}">
+  <link rel="apple-touch-icon" href="{{ 'dk-favicon.png' | asset_url }}">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- comment -%} Robots meta — noindex search, cart, and account pages {%- endcomment -%}
+  {%- if request.path contains '/search' or request.path contains '/cart' or request.path contains '/account' -%}
+    <meta name="robots" content="noindex, follow">
+  {%- endif -%}
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% else %}
+    <meta name="description" content="Delisha Karigari — Handcrafted festive Diwali décor, bandhanwars, door latkans, Karwa Chauth sets & bespoke gifts handmade with love in India.">
+  {% endif %}
+
+  {%- comment -%} Open Graph Tags {%- endcomment -%}
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  {%- if page_description -%}
+    <meta property="og:description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta property="og:description" content="Delisha Karigari — Handcrafted festive Diwali décor, bandhanwars, door latkans, Karwa Chauth sets & bespoke gifts handmade with love in India.">
+  {%- endif -%}
+  {%- if product -%}
+    <meta property="og:type" content="product">
+    {%- if product.featured_image -%}
+      <meta property="og:image" content="https:{{ product.featured_image | image_url: width: 1200 }}">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:alt" content="{{ product.featured_image.alt | default: product.title | escape }}">
+    {%- endif -%}
+    <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code | default: 'INR' }}">
+  {%- elsif collection -%}
+    <meta property="og:type" content="product.group">
+    {%- if collection.image -%}
+      <meta property="og:image" content="https:{{ collection.image | image_url: width: 1200 }}">
+    {%- else -%}
+      <meta property="og:image" content="https:{{ 'dk-hero-diwali.jpg' | asset_url }}">
+    {%- endif -%}
+  {%- else -%}
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https:{{ 'dk-hero-diwali.jpg' | asset_url }}">
+  {%- endif -%}
+
+  {%- comment -%} Twitter Card Tags {%- endcomment -%}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | escape }}">
+  {%- if page_description -%}
+    <meta name="twitter:description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="twitter:description" content="Delisha Karigari — Handcrafted festive Diwali décor, bandhanwars, door latkans, Karwa Chauth sets & bespoke gifts handmade with love in India.">
+  {%- endif -%}
+  {%- if product.featured_image -%}
+    <meta name="twitter:image" content="https:{{ product.featured_image | image_url: width: 1200 }}">
+  {%- elsif collection.image -%}
+    <meta name="twitter:image" content="https:{{ collection.image | image_url: width: 1200 }}">
+  {%- else -%}
+    <meta name="twitter:image" content="https:{{ 'dk-hero-diwali.jpg' | asset_url }}">
+  {%- endif -%}
+
+  {{ content_for_header }}
+
+  {% # theme-check-disable RemoteAsset %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  {% # theme-check-enable RemoteAsset %}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  <script>
+    window.theme = {
+        moneyFormat: {{ shop.money_format | json }}
+      };
+  </script>
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'wishlist.js' | asset_url }}" defer="defer"></script>
+
+  {%- comment -%} JSON-LD Structured Data {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "logo": "https:{{ 'dk-logo.png' | asset_url }}",
+    "description": "Handmade and personalised festive gifting, Diwali décor, bandhanwars, and home adornments crafted with love in India.",
+    "telephone": "+91-9211549097",
+    "contactPoint": [{
+      "@type": "ContactPoint",
+      "telephone": "+91-9211549097",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Hindi"]
+    }],
+    "sameAs": [
+      "https://www.instagram.com/delishakarigari/",
+      "https://www.facebook.com/profile.php?id=61578229348792"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ shop.url }}/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  {%- if product -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": {{ product.title | json }},
+    "url": {{ canonical_url | json }},
+    {%- if product.featured_image -%}
+    "image": {{ product.featured_image | image_url: width: 1200 | prepend: 'https:' | json }},
+    {%- endif -%}
+    {%- if product.description != blank -%}
+    "description": {{ product.description | strip_html | truncatewords: 100 | json }},
+    {%- endif -%}
+    "brand": {
+      "@type": "Brand",
+      "name": {{ product.vendor | default: shop.name | json }}
+    },
+    "offers": {
+      "@type": "Offer",
+      "url": {{ canonical_url | json }},
+      "priceCurrency": {{ cart.currency.iso_code | default: 'INR' | json }},
+      "price": {{ product.price | money_without_currency | strip_html | json }},
+      "availability": "https://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}"
+    }
+  }
+  </script>
+  {%- endif -%}
+
+  {%- if collection or product -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ shop.url }}"
+      }
+      {%- if collection -%},
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ collection.title | json }},
+        "item": "{{ shop.url }}{{ collection.url }}"
+      }
+      {%- elsif product -%},
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ product.collections.first.title | default: "All Collections" | json }},
+        "item": "{{ shop.url }}{{ product.collections.first.url | default: '/collections/all' }}"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": {{ product.title | json }},
+        "item": "{{ canonical_url }}"
+      }
+      {%- endif -%}
+    ]
+  }
+  </script>
+  {%- endif -%}
+</head>
+
+<body>
+  {% section 'header' %}
+
+  <main role="main" id="MainContent">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+  {% section 'cart-drawer' %}
+  {% section 'wishlist-drawer' %}
+  {% render 'search-modal' %}
+  {% render 'quick-view-modal' %}
+  
+  <!-- PREMIUM FLOATING WHATSAPP CONCIERGE -->
+  <a
+    href="https://wa.me/919211549097?text=Hi%20Delisha%20Karigari,%20I'd%20like%20to%20inquire%20about%20your%20handcrafted%20decor%20and%20customisations."
+    class="delisha-whatsapp-float"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Chat with Delisha Karigari on WhatsApp"
+  >
+    <span class="delisha-whatsapp-status-dot" aria-hidden="true"></span>
+    <div class="delisha-whatsapp-icon-wrap">
+      <svg class="delisha-whatsapp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.04 3.67C14.24 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.61 20.16 9.21 19.78 7.99 19.06L7.7 18.89L4.58 19.71L5.41 16.67L5.22 16.37C4.42 15.1 4 13.52 4 11.91C4 7.48 7.6 3.67 12.04 3.67ZM8.84 7.37C8.65 7.37 8.34 7.44 8.08 7.72C7.82 8 7.08 8.69 7.08 10.09C7.08 11.49 8.1 12.84 8.24 13.03C8.38 13.22 10.21 16.18 13.08 17.3C15.46 18.23 15.95 18.04 16.46 17.99C16.97 17.94 18.1 17.32 18.33 16.67C18.56 16.02 18.56 15.46 18.49 15.34C18.42 15.22 18.23 15.15 17.95 15.01C17.67 14.87 16.29 14.19 16.03 14.1C15.77 14.01 15.58 13.96 15.39 14.24C15.2 14.52 14.66 15.15 14.5 15.34C14.34 15.53 14.18 15.55 13.9 15.41C13.62 15.27 12.72 14.98 11.66 14.03C10.83 13.29 10.27 12.38 10.11 12.1C9.95 11.82 10.09 11.67 10.23 11.53C10.36 11.4 10.51 11.2 10.65 11.04C10.79 10.88 10.84 10.76 10.93 10.57C11.02 10.38 10.98 10.22 10.91 10.08C10.84 9.94 10.28 8.57 10.05 8.01C9.82 7.47 9.59 7.54 9.42 7.53C9.26 7.52 9.07 7.37 8.84 7.37Z"/>
+      </svg>
+    </div>
+    <span class="delisha-whatsapp-badge">✦ Concierge • Chat on WhatsApp</span>
+  </a>
+  
+  <style>
+    .delisha-whatsapp-float {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1C6750 0%, #0F4534 100%);
+      border: 1.5px solid rgba(184, 154, 98, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(15, 69, 52, 0.32), 0 2px 8px rgba(0, 0, 0, 0.12);
+      transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-sizing: border-box;
+    }
+  
+    /* SOFT AMBIENT PULSE RING */
+    .delisha-whatsapp-float::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(184, 154, 98, 0.4);
+      animation: dkWaRing 2.6s infinite ease-out;
+      pointer-events: none;
+    }
+    @keyframes dkWaRing {
+      0% { transform: scale(0.92); opacity: 0.9; }
+      100% { transform: scale(1.36); opacity: 0; }
+    }
+  
+    .delisha-whatsapp-float:hover {
+      transform: translateY(-3px) scale(1.06);
+      box-shadow: 0 12px 30px rgba(15, 69, 52, 0.45), 0 4px 14px rgba(184, 154, 98, 0.35);
+      border-color: #B89A62;
+    }
+  
+    .delisha-whatsapp-icon-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      transition: transform 0.25s ease;
+    }
+    .delisha-whatsapp-float:hover .delisha-whatsapp-icon-wrap {
+      transform: scale(1.06);
+    }
+  
+    .delisha-whatsapp-status-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #25D366;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 8px rgba(37, 211, 102, 0.9);
+      z-index: 3;
+    }
+
+    .delisha-whatsapp-icon {
+      width: 28px;
+      height: 28px;
+      display: block;
+    }
+  
+    /* LUXURY HOVER BADGE ON DESKTOP */
+    .delisha-whatsapp-badge {
+      position: absolute;
+      right: 68px;
+      background: #FFFFFF;
+      color: #1A5442;
+      font-family: var(--dk-font-body, 'Poppins', sans-serif);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid #E6D8CA;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(8px);
+      transition: all 0.25s ease;
+    }
+    .delisha-whatsapp-float:hover .delisha-whatsapp-badge {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  
+    @media screen and (max-width: 768px) {
+      .delisha-whatsapp-float {
+        width: 48px;
+        height: 48px;
+        right: 18px;
+        bottom: 18px;
+      }
+      .delisha-whatsapp-icon {
+        width: 24px;
+        height: 24px;
+      }
+      .delisha-whatsapp-badge {
+        display: none;
+      }
+    }
+  </style>
+
+  <!-- DELISHA KARIGARI — CUSTOM PEACOCK-FEATHER INSPIRED LUXURY CURSOR -->
+  <script src="{{ 'dk-peacock-cursor.js' | asset_url }}" defer="defer"></script>
+</body>
+
+</html>

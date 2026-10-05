@@ -1,0 +1,279 @@
+<section
+  id="dk-rakhi-feature-{{ section.id }}"
+  class="dk-rakhi-sec"
+  style="background-color: {{ section.settings.bg_color | default: '#F9F5EE' }}; padding: {{ section.settings.padding_top | default: 70 }}px 0 {{ section.settings.padding_bottom | default: 70 }}px 0;"
+>
+  <div class="container">
+    <div class="dk-rakhi-grid">
+      <!-- Media Side -->
+      <div class="dk-rakhi-media">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1200 }}"
+            alt="{{ section.settings.heading | escape }}"
+            class="dk-rakhi-img"
+            loading="lazy"
+            width="1200"
+            height="1200"
+          >
+        {%- else -%}
+          <img
+            src="{{ 'dk-hero-banner-3.jpg' | asset_url }}"
+            alt="{{ section.settings.heading | default: 'Handcrafted Rakhis & Festive Hampers' | escape }}"
+            class="dk-rakhi-img"
+            loading="lazy"
+            width="1200"
+            height="1200"
+          >
+        {%- endif -%}
+        {%- if section.settings.badge_text != blank -%}
+          <span class="dk-rakhi-badge">{{ section.settings.badge_text | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <!-- Content Side -->
+      <div class="dk-rakhi-content">
+        {%- if section.settings.subheading != blank -%}
+          <span class="dk-subtitle">{{ section.settings.subheading | escape }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="dk-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <p class="dk-description">{{ section.settings.description | escape }}</p>
+        {%- endif -%}
+
+        <div class="dk-rakhi-categories">
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              <a href="{{ block.settings.link | default: routes.all_products_collection_url }}" class="dk-rakhi-pill" {{ block.shopify_attributes }}>
+                <span class="pill-name">{{ block.settings.title | escape }}</span>
+                <span class="pill-arrow">&rarr;</span>
+              </a>
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign fallback_rakhis = "Premium Rakhis,Rakhi Hampers,Lumba Sets,Rakhi Thali,Kids Rakhi" | split: "," -%}
+            {%- for rak in fallback_rakhis -%}
+              <a href="#" class="dk-rakhi-pill">
+                <span class="pill-name">{{ rak }}</span>
+                <span class="pill-arrow">&rarr;</span>
+              </a>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.button_label != blank -%}
+          <div style="margin-top: var(--dk-space-xl, 2rem);">
+            <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="dk-btn dk-btn-primary">
+              {{ section.settings.button_label | escape }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dk-rakhi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--dk-space-2xl, 3.5rem);
+    align-items: center;
+  }
+  .dk-rakhi-media {
+    position: relative;
+    border-radius: var(--dk-radius-lg, 12px);
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background-color: var(--dk-color-background-secondary, #F2E5DD);
+    box-shadow: 0 10px 30px rgba(110,31,42,0.1);
+  }
+  .dk-rakhi-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .dk-rakhi-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dk-rakhi-placeholder-svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.35;
+  }
+  .dk-rakhi-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: var(--dk-color-primary, #6E1F2A);
+    color: #FFFFFF;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    border-radius: 30px;
+    text-transform: uppercase;
+  }
+  .dk-rakhi-content {
+    padding-right: var(--dk-space-lg, 1.5rem);
+  }
+  .dk-rakhi-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: var(--dk-space-lg, 1.5rem);
+  }
+  .dk-rakhi-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--dk-color-border, rgba(110,31,42,0.15));
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--dk-color-text, #252525);
+    transition: all 0.2s ease;
+  }
+  .dk-rakhi-pill:hover {
+    background-color: var(--dk-color-primary, #6E1F2A);
+    color: #FFFFFF;
+    border-color: var(--dk-color-primary, #6E1F2A);
+  }
+  .dk-rakhi-pill:hover .pill-arrow {
+    transform: translateX(3px);
+  }
+  .pill-arrow {
+    color: var(--dk-color-gold, #B89552);
+    transition: transform 0.2s ease;
+  }
+  .dk-rakhi-pill:hover .pill-arrow {
+    color: #FFFFFF;
+  }
+
+  @media (max-width: 900px) {
+    .dk-rakhi-grid {
+      grid-template-columns: 1fr;
+      gap: var(--dk-space-xl, 2rem);
+    }
+    .dk-rakhi-content {
+      padding-right: 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "DELISHA Rakhi Feature",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Feature Lifestyle Image"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "FESTIVE EDITION"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "RAKHI, BUT MAKE IT BEAUTIFUL"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Handcrafted Rakhis & Festive Hampers"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Celebrate the sacred bond of protection with intricately woven Rakhis, artisanal Lumba sets, and handcrafted festive thalis made to be treasured."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "EXPLORE RAKHI COLLECTION"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F9F5EE"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 70
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_pill",
+      "name": "Category Pill",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Pill Title",
+          "default": "Premium Rakhis"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Pill Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DELISHA Festive Rakhi Feature",
+      "blocks": [
+        { "type": "category_pill", "settings": { "title": "Premium Rakhis" } },
+        { "type": "category_pill", "settings": { "title": "Rakhi Hampers" } },
+        { "type": "category_pill", "settings": { "title": "Lumba Sets" } },
+        { "type": "category_pill", "settings": { "title": "Rakhi Thali" } },
+        { "type": "category_pill", "settings": { "title": "Kids Rakhi" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

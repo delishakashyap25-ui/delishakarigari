@@ -1,0 +1,10 @@
+# Node & dev files
+node_modules/
+package-lock.json
+package.json
+preview-server.js
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log

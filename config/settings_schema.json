@@ -1,0 +1,62 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "DELISHA KARIGARI Premium",
+    "theme_author": "DELISHA KARIGARI",
+    "theme_version": "1.0.0",
+    "theme_support_url": "https://delishakarigari.com/pages/contact",
+    "theme_documentation_url": "https://delishakarigari.com"
+  },
+  {
+    "name": "Brand Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Accent (Maroon)",
+        "default": "#6E1F2A"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Primary Background (Ivory)",
+        "default": "#F9F5EE"
+      },
+      {
+        "type": "color",
+        "id": "color_background_secondary",
+        "label": "Secondary Background (Sand)",
+        "default": "#F2E5DD"
+      },
+      {
+        "type": "color",
+        "id": "color_gold",
+        "label": "Muted Champagne Gold",
+        "default": "#B89552"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Primary Text",
+        "default": "#252525"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Heading Font",
+        "default": "playfair_display_n6"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Body Font",
+        "default": "poppins_n4"
+      }
+    ]
+  }
+]

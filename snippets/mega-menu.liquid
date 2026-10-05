@@ -1,0 +1,65 @@
+{%- comment -%}
+  snippets/mega-menu.liquid
+  Multi-column mega menu component for DELISHA KARIGARI header.
+{%- endcomment -%}
+
+{%- assign has_featured = false -%}
+{%- if mega_menu_block != blank and mega_menu_block.settings.featured_image != blank or mega_menu_block.settings.featured_heading != blank -%}
+  {%- assign has_featured = true -%}
+{%- endif -%}
+
+<div class="dk-mega-menu {% if has_featured %}dk-mega-menu--has-featured{% endif %}" role="region" aria-label="{{ link.title }} Navigation Menu">
+  <div class="dk-mega-menu__container">
+    <div class="dk-mega-menu__columns">
+      {%- for childlink in link.links -%}
+        <div class="dk-mega-menu__column">
+          <a href="{{ childlink.url }}" class="dk-mega-menu__heading">
+            {{ childlink.title | escape }}
+          </a>
+
+          {%- if childlink.links != blank -%}
+            <ul class="dk-mega-menu__list" role="list">
+              {%- for grandchild in childlink.links -%}
+                <li class="dk-mega-menu__item">
+                  <a href="{{ grandchild.url }}" class="dk-mega-menu__link">
+                    {{ grandchild.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if has_featured -%}
+      <div class="dk-mega-menu__featured">
+        <a href="{{ mega_menu_block.settings.featured_link | default: link.url }}" class="dk-mega-menu__featured-card">
+          {%- if mega_menu_block.settings.featured_image != blank -%}
+            <div class="dk-mega-menu__featured-image-wrap">
+              <img
+                src="{{ mega_menu_block.settings.featured_image | image_url: width: 600 }}"
+                alt="{{ mega_menu_block.settings.featured_heading | default: link.title | escape }}"
+                loading="lazy"
+                width="300"
+                height="300"
+                class="dk-mega-menu__featured-image"
+              >
+            </div>
+          {%- endif -%}
+          <div class="dk-mega-menu__featured-content">
+            {%- if mega_menu_block.settings.featured_tag != blank -%}
+              <span class="dk-subtitle">{{ mega_menu_block.settings.featured_tag | escape }}</span>
+            {%- endif -%}
+            {%- if mega_menu_block.settings.featured_heading != blank -%}
+              <h4 class="dk-mega-menu__featured-title">{{ mega_menu_block.settings.featured_heading | escape }}</h4>
+            {%- endif -%}
+            {%- if mega_menu_block.settings.featured_button_text != blank -%}
+              <span class="dk-mega-menu__featured-btn">{{ mega_menu_block.settings.featured_button_text | escape }} &rarr;</span>
+            {%- endif -%}
+          </div>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>

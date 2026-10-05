@@ -1,0 +1,652 @@
+{%- comment -%} Fonts loaded globally in theme.liquid {%- endcomment -%}
+
+{%- assign selected_collection = collections[section.settings.collection] -%}
+
+<div id="sale-offer--{{ section.id }}" class="sale-offer-section padding-{{ section.id }}" style="background-color: {{ section.settings.bg_color | default: '#fdf5e6' }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+
+  <div class="sale-offer-container">
+    
+    <!-- Section Header -->
+    <div class="sale-offer-header" style="text-align: {{ section.settings.text_align | default: 'center' }};">
+      {% if section.settings.title != blank %}
+        <h2 class="sale-offer-title" style="color: {{ section.settings.title_color | default: '#4a1525' }};">
+          {{ section.settings.title }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.subtitle != blank %}
+        <p class="sale-offer-subtitle" style="color: {{ section.settings.subtitle_color | default: '#333333' }};">
+          {{ section.settings.subtitle }}
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Slider Viewport -->
+    <div class="sale-slider-viewport">
+      {%- assign products_limit = section.settings.products_to_show | default: 8 -%}
+      {%- if selected_collection != blank and selected_collection.products_count > 0 -%}
+        {%- assign products_list = selected_collection.products -%}
+      {%- else -%}
+        {%- assign products_list = collections.all.products -%}
+      {%- endif -%}
+
+      {% if section.settings.show_arrows %}
+        <button type="button" class="sale-slider-arrow prev" aria-label="Previous slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button type="button" class="sale-slider-arrow next" aria-label="Next slide">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      {% endif %}
+
+      <div class="sale-slider-track" id="SaleSliderTrack--{{ section.id }}" data-autoplay="{{ section.settings.enable_autoplay }}" data-speed="{{ section.settings.autoplay_speed | default: 5 | times: 1000 }}">
+        {% for product in products_list limit: products_limit %}
+          <div class="sale-card-slide" data-index="{{ forloop.index0 }}">
+            <div class="sale-card-inner" style="background-color: {{ section.settings.card_bg_color | default: '#ffffff' }}; border-radius: {{ section.settings.card_border_radius | default: 16 }}px;">
+              
+              <!-- Product Image -->
+              <a href="{{ product.url }}" class="sale-card-image-wrap">
+                {% if product.featured_image != blank %}
+                  <img src="{{ product.featured_image | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy" class="sale-card-img" width="800" height="800">
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'sale-card-placeholder' }}
+                {% endif %}
+
+                {% if product.compare_at_price > product.price %}
+                  <span class="sale-badge">SALE</span>
+                {% endif %}
+              </a>
+
+              <!-- Card Content -->
+              <div class="sale-card-content">
+                <a href="{{ product.url }}" class="sale-product-title" style="color: {{ section.settings.title_color | default: '#4a1525' }};">
+                  {{ product.title }}
+                </a>
+
+                <div class="sale-product-price">
+                  <span class="current-price" style="color: {{ section.settings.title_color | default: '#4a1525' }};">{{ product.price | money }}</span>
+                  {% if product.compare_at_price > product.price %}
+                    <s class="compare-price">{{ product.compare_at_price | money }}</s>
+                  {% endif %}
+                </div>
+
+                <form method="post" action="{{ routes.cart_add_url }}" class="sale-quick-add-form" style="width: 100%;">
+                  <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="button" class="sale-card-pill" style="background-color: {{ section.settings.pill_bg_color | default: '#f4f3c7' }}; color: {{ section.settings.pill_text_color | default: '#4a1525' }};" onclick="if(window.ShopifyCart && window.ShopifyCart.addItem){ window.ShopifyCart.addItem(this.closest('form')); } else { this.closest('form').submit(); }">
+                    ADD TO CART
+                  </button>
+                </form>
+              </div>
+
+            </div>
+          </div>
+        {% else %}
+          <!-- Placeholder Cards -->
+          {% for i in (1..4) %}
+            <div class="sale-card-slide" data-index="{{ forloop.index0 }}">
+              <div class="sale-card-inner" style="background-color: {{ section.settings.card_bg_color | default: '#ffffff' }}; border-radius: {{ section.settings.card_border_radius | default: 16 }}px;">
+                <div class="sale-card-image-wrap">
+                  {{ 'product-1' | placeholder_svg_tag: 'sale-card-placeholder' }}
+                </div>
+                <div class="sale-card-content">
+                  <div class="sale-product-title" style="color: {{ section.settings.title_color | default: '#4a1525' }};">Sample Product {{ i }}</div>
+                  <div class="sale-product-price"><span class="current-price">₹299.00</span></div>
+                  <button type="button" class="sale-card-pill" style="background-color: {{ section.settings.pill_bg_color | default: '#f4f3c7' }}; color: {{ section.settings.pill_text_color | default: '#4a1525' }};">ADD TO CART</button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+
+      {% if section.settings.show_dots %}
+        <div class="sale-slider-dots" id="SaleSliderDots--{{ section.id }}">
+          {% for product in products_list limit: products_limit %}
+            <button type="button" class="sale-dot {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* =========================================
+   SALE OFFER SLIDER STYLES
+   ========================================= */
+
+.sale-offer-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.sale-offer-container {
+  width: 92%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Header */
+.sale-offer-header {
+  margin-bottom: 35px;
+}
+
+.sale-offer-title {
+  font-family: var(--font-heading, 'Playfair Display', serif);
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.sale-offer-subtitle {
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+/* Slider Viewport & Track */
+.sale-slider-viewport {
+  position: relative;
+  width: 100%;
+}
+
+.sale-slider-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 4px 20px 4px;
+}
+
+.sale-slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Slides */
+.sale-card-slide {
+  flex: 0 0 calc(25% - 18px);
+  min-width: 250px;
+  box-sizing: border-box;
+}
+
+.sale-card-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sale-card-inner:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Image */
+.sale-card-image-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  display: block;
+  background: #f8f8f8;
+}
+
+.sale-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.sale-card-inner:hover .sale-card-img {
+  transform: scale(1.06);
+}
+
+.sale-card-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #eee;
+  fill: #aaa;
+}
+
+.sale-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #4a1525;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+/* Card Bottom Details */
+.sale-card-content {
+  padding: 18px 16px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.sale-product-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sale-product-price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sale-product-price .compare-price {
+  color: #999999;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.sale-card-pill {
+  display: inline-block;
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 30px;
+  border: none;
+  font-family: var(--font-body, 'Poppins', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 1px;
+  text-align: center;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.sale-card-pill:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* Navigation Arrows */
+.sale-slider-arrow {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #333333;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.sale-slider-arrow:hover {
+  background: #4a1525;
+  color: #ffffff;
+  border-color: #4a1525;
+  transform: translateY(-50%) scale(1.08);
+}
+
+.sale-slider-arrow.prev {
+  left: -20px;
+}
+
+.sale-slider-arrow.next {
+  right: -20px;
+}
+
+/* Dots */
+.sale-slider-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.sale-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #cccccc;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.sale-dot.active {
+  background: #4a1525;
+  transform: scale(1.3);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sale-card-slide {
+    flex: 0 0 calc(33.333% - 16px);
+  }
+}
+
+@media (max-width: 768px) {
+  .sale-offer-title {
+    font-size: 28px;
+  }
+  .sale-offer-subtitle {
+    font-size: 14px;
+  }
+  .sale-card-slide {
+    flex: 0 0 calc(65% - 12px);
+  }
+  .sale-slider-arrow {
+    display: none;
+  }
+}
+</style>
+
+<script>
+  (function() {
+    function initSaleOfferSlider() {
+      var sectionId = '{{ section.id }}';
+      var track = document.getElementById('SaleSliderTrack--' + sectionId);
+      if (!track) return;
+
+      var viewport = track.parentElement;
+      var prevBtn = viewport.querySelector('.sale-slider-arrow.prev');
+      var nextBtn = viewport.querySelector('.sale-slider-arrow.next');
+      var dots = viewport.querySelectorAll('.sale-dot');
+      var slides = track.querySelectorAll('.sale-card-slide');
+      
+      var isAutoplay = track.getAttribute('data-autoplay') === 'true';
+      var speed = parseInt(track.getAttribute('data-speed'), 10) || 5000;
+      var timer = null;
+
+      function getSlideWidth() {
+        if (slides.length === 0) return 270;
+        return slides[0].offsetWidth + 24;
+      }
+
+      function scrollToSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= slides.length) index = slides.length - 1;
+        
+        var scrollPos = index * getSlideWidth();
+        track.scrollTo({
+          left: scrollPos,
+          behavior: 'smooth'
+        });
+
+        dots.forEach(function(dot, i) {
+          if (i === index) dot.classList.add('active');
+          else dot.classList.remove('active');
+        });
+      }
+
+      function getCurrentIndex() {
+        return Math.round(track.scrollLeft / getSlideWidth());
+      }
+
+      if (nextBtn) {
+        nextBtn.onclick = function() {
+          var nextIdx = getCurrentIndex() + 1;
+          if (nextIdx >= slides.length) nextIdx = 0;
+          scrollToSlide(nextIdx);
+        };
+      }
+
+      if (prevBtn) {
+        prevBtn.onclick = function() {
+          var prevIdx = getCurrentIndex() - 1;
+          if (prevIdx < 0) prevIdx = slides.length - 1;
+          scrollToSlide(prevIdx);
+        };
+      }
+
+      dots.forEach(function(dot) {
+        dot.onclick = function() {
+          var idx = parseInt(this.getAttribute('data-index'), 10);
+          scrollToSlide(idx);
+        };
+      });
+
+      track.addEventListener('scroll', function() {
+        clearTimeout(window.saleScrollTimer);
+        window.saleScrollTimer = setTimeout(function() {
+          var current = getCurrentIndex();
+          dots.forEach(function(dot, i) {
+            if (i === current) dot.classList.add('active');
+            else dot.classList.remove('active');
+          });
+        }, 100);
+      });
+
+      function startAutoplay() {
+        if (!isAutoplay || slides.length <= 1) return;
+        stopAutoplay();
+        timer = setInterval(function() {
+          var nextIdx = getCurrentIndex() + 1;
+          if (nextIdx >= slides.length) nextIdx = 0;
+          scrollToSlide(nextIdx);
+        }, speed);
+      }
+
+      function stopAutoplay() {
+        if (timer) clearInterval(timer);
+      }
+
+      track.addEventListener('mouseenter', stopAutoplay);
+      track.addEventListener('mouseleave', startAutoplay);
+      track.addEventListener('touchstart', stopAutoplay, { passive: true });
+
+      startAutoplay();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSaleOfferSlider);
+    } else {
+      initSaleOfferSlider();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sale Offer Slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection Selection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "label": "Number of Products to Show",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Title",
+      "default": "FREEDOM SALE"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading / Discount Code",
+      "default": "Flat 20% OFF | Code: INDEPENDENCE"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Header Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Colors & Styling"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#fdf5e6"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading / Product Title Color",
+      "default": "#4a1525"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subheading Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "pill_bg_color",
+      "label": "Button Background",
+      "default": "#f4f3c7"
+    },
+    {
+      "type": "color",
+      "id": "pill_text_color",
+      "label": "Button Text Color",
+      "default": "#4a1525"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Autoplay Duration (seconds)",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sale Offer Slider"
+    }
+  ]
+}
+{% endschema %}

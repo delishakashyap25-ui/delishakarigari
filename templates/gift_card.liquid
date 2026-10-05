@@ -1,0 +1,23 @@
+{% layout none %}
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gift Card</title>
+  {{ content_for_header }}
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+<body style="background: var(--dk-color-background, #F9F5EE); font-family: var(--dk-font-body, 'Poppins', sans-serif); text-align: center; padding: 50px 20px;">
+  <div style="max-width: 500px; margin: 0 auto; background: #fff; border-radius: 8px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+    <h1 style="font-family: var(--dk-font-heading, 'Playfair Display', serif); color: var(--dk-color-primary, #6E1F2A); font-size: 28px; margin-bottom: 20px;">Delisha Karigari</h1>
+    <h2 style="font-size: 20px; margin-bottom: 10px;">Gift Card</h2>
+    <p style="color: var(--dk-color-text-muted, #555); margin-bottom: 20px;">Use this card to redeem your handcrafted treasure.</p>
+    <div style="background: #F2E5DD; padding: 15px; border-radius: 4px; font-size: 24px; font-weight: 600; color: #6E1F2A; margin-bottom: 25px;">
+      {{ gift_card.balance | money }}
+    </div>
+    <a href="{{ routes.root_url }}" class="dk-btn dk-btn-primary" style="display: inline-block; padding: 12px 24px; background: #6E1F2A; color: #fff; text-decoration: none; border-radius: 4px; font-weight: 600;">Start Shopping</a>
+  </div>
+</body>
+</html>

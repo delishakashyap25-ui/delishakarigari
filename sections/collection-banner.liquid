@@ -1,0 +1,246 @@
+{%- liquid
+  assign is_all = false
+  if collection.handle == 'all' or collection.handle == blank
+    assign is_all = true
+  endif
+
+  if is_all
+    assign header_eyebrow = 'ALL COLLECTIONS'
+    assign header_title = 'Handcrafted Pieces for Beautiful Celebrations.'
+    assign header_desc = collection.description
+    if header_desc == blank
+      assign header_desc = 'Thoughtfully handcrafted décor, gifting and festive pieces made to make every celebration feel a little more special.'
+    endif
+  else
+    assign header_eyebrow = 'DELISHA KARIGARI • EDIT'
+    assign header_title = collection.title | default: section.settings.fallback_title | default: 'Collection'
+    assign header_desc = collection.description
+    if header_desc == blank
+      assign header_desc = 'Thoughtfully handcrafted pieces made to bring warmth, tradition, and artistry to your home.'
+    endif
+  endif
+-%}
+
+<div
+  class="dk-collection-hero {% if section.settings.show_image and collection.image %}dk-collection-hero--has-image{% endif %}"
+  style="
+    background-color: {{ section.settings.banner_bg_color | default: '#F9F5EE' }};
+    {% if section.settings.show_image and collection.image %}
+      background-image: url('{{ collection.image | image_url: width: 2000 }}');
+    {% elsif section.settings.banner_image != blank %}
+      background-image: url('{{ section.settings.banner_image | image_url: width: 2000 }}');
+    {% endif %}
+  "
+>
+  {% if section.settings.show_image and collection.image or section.settings.banner_image != blank %}
+    <div class="dk-collection-hero__overlay"></div>
+  {% endif %}
+
+  <div class="dk-collection-hero__inner">
+    {% if section.settings.show_breadcrumb %}
+      <nav class="dk-collection-hero__breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ routes.root_url }}">Home</a>
+        <span class="sep">/</span>
+        <a href="{{ routes.collections_url | default: '/collections' }}">Collections</a>
+        <span class="sep">/</span>
+        <span class="current">{{ collection.title | default: 'All Collections' }}</span>
+      </nav>
+    {% endif %}
+
+    <span class="dk-collection-hero__eyebrow">{{ header_eyebrow }}</span>
+
+    <h1 class="dk-collection-hero__title">
+      {%- if is_all -%}
+        Handcrafted Pieces for<br class="dk-hero-title-br"> <em>Beautiful Celebrations.</em>
+      {%- else -%}
+        {{ header_title }}
+      {%- endif -%}
+    </h1>
+
+    {% if section.settings.show_description and header_desc != blank %}
+      <div class="dk-collection-hero__description">
+        {{ header_desc }}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .dk-collection-hero {
+    position: relative;
+    width: 100%;
+    background-color: #F9F5EE;
+    border-bottom: 1px solid #ECE4D8;
+    padding: clamp(32px, 3.8vw, 54px) 20px clamp(28px, 3.4vw, 44px);
+    box-sizing: border-box;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .dk-collection-hero--has-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .dk-collection-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(249, 245, 238, 0.82) 0%, rgba(249, 245, 238, 0.94) 100%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .dk-collection-hero__inner {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dk-collection-hero__breadcrumb {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    color: #8C7B75;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .dk-collection-hero__breadcrumb a {
+    color: #6A5B55;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .dk-collection-hero__breadcrumb a:hover {
+    color: var(--dk-color-primary, #641A28);
+  }
+
+  .dk-collection-hero__breadcrumb .sep {
+    color: #B5A8A3;
+    font-size: 0.7rem;
+  }
+
+  .dk-collection-hero__breadcrumb .current {
+    color: var(--dk-color-primary, #641A28);
+    font-weight: 600;
+  }
+
+  .dk-collection-hero__eyebrow {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: #9E7D42;
+    margin-bottom: 0.6rem;
+    display: inline-block;
+  }
+
+  .dk-collection-hero__title {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: clamp(2rem, 3.2vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #211216;
+    margin: 0 0 0.85rem;
+    letter-spacing: -0.2px;
+  }
+
+  .dk-collection-hero__title em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--dk-color-primary, #641A28);
+  }
+
+  .dk-hero-title-br {
+    display: block;
+  }
+
+  .dk-collection-hero__description {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: clamp(0.86rem, 1.05vw, 0.95rem);
+    line-height: 1.65;
+    color: #5A4E49;
+    max-width: 660px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .dk-collection-hero {
+      padding: 24px 16px 22px;
+    }
+    .dk-collection-hero__title {
+      font-size: 1.65rem;
+      line-height: 1.25;
+    }
+    .dk-hero-title-br {
+      display: inline;
+    }
+    .dk-collection-hero__description {
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+    .dk-collection-hero__eyebrow {
+      font-size: 0.65rem;
+      letter-spacing: 1.8px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "fallback_title",
+      "label": "Fallback Title (if empty)",
+      "default": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show Collection Featured Image as Background",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Custom Banner Background Image"
+    },
+    {
+      "type": "color",
+      "id": "banner_bg_color",
+      "label": "Background Color",
+      "default": "#F9F5EE"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show Breadcrumb",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Collection Description",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Banner"
+    }
+  ]
+}
+{% endschema %}

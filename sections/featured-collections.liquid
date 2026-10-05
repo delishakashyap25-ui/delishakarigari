@@ -1,0 +1,376 @@
+<section class="featured-collections-sec" style="background-color: {{ section.settings.bg_color }}; {% if section.settings.bg_image != blank %}background-image: url({{ section.settings.bg_image | image_url }}); background-size: cover; background-position: center;{% endif %} padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;">
+  
+  <div class="fc-container">
+    {% if section.settings.heading != blank %}
+      <h2 class="fc-section-title" style="text-align: {{ section.settings.heading_align }};">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="fc-grid">
+      {% for block in section.blocks %}
+        <div class="fc-card" {{ block.shopify_attributes }}>
+          
+          <!-- Background Image -->
+          {% if block.settings.image != blank %}
+            <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.title | escape }}" class="fc-bg-img" loading="lazy" width="800" height="600">
+          {% else %}
+            {{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg fc-bg-img' }}
+          {% endif %}
+
+          <!-- Overlay -->
+          <div class="fc-overlay" style="background-color: {{ block.settings.overlay_color }}; opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+
+          <!-- Content & Inner Border -->
+          <div class="fc-inner-wrapper {% if block.settings.show_border %}has-border{% endif %}">
+            <div class="fc-content">
+              {% if block.settings.title != blank %}
+                <h3 class="fc-title">{{ block.settings.title }}</h3>
+              {% endif %}
+              
+              {% if block.settings.description != blank %}
+                <p class="fc-desc">{{ block.settings.description }}</p>
+              {% endif %}
+              
+              {% if block.settings.btn_text != blank %}
+                <a href="{{ block.settings.btn_link | default: '#' }}" class="fc-btn style-{{ block.settings.btn_style }}">
+                  {{ block.settings.btn_text }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+/* Base Section */
+.featured-collections-sec {
+  width: 100%;
+  position: relative;
+}
+.fc-container {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.fc-section-title {
+  font-family: var(--font-heading, serif);
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+/* Grid Layout */
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+/* Card Styling */
+.fc-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 4.5; /* Slightly taller than square */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.fc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Image */
+.fc-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  transition: transform 0.6s ease;
+}
+.fc-card:hover .fc-bg-img {
+  transform: scale(1.08);
+}
+
+/* Overlay */
+.fc-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Inner Wrapper & Border */
+.fc-inner-wrapper {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+}
+.fc-inner-wrapper.has-border {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Content Typography */
+.fc-title {
+  font-family: var(--font-heading, serif);
+  font-size: 28px;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.fc-desc {
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  color: #ffffff;
+  margin: 0 0 25px 0;
+  opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+/* Button */
+.fc-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  border-radius: 4px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  width: 80%;
+  max-width: 250px;
+}
+.fc-btn.style-gold {
+  background-color: #d8a85e; /* Exact match to screenshot */
+  color: #000000;
+  border: none;
+}
+.fc-btn.style-gold:hover {
+  background-color: #c29550;
+  color: #ffffff;
+}
+.fc-btn.style-dark {
+  background-color: #2b221a; /* Dark brown/black match */
+  color: #ffffff;
+  border: none;
+}
+.fc-btn.style-dark:hover {
+  background-color: #000000;
+}
+.fc-btn.style-outline {
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+}
+.fc-btn.style-outline:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Responsive */
+@media(max-width: 992px) {
+  .fc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media(max-width: 768px) {
+  .fc-grid {
+    grid-template-columns: 1fr;
+  }
+  .fc-card {
+    aspect-ratio: 1 / 1;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#fdf8f2"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Pattern Image (e.g. Mandala)"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection Card",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Collection Title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Description here"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show Inner White Border",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Button Options"
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button Label",
+          "default": "EXPLORE NOW"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "Button Style",
+          "options": [
+            { "value": "gold", "label": "Gold" },
+            { "value": "dark", "label": "Dark/Brown" },
+            { "value": "outline", "label": "White Outline" }
+          ],
+          "default": "gold"
+        },
+        {
+          "type": "header",
+          "content": "Overlay Settings"
+        },
+        {
+          "type": "color",
+          "id": "overlay_color",
+          "label": "Overlay Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "Overlay Opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "default": 40
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections Grid",
+      "blocks": [
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Collection Title",
+            "description": "Description here",
+            "btn_style": "gold",
+            "show_border": true,
+            "overlay_color": "#000000",
+            "overlay_opacity": 40
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Collection Title",
+            "description": "Description here",
+            "btn_style": "dark",
+            "show_border": false,
+            "overlay_color": "#d8a85e",
+            "overlay_opacity": 30
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Collection Title",
+            "description": "Description here",
+            "btn_style": "gold",
+            "show_border": true,
+            "overlay_color": "#000000",
+            "overlay_opacity": 40
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

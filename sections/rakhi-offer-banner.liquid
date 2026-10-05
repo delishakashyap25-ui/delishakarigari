@@ -1,0 +1,235 @@
+<div class="rakhi-banner-section padding-{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
+  <div class="rakhi-container">
+    <div class="rakhi-flex">
+      
+      <!-- Image Side -->
+      <div class="rakhi-image-col">
+        {% if section.settings.image != blank %}
+          <img src="{{ section.settings.image | image_url: width: 1000 }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1000" height="800">
+        {% else %}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+      
+      <!-- Text Side -->
+      <div class="rakhi-text-col">
+        {% if section.settings.heading != blank %}
+          <h2 class="rakhi-heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+        
+        {% if section.settings.subheading != blank %}
+          <p class="rakhi-subheading">{{ section.settings.subheading }}</p>
+        {% endif %}
+        
+        {% if section.settings.offer_text != blank %}
+          <p class="rakhi-offer">{{ section.settings.offer_text }}</p>
+        {% endif %}
+        
+        {% if section.settings.btn_text != blank %}
+          <a href="{{ section.settings.btn_link }}" class="rakhi-btn">{{ section.settings.btn_text }}</a>
+        {% endif %}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<style>
+.rakhi-banner-section {
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+  overflow: hidden;
+}
+.rakhi-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+.rakhi-flex {
+  display: flex;
+  align-items: stretch;
+  background-color: {{ section.settings.bg_color }};
+  border-radius: 12px;
+  overflow: hidden;
+}
+.rakhi-image-col {
+  flex: 0 0 50%;
+  position: relative;
+}
+.rakhi-image-col img, .rakhi-image-col svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.rakhi-text-col {
+  flex: 0 0 50%;
+  padding: 30px 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: {{ section.settings.text_color }};
+}
+.rakhi-heading {
+  font-family: var(--font-heading, serif);
+  font-size: 42px;
+  letter-spacing: 2px;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+}
+.rakhi-subheading {
+  font-size: 18px;
+  font-family: var(--font-body, sans-serif);
+  margin: 0 0 20px 0;
+  color: {{ section.settings.text_color | color_modify: 'alpha', 0.8 }};
+}
+.rakhi-offer {
+  font-size: 22px;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 500;
+  margin: 0 0 30px 0;
+}
+.rakhi-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #64142D;
+  color: #fff;
+  text-decoration: none;
+  font-family: var(--font-body, sans-serif);
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  transition: opacity 0.3s ease;
+}
+.rakhi-btn:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 992px) {
+  .rakhi-heading {
+    font-size: 32px;
+  }
+  .rakhi-text-col {
+    padding: 30px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rakhi-container {
+    padding: 0 15px;
+  }
+  .rakhi-flex {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .rakhi-image-col {
+    flex: 0 0 45%;
+    width: 45%;
+  }
+  .rakhi-text-col {
+    flex: 0 0 55%;
+    width: 55%;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .rakhi-heading {
+    font-size: 20px;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .rakhi-subheading {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+  .rakhi-offer {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  .rakhi-btn {
+    padding: 8px 15px;
+    font-size: 11px;
+    width: fit-content;
+    margin: 0 auto;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Rakhi Offer Banner",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#dfcdc2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "RAKSHA BANDHAN GIFTS"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Elegant silver treasures your sister will cherish"
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Offer Text",
+      "default": "Flat 15% Off Sitewide"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rakhi Offer Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,678 @@
+<div class="customer-account-container">
+  <div class="account-header">
+    <div class="header-text">
+      <h1 class="account-title">My Account</h1>
+      <p class="account-subtitle">Welcome back, {{ customer.name }}!</p>
+    </div>
+    <a href="{{ routes.account_logout_url | default: '/account/logout' }}" class="logout-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+      Logout
+    </a>
+  </div>
+
+  <div class="account-grid">
+    <!-- LEFT COLUMN: ORDER HISTORY -->
+    <div class="orders-section">
+      <div class="section-card">
+        <h2 class="section-title">Order History</h2>
+
+        {% paginate customer.orders by 10 %}
+        {% if customer.orders.size != 0 %}
+        <div class="table-responsive">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Payment</th>
+                <th>Fulfillment</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in customer.orders %}
+              <tr>
+                <td data-label="Order">
+                  <a href="{{ order.customer_url }}" class="order-link">{{ order.name }}</a>
+                </td>
+                <td data-label="Date">{{ order.created_at | date: "%b %d, %Y" }}</td>
+                <td data-label="Payment">
+                  <span class="status-badge status-{{ order.financial_status }}">
+                          {{ order.financial_status_label }}
+                        </span>
+                </td>
+                <td data-label="Fulfillment">
+                  <span class="status-badge status-{{ order.fulfillment_status }}">
+                          {{ order.fulfillment_status_label }}
+                        </span>
+                </td>
+                <td data-label="Total" class="order-total">{{ order.total_price | money }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        {% if paginate.pages > 1 %}
+        <div class="pagination-wrapper">
+          {{ paginate | default_pagination }}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-orders">
+          <div class="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+              stroke="#caa25d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <h3>No Orders Placed Yet</h3>
+          <p>Explore our collections and find something you love.</p>
+          <a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" class="shop-now-btn">Start
+            Shopping</a>
+        </div>
+        {% endif %}
+        {% endpaginate %}
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: PROFILE & ADDRESSES -->
+    <div class="profile-section">
+      <!-- PROFILE CARD -->
+      <div class="section-card">
+        <h2 class="section-title">Edit Profile</h2>
+
+        <form method="post" action="" class="profile-form">
+          <div class="input-row">
+            <div class="input-group">
+              <label for="FirstName" class="input-label">First Name</label>
+              <input
+                type="text"
+                name="customer[first_name]"
+                id="FirstName"
+                class="input-field"
+                value="{{ customer.first_name }}"
+                placeholder="First name"
+              >
+            </div>
+
+            <div class="input-group">
+              <label for="LastName" class="input-label">Last Name</label>
+              <input
+                type="text"
+                name="customer[last_name]"
+                id="LastName"
+                class="input-field"
+                value="{{ customer.last_name }}"
+                placeholder="Last name"
+              >
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="Email" class="input-label">Email Address</label>
+            <input
+              type="email"
+              name="customer[email]"
+              id="Email"
+              class="input-field"
+              value="{{ customer.email }}"
+              placeholder="Email address"
+              required
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="NewPassword" class="input-label">New Password (optional)</label>
+            <input
+              type="password"
+              name="customer[password]"
+              id="NewPassword"
+              class="input-field"
+              placeholder="Leave blank to keep same"
+            >
+          </div>
+
+          <div class="input-group">
+            <label for="CurrentPassword" class="input-label">Current Password (required)</label>
+            <input
+              type="password"
+              name="customer[current_password]"
+              id="CurrentPassword"
+              class="input-field"
+              placeholder="Verify password to save changes"
+              required
+            >
+          </div>
+
+          <button type="submit" class="save-profile-btn">Save Profile</button>
+        </form>
+      </div>
+
+      <!-- DEFAULT ADDRESS CARD -->
+      <div class="section-card mt-30">
+        <h2 class="section-title">Default Address</h2>
+
+        <div class="address-details-box">
+          {% if customer.default_address != nil %}
+          <h3 class="address-name">{{ customer.default_address.name }}</h3>
+          <p class="address-text">
+            {{ customer.default_address.address1 }}<br>
+              {% if customer.default_address.address2 != blank %}
+                {{ customer.default_address.address2 }}<br>
+              {% endif %}
+              {{ customer.default_address.city }}
+              {% if customer.default_address.province_code != blank %}
+                , {{ customer.default_address.province_code }}
+              {% endif %}
+              {{ customer.default_address.zip }}<br>
+              {{ customer.default_address.country }}
+              {% if customer.default_address.phone != blank %}
+            <br><span class="phone-num">Phone: {{ customer.default_address.phone }}</span>
+            {% endif %}
+          </p>
+          {% else %}
+          <p class="no-address-text">You haven't set a default address yet.</p>
+          {% endif %}
+
+          <div class="address-action-row">
+            <a href="{{ routes.account_addresses_url | default: '/account/addresses' }}" class="manage-addr-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Manage Addresses ({{ customer.addresses_count }})
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .customer-account-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f3ea;
+    min-height: 80vh;
+    box-sizing: border-box;
+  }
+
+  .account-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid rgba(202, 162, 93, 0.2);
+    padding-bottom: 25px;
+    margin-bottom: 40px;
+  }
+
+  .account-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: #222222;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .account-subtitle {
+    font-size: 15px;
+    color: #666666;
+    margin: 0;
+  }
+
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: #666666;
+    border: 1px solid #e2e0da;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background: #222222;
+    color: #ffffff;
+    border-color: #222222;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  .account-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .section-card {
+    background: #ffffff;
+    border: 1px solid rgba(202, 162, 93, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    padding: 35px;
+  }
+
+  .mt-30 {
+    margin-top: 30px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #222222;
+    margin: 0 0 25px 0;
+    position: relative;
+    padding-bottom: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: #caa25d;
+  }
+
+  /* Orders Table Styling */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .orders-table th {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #222222;
+    letter-spacing: 0.8px;
+    padding: 16px 20px;
+    border-bottom: 2px solid #f8f3ea;
+    background: #faf8f5;
+  }
+
+  .orders-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f0eae1;
+    font-size: 14px;
+    color: #444444;
+  }
+
+  .orders-table tbody tr {
+    transition: background-color 0.2s ease;
+  }
+
+  .orders-table tbody tr:hover {
+    background-color: #fcfbfa;
+  }
+
+  .order-link {
+    color: #caa25d;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .order-link:hover {
+    color: #8e6c38;
+    text-decoration: underline;
+  }
+
+  .order-total {
+    font-weight: 600;
+    color: #222222;
+  }
+
+  /* Status Badges */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Payment Statuses */
+  .status-badge.status-paid,
+  .status-badge.status-authorized {
+    background-color: #e6f4ea;
+    color: #137333;
+  }
+
+  .status-badge.status-pending,
+  .status-badge.status-partially_paid {
+    background-color: #fef7e0;
+    color: #b06000;
+  }
+
+  .status-badge.status-refunded,
+  .status-badge.status-voided {
+    background-color: #fce8e6;
+    color: #c5221f;
+  }
+
+  /* Fulfillment Statuses */
+  .status-badge.status-fulfilled {
+    background-color: #e8f0fe;
+    color: #1a73e8;
+  }
+
+  .status-badge.status-unfulfilled,
+  .status-badge.status-partial {
+    background-color: #fef7e0;
+    color: #b06000;
+  }
+
+  .status-badge.status-restocked {
+    background-color: #f1f3f4;
+    color: #5f6368;
+  }
+
+  /* Pagination */
+  .pagination-wrapper {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .pagination-wrapper span,
+  .pagination-wrapper a {
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #666666;
+    border: 1px solid #e2e0da;
+    transition: all 0.2s ease;
+  }
+
+  .pagination-wrapper .current {
+    background: #caa25d;
+    color: white;
+    border-color: #caa25d;
+  }
+
+  .pagination-wrapper a:hover {
+    border-color: #caa25d;
+    color: #caa25d;
+  }
+
+  /* Empty State */
+  .empty-orders {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .empty-icon {
+    margin-bottom: 20px;
+  }
+
+  .empty-orders h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    margin: 0 0 8px 0;
+    color: #222222;
+  }
+
+  .empty-orders p {
+    font-size: 14px;
+    color: #666666;
+    margin: 0 0 25px 0;
+  }
+
+  .shop-now-btn {
+    display: inline-block;
+    background: #222222;
+    color: #ffffff;
+    border: 1px solid #222222;
+    border-radius: 50px;
+    padding: 12px 30px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .shop-now-btn:hover {
+    background: #caa25d;
+    border-color: #caa25d;
+    box-shadow: 0 5px 15px rgba(202, 162, 93, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* Profile Form styling */
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #222222;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .input-field {
+    background: #fbfbf9;
+    border: 1px solid #e2e0da;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    color: #222222;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .input-field:focus {
+    border-color: #caa25d;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(202, 162, 93, 0.1);
+  }
+
+  .save-profile-btn {
+    background: #222222;
+    color: #ffffff;
+    border: 1px solid #222222;
+    border-radius: 50px;
+    padding: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .save-profile-btn:hover {
+    background: #caa25d;
+    border-color: #caa25d;
+    box-shadow: 0 5px 15px rgba(202, 162, 93, 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* Address details */
+  .address-details-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .address-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222222;
+    margin: 0;
+  }
+
+  .address-text {
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .phone-num {
+    color: #777777;
+    font-size: 13px;
+  }
+
+  .no-address-text {
+    font-size: 14px;
+    color: #777777;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .address-action-row {
+    margin-top: 10px;
+  }
+
+  .manage-addr-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #caa25d;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .manage-addr-btn:hover {
+    color: #8e6c38;
+  }
+
+  .manage-addr-btn svg {
+    transition: transform 0.2s ease;
+  }
+
+  .manage-addr-btn:hover svg {
+    transform: scale(1.1);
+  }
+
+  /* RESPONSIVE DESIGN */
+  @media (max-width: 992px) {
+    .account-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .customer-account-container {
+      padding: 40px 15px;
+    }
+
+    .account-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .account-title {
+      font-size: 30px;
+    }
+
+    .section-card {
+      padding: 25px 20px;
+    }
+
+    /* Responsive Table to Cards */
+    .orders-table thead {
+      display: none;
+    }
+
+    .orders-table tbody tr {
+      display: block;
+      border-bottom: 2px solid #f5f0e6;
+      padding: 15px 0;
+    }
+
+    .orders-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .orders-table td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: none;
+      font-size: 13px;
+    }
+
+    .orders-table td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      color: #222222;
+      letter-spacing: 0.5px;
+    }
+
+    .orders-table td[data-label="Order"]::before {
+      content: "Order Number";
+    }
+  }
+
+  @media (max-width: 480px) {
+    .input-row {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+</style>

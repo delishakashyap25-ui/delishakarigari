@@ -1,0 +1,1209 @@
+{%- liquid
+  assign active_filter_count = 0
+  for filter in collection.filters
+    if filter.type == 'price_range'
+      if filter.min_value.value != nil or filter.max_value.value != nil
+        assign active_filter_count = active_filter_count | plus: 1
+      endif
+    else
+      assign active_filter_count = active_filter_count | plus: filter.active_values.size
+    endif
+  endfor
+
+  assign clear_all_url = collection.url
+  if collection.sort_by != blank
+    assign clear_all_url = clear_all_url | append: '?sort_by=' | append: collection.sort_by
+  endif
+-%}
+
+<section class="dk-collection-section" id="CollectionSection">
+  <div class="dk-collection-container">
+
+    <!-- 1. REFINED HORIZONTAL CATEGORY NAVIGATION -->
+    <nav class="dk-category-nav" aria-label="Collections">
+      <div class="dk-category-nav__track">
+        <a href="{{ routes.all_products_collection_url }}" class="dk-category-nav__item {% if collection.handle == 'all' or collection.handle == blank %}is-active{% endif %}">
+          All Collections
+        </a>
+        <a href="{{ routes.collections_url }}/navratri-decor" class="dk-category-nav__item {% if collection.handle == 'navratri-decor' %}is-active{% endif %}">
+          Navratri
+        </a>
+        <a href="{{ routes.collections_url }}/bandhanwar" class="dk-category-nav__item {% if collection.handle == 'bandhanwar' %}is-active{% endif %}">
+          Bandhanwar
+        </a>
+        <a href="{{ routes.collections_url }}/latkan" class="dk-category-nav__item {% if collection.handle == 'latkan' %}is-active{% endif %}">
+          Latkans
+        </a>
+        <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-category-nav__item {% if collection.handle == 'for-her-accessories' %}is-active{% endif %}">
+          Gifting
+        </a>
+        <a href="{{ routes.collections_url }}/diwali-decor" class="dk-category-nav__item {% if collection.handle == 'diwali-decor' %}is-active{% endif %}">
+          Festive Decor
+        </a>
+        <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-category-nav__item {% if collection.handle == 'karwa-chauth-special' %}is-active{% endif %}">
+          Karwa Chauth
+        </a>
+        <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-category-nav__item dk-category-nav__item--highlight {% if collection.handle == 'under-199' %}is-active{% endif %}">
+          Under ₹199
+        </a>
+      </div>
+    </nav>
+
+    <!-- 2. MAIN FILTER FORM (USED BY DESKTOP POPOVERS & MOBILE DRAWER) -->
+    <form id="CollectionFiltersForm" method="get" action="{{ collection.url }}" class="dk-filters-form">
+      {%- comment -%} Preserve sort_by parameter {%- endcomment -%}
+      <input type="hidden" name="sort_by" id="FilterSortByInput" value="{{ collection.sort_by | default: collection.default_sort_by }}">
+
+      <!-- 3. DESKTOP FILTER & SORT BAR (HORIZONTAL, COMPACT, EDITORIAL) -->
+      <div class="dk-filter-bar desktop-only">
+        <div class="dk-filter-bar__left">
+          <span class="dk-filter-bar__label">FILTER BY</span>
+
+          {%- if section.settings.enable_filtering -%}
+            <div class="dk-filter-dropdowns">
+              {%- for filter in collection.filters -%}
+                {%- liquid
+                  assign is_filter_active = false
+                  if filter.type == 'price_range'
+                    if filter.min_value.value != nil or filter.max_value.value != nil
+                      assign is_filter_active = true
+                    endif
+                  else
+                    if filter.active_values.size > 0
+                      assign is_filter_active = true
+                    endif
+                  endif
+                -%}
+
+                <div class="dk-filter-dropdown" data-filter-index="{{ forloop.index0 }}">
+                  <button
+                    type="button"
+                    class="dk-filter-dropdown__trigger {% if is_filter_active %}is-active{% endif %}"
+                    aria-expanded="false"
+                    onclick="dkToggleFilterPopover(this)"
+                  >
+                    <span>{{ filter.label }}</span>
+                    {%- if filter.active_values.size > 0 -%}
+                      <span class="dk-filter-badge">{{ filter.active_values.size }}</span>
+                    {%- elsif is_filter_active -%}
+                      <span class="dk-filter-dot"></span>
+                    {%- endif -%}
+                    <svg class="dk-filter-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+
+                  <!-- POPOVER CARD -->
+                  <div class="dk-filter-popover" role="dialog" aria-label="{{ filter.label }}">
+                    <div class="dk-filter-popover__header">
+                      <span class="dk-filter-popover__title">{{ filter.label }}</span>
+                      {%- if is_filter_active -%}
+                        <a href="{{ filter.url_to_remove }}" class="dk-filter-popover__reset">Reset</a>
+                      {%- endif -%}
+                    </div>
+
+                    <div class="dk-filter-popover__body">
+                      {%- case filter.type -%}
+                        {%- when 'boolean' or 'list' -%}
+                          <ul class="dk-filter-list">
+                            {%- for value in filter.values -%}
+                              <li>
+                                <label class="dk-filter-checkbox {% if value.count == 0 and value.active == false %}is-disabled{% endif %}">
+                                  <input
+                                    type="checkbox"
+                                    name="{{ value.param_name }}"
+                                    value="{{ value.value }}"
+                                    {% if value.active %}checked{% endif %}
+                                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                    onchange="document.getElementById('CollectionFiltersForm').submit()"
+                                  >
+                                  <span class="dk-custom-checkbox">
+                                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                  </span>
+                                  <span class="dk-filter-label-text">{{ value.label }}</span>
+                                  <span class="dk-filter-count">({{ value.count }})</span>
+                                </label>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+
+                        {%- when 'price_range' -%}
+                          {%- liquid
+                            assign max_price = filter.range_max | money_without_currency | replace: ',', '' | floor
+                            assign current_min = filter.min_value.value | money_without_currency | replace: ',', ''
+                            assign current_max = filter.max_value.value | money_without_currency | replace: ',', ''
+                          -%}
+                          <div class="dk-price-popover">
+                            <p class="dk-price-note">Highest price is {{ filter.range_max | money }}</p>
+                            <div class="dk-price-inputs">
+                              <div class="dk-price-field">
+                                <span class="currency">₹</span>
+                                <input
+                                  type="number"
+                                  name="{{ filter.min_value.param_name }}"
+                                  id="PriceMinDesktop"
+                                  value="{{ current_min }}"
+                                  placeholder="0"
+                                  min="0"
+                                  max="{{ max_price }}"
+                                  aria-label="Minimum price"
+                                >
+                              </div>
+                              <span class="separator">–</span>
+                              <div class="dk-price-field">
+                                <span class="currency">₹</span>
+                                <input
+                                  type="number"
+                                  name="{{ filter.max_value.param_name }}"
+                                  id="PriceMaxDesktop"
+                                  value="{{ current_max }}"
+                                  placeholder="{{ max_price }}"
+                                  min="0"
+                                  max="{{ max_price }}"
+                                  aria-label="Maximum price"
+                                >
+                              </div>
+                            </div>
+                            <div class="dk-price-actions">
+                              <button type="submit" class="dk-price-apply-btn">Apply Price</button>
+                            </div>
+                          </div>
+                      {%- endcase -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if active_filter_count > 0 -%}
+            <a href="{{ clear_all_url }}" class="dk-clear-all-link">Clear all ({{ active_filter_count }})</a>
+          {%- endif -%}
+        </div>
+
+        <div class="dk-filter-bar__right">
+          <!-- PIECES COUNT -->
+          <span class="dk-result-count">
+            {{ collection.products_count }} {% if collection.products_count == 1 %}handcrafted piece{% else %}handcrafted pieces{% endif %}
+          </span>
+
+          <!-- REFINED SORT BY -->
+          {%- if section.settings.enable_sorting -%}
+            <div class="dk-sort-control">
+              <label for="SortByDesktop" class="dk-sort-control__label">SORT BY:</label>
+              <div class="dk-sort-control__select-wrap">
+                <select id="SortByDesktop" class="dk-sort-control__select" onchange="dkApplySort(this.value)">
+                  {%- for option in collection.sort_options -%}
+                    <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+                      {%- case option.value -%}
+                        {%- when 'manual' -%}Featured
+                        {%- when 'best-selling' -%}Best Selling
+                        {%- when 'price-ascending' -%}Price: Low to High
+                        {%- when 'price-descending' -%}Price: High to Low
+                        {%- when 'created-descending' -%}Newest
+                        {%- else -%}{{ option.name }}
+                      {%- endcase -%}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                <svg class="dk-sort-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- ACTIVE FILTER CHIPS (DESKTOP & TABLET) -->
+      {%- if active_filter_count > 0 -%}
+        <div class="dk-active-chips desktop-only">
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                <a href="{{ filter.url_to_remove }}" class="dk-chip" aria-label="Remove price filter">
+                  <span>Price: ₹{{ filter.min_value.value | money_without_currency | default: '0' }} – ₹{{ filter.max_value.value | money_without_currency | default: max_price }}</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </a>
+              {%- endif -%}
+            {%- else -%}
+              {%- for value in filter.active_values -%}
+                <a href="{{ value.url_to_remove }}" class="dk-chip" aria-label="Remove {{ value.label }} filter">
+                  <span>{{ value.label }}</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </a>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <!-- 4. MOBILE FILTER & SORT BAR -->
+      <div class="dk-mobile-action-bar">
+        {%- if section.settings.enable_filtering -%}
+          <button type="button" class="dk-mobile-bar-btn" onclick="dkOpenMobileDrawer('filters')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="6" x2="20" y2="6"></line>
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <line x1="4" y1="18" x2="20" y2="18"></line>
+            </svg>
+            <span>Filter{% if active_filter_count > 0 %} ({{ active_filter_count }}){% endif %}</span>
+          </button>
+        {%- endif -%}
+
+        {%- if section.settings.enable_sorting -%}
+          <div class="dk-mobile-sort-wrap">
+            <button type="button" class="dk-mobile-bar-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+              <span>SORT</span>
+            </button>
+            <select
+              id="SortByMobile"
+              class="dk-mobile-sort-native-select"
+              onchange="dkApplySort(this.value)"
+              aria-label="Sort products"
+            >
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>
+                  {%- case option.value -%}
+                    {%- when 'manual' -%}Featured
+                    {%- when 'best-selling' -%}Best Selling
+                    {%- when 'price-ascending' -%}Price: Low to High
+                    {%- when 'price-descending' -%}Price: High to Low
+                    {%- when 'created-descending' -%}Newest
+                    {%- else -%}{{ option.name }}
+                  {%- endcase -%}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- MOBILE FILTER DRAWER BACKDROP -->
+      <div class="dk-filter-backdrop" id="CollectionFilterBackdrop" onclick="dkCloseMobileDrawer()"></div>
+
+      <!-- MOBILE BOTTOM SHEET / FILTER DRAWER -->
+      <div class="dk-filter-drawer" id="CollectionFilterDrawer" role="dialog" aria-modal="true" aria-label="Filters">
+        <div class="dk-filter-drawer__header">
+          <div class="dk-filter-drawer__title-wrap">
+            <h3 class="dk-filter-drawer__title">Filter Products</h3>
+            {%- if active_filter_count > 0 -%}
+              <span class="dk-filter-drawer__count-badge">{{ active_filter_count }} active</span>
+            {%- endif -%}
+          </div>
+          <button type="button" class="dk-filter-drawer__close" onclick="dkCloseMobileDrawer()" aria-label="Close filters">&times;</button>
+        </div>
+
+        <div class="dk-filter-drawer__body">
+          {%- for filter in collection.filters -%}
+            <details class="dk-mobile-filter-accordion" open>
+              <summary class="dk-mobile-accordion-summary">
+                <span>{{ filter.label }}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+              </summary>
+              <div class="dk-mobile-accordion-content">
+                {%- case filter.type -%}
+                  {%- when 'boolean' or 'list' -%}
+                    <ul class="dk-filter-list">
+                      {%- for value in filter.values -%}
+                        <li>
+                          <label class="dk-filter-checkbox {% if value.count == 0 and value.active == false %}is-disabled{% endif %}">
+                            <input
+                              type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              {% if value.active %}checked{% endif %}
+                              {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                            >
+                            <span class="dk-custom-checkbox">
+                              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#FFFFFF" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </span>
+                            <span class="dk-filter-label-text">{{ value.label }}</span>
+                            <span class="dk-filter-count">({{ value.count }})</span>
+                          </label>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+
+                  {%- when 'price_range' -%}
+                    <div class="dk-price-popover">
+                      <p class="dk-price-note">Highest price is {{ filter.range_max | money }}</p>
+                      <div class="dk-price-inputs">
+                        <div class="dk-price-field">
+                          <span class="currency">₹</span>
+                          <input
+                            type="number"
+                            name="{{ filter.min_value.param_name }}"
+                            value="{{ current_min }}"
+                            placeholder="0"
+                            min="0"
+                            max="{{ max_price }}"
+                          >
+                        </div>
+                        <span class="separator">–</span>
+                        <div class="dk-price-field">
+                          <span class="currency">₹</span>
+                          <input
+                            type="number"
+                            name="{{ filter.max_value.param_name }}"
+                            value="{{ current_max }}"
+                            placeholder="{{ max_price }}"
+                            min="0"
+                            max="{{ max_price }}"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                {%- endcase -%}
+              </div>
+            </details>
+          {%- endfor -%}
+        </div>
+
+        <div class="dk-filter-drawer__footer">
+          {%- if active_filter_count > 0 -%}
+            <a href="{{ clear_all_url }}" class="dk-mobile-clear-btn">Clear All</a>
+          {%- else -%}
+            <button type="button" class="dk-mobile-clear-btn" onclick="dkResetMobileForm()">Clear</button>
+          {%- endif -%}
+          <button type="submit" class="dk-mobile-apply-btn">Apply Filters</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- 5. PRODUCT GRID (3 COLUMNS DESKTOP, 2 COLUMNS TABLET/MOBILE) -->
+    <div class="dk-collection-content">
+      {% paginate collection.products by section.settings.products_per_page %}
+        <div class="dk-product-grid" id="ProductGrid">
+          {% for product in collection.products %}
+            <div class="dk-grid-cell">
+              {% render 'product-card', product: product %}
+            </div>
+          {% else %}
+            <!-- EMPTY STATE -->
+            <div class="dk-empty-collection">
+              <span class="dk-empty-icon">✦</span>
+              <h3 class="dk-empty-title">No pieces found in this selection</h3>
+              <p class="dk-empty-desc">Try clearing some of your filters or explore our complete handcrafted catalog.</p>
+              <a href="{{ routes.all_products_collection_url }}" class="dk-empty-btn">Explore All Creations &rarr;</a>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- 6. REFINED PAGINATION -->
+        {% if paginate.pages > 1 %}
+          <div class="dk-pagination-wrapper">
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ==========================================================================
+     DELISHA KARIGARI — EDITORIAL COLLECTION STYLES
+     ========================================================================== */
+  .dk-collection-section {
+    background-color: #FAF6F0;
+    min-height: 80vh;
+    padding-top: 10px;
+    padding-bottom: 70px;
+  }
+  .dk-collection-container {
+    width: 92%;
+    max-width: 1360px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  /* 1. Category Navigation Track */
+  .dk-category-nav {
+    width: 100%;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #ECE3D6;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .dk-category-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .dk-category-nav__track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 1.8vw, 24px);
+    white-space: nowrap;
+    padding: 0 4px;
+  }
+  .dk-category-nav__item {
+    display: inline-block;
+    padding: 12px 10px 14px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #6A5B55;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+  }
+  .dk-category-nav__item:hover {
+    color: #641A28;
+    border-bottom-color: rgba(100, 26, 40, 0.35);
+  }
+  .dk-category-nav__item.is-active {
+    color: #641A28;
+    font-weight: 600;
+    border-bottom-color: #641A28;
+  }
+  .dk-category-nav__item--highlight {
+    color: #8C2234;
+  }
+
+  /* 2. Desktop Horizontal Filter Bar */
+  .dk-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0 16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #ECE3D6;
+  }
+  .dk-filter-bar__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .dk-filter-bar__label {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    color: #8C7B75;
+    text-transform: uppercase;
+  }
+  .dk-filter-dropdowns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dk-filter-dropdown {
+    position: relative;
+  }
+  .dk-filter-dropdown__trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 14px;
+    background: #FFFFFF;
+    border: 1px solid #E4DAD0;
+    border-radius: 4px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    color: #382A25;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .dk-filter-dropdown__trigger:hover {
+    border-color: #641A28;
+    color: #641A28;
+  }
+  .dk-filter-dropdown__trigger.is-active {
+    border-color: #641A28;
+    background: #F8F1EB;
+    color: #641A28;
+    font-weight: 600;
+  }
+  .dk-filter-arrow {
+    transition: transform 0.25s ease;
+  }
+  .dk-filter-dropdown.is-open .dk-filter-arrow {
+    transform: rotate(180deg);
+  }
+  .dk-filter-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: #641A28;
+    color: #FFFFFF;
+    font-size: 0.65rem;
+    font-weight: 600;
+  }
+  .dk-filter-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #641A28;
+  }
+
+  /* Popover Card */
+  .dk-filter-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 100;
+    min-width: 250px;
+    background: #FFFFFF;
+    border: 1px solid #E6DCD2;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(45, 20, 15, 0.12);
+    padding: 16px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dk-filter-dropdown.is-open .dk-filter-popover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .dk-filter-popover__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #F0E8DF;
+  }
+  .dk-filter-popover__title {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #382A25;
+  }
+  .dk-filter-popover__reset {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.72rem;
+    color: #8C7B75;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .dk-filter-popover__reset:hover {
+    color: #641A28;
+  }
+
+  /* Filter Checkbox list */
+  .dk-filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 240px;
+    overflow-y: auto;
+  }
+  .dk-filter-list li {
+    margin-bottom: 10px;
+  }
+  .dk-filter-list li:last-child {
+    margin-bottom: 0;
+  }
+  .dk-filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.82rem;
+    color: #382A25;
+    cursor: pointer;
+    user-select: none;
+  }
+  .dk-filter-checkbox input[type="checkbox"] {
+    display: none;
+  }
+  .dk-custom-checkbox {
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #CFC3B8;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #FFFFFF;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .dk-filter-checkbox input:checked + .dk-custom-checkbox {
+    background: #641A28;
+    border-color: #641A28;
+  }
+  .dk-filter-checkbox.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .dk-filter-count {
+    color: #9C8F8A;
+    font-size: 0.74rem;
+  }
+
+  /* Price inputs */
+  .dk-price-popover {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .dk-price-note {
+    margin: 0;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.74rem;
+    color: #7A6C66;
+  }
+  .dk-price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dk-price-field {
+    display: flex;
+    align-items: center;
+    border: 1px solid #D8CFC5;
+    border-radius: 4px;
+    background: #FFFFFF;
+    padding: 4px 8px;
+    width: 90px;
+    box-sizing: border-box;
+  }
+  .dk-price-field .currency {
+    color: #7A6C66;
+    font-size: 0.8rem;
+    margin-right: 4px;
+  }
+  .dk-price-field input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.8rem;
+    color: #211216;
+    padding: 3px 0;
+    background: transparent;
+  }
+  .dk-price-inputs .separator {
+    color: #A89B95;
+    font-size: 0.85rem;
+  }
+  .dk-price-apply-btn {
+    width: 100%;
+    background: #641A28;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .dk-price-apply-btn:hover {
+    background-color: #4A121D;
+  }
+
+  .dk-clear-all-link {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.74rem;
+    color: #641A28;
+    text-decoration: underline;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .dk-clear-all-link:hover {
+    color: #380E15;
+  }
+
+  /* Right Toolbar: Pieces Count & Sort By */
+  .dk-filter-bar__right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .dk-result-count {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.8rem;
+    color: #756660;
+    letter-spacing: 0.3px;
+  }
+  .dk-sort-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dk-sort-control__label {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    color: #8C7B75;
+    text-transform: uppercase;
+  }
+  .dk-sort-control__select-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  .dk-sort-control__select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #382A25;
+    cursor: pointer;
+    padding-right: 18px;
+    outline: none;
+  }
+  .dk-sort-chevron {
+    position: absolute;
+    right: 0;
+    pointer-events: none;
+    color: #641A28;
+  }
+
+  /* Active Filter Chips */
+  .dk-active-chips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .dk-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: #FFFFFF;
+    border: 1px solid #DDD3C8;
+    border-radius: 14px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.74rem;
+    color: #4A352F;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .dk-chip:hover {
+    border-color: #641A28;
+    color: #641A28;
+  }
+
+  /* 3. Product Grid Area */
+  .dk-collection-content {
+    width: 100%;
+    margin-top: 10px;
+  }
+  .dk-product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(24px, 2.5vw, 36px);
+  }
+  .dk-grid-cell {
+    min-width: 0;
+  }
+
+  /* Empty state */
+  .dk-empty-collection {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 70px 20px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    border: 1px solid #ECE3D6;
+    margin: 20px 0;
+  }
+  .dk-empty-icon {
+    font-size: 1.8rem;
+    color: #B89A62;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .dk-empty-title {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: 1.6rem;
+    color: #211216;
+    margin: 0 0 10px;
+  }
+  .dk-empty-desc {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.88rem;
+    color: #6A5B55;
+    margin: 0 0 24px;
+  }
+  .dk-empty-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 26px;
+    background: #641A28;
+    color: #FFFFFF;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.25s ease;
+  }
+  .dk-empty-btn:hover {
+    background-color: #4A121D;
+  }
+
+  /* Pagination */
+  .dk-pagination-wrapper {
+    margin-top: 55px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 4. Mobile Bar & Drawer */
+  .dk-mobile-action-bar {
+    display: none;
+    margin-bottom: 20px;
+    background: #FFFFFF;
+    border: 1px solid #E6DCD2;
+    border-radius: 4px;
+  }
+  .dk-mobile-bar-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #382A25;
+    cursor: pointer;
+  }
+  .dk-mobile-sort-wrap {
+    flex: 1;
+    position: relative;
+    border-left: 1px solid #E6DCD2;
+  }
+  .dk-mobile-sort-native-select {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+
+  .dk-filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 10, 12, 0.55);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .dk-filter-backdrop.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dk-filter-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-height: 85vh;
+    background: #FAF6F0;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    z-index: 9999;
+    transform: translateY(100%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+  }
+  .dk-filter-drawer.is-open {
+    transform: translateY(0);
+  }
+  .dk-filter-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E8DFD5;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+  }
+  .dk-filter-drawer__title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dk-filter-drawer__title {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #211216;
+    margin: 0;
+  }
+  .dk-filter-drawer__count-badge {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.65rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: #F2E5DD;
+    color: #641A28;
+    font-weight: 600;
+  }
+  .dk-filter-drawer__close {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #6A5B55;
+    cursor: pointer;
+    padding: 0 4px;
+  }
+  .dk-filter-drawer__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px 24px;
+  }
+  .dk-mobile-filter-accordion {
+    border-bottom: 1px solid #E6DCD2;
+    padding: 14px 0;
+  }
+  .dk-mobile-filter-accordion:last-child {
+    border-bottom: none;
+  }
+  .dk-mobile-accordion-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #382A25;
+    cursor: pointer;
+    list-style: none;
+  }
+  .dk-mobile-accordion-summary::-webkit-details-marker {
+    display: none;
+  }
+  .dk-mobile-filter-accordion[open] .dk-mobile-accordion-summary svg {
+    transform: rotate(180deg);
+  }
+  .dk-mobile-accordion-content {
+    margin-top: 14px;
+  }
+  .dk-filter-drawer__footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border-top: 1px solid #E8DFD5;
+  }
+  .dk-mobile-clear-btn {
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid #D8CFC5;
+    color: #6A5B55;
+    border-radius: 4px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .dk-mobile-apply-btn {
+    flex: 2;
+    padding: 12px;
+    background: #641A28;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  /* Responsive Breakpoints */
+  @media (min-width: 992px) {
+    .dk-mobile-action-bar,
+    .dk-filter-drawer,
+    .dk-filter-backdrop {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 991px) {
+    .desktop-only {
+      display: none !important;
+    }
+    .dk-mobile-action-bar {
+      display: flex;
+    }
+    .dk-category-nav__track {
+      justify-content: flex-start;
+      padding: 0 8px;
+    }
+    .dk-product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .dk-collection-container {
+      width: 94%;
+    }
+    .dk-product-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  }
+</style>
+
+<script>
+  // Filter Popover Toggler (Desktop)
+  function dkToggleFilterPopover(btn) {
+    const parent = btn.closest('.dk-filter-dropdown');
+    const wasOpen = parent.classList.contains('is-open');
+
+    // Close all other dropdowns
+    document.querySelectorAll('.dk-filter-dropdown').forEach(el => {
+      el.classList.remove('is-open');
+      el.querySelector('.dk-filter-dropdown__trigger').setAttribute('aria-expanded', 'false');
+    });
+
+    if (!wasOpen) {
+      parent.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  // Close popovers on click outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.dk-filter-dropdown')) {
+      document.querySelectorAll('.dk-filter-dropdown').forEach(el => {
+        el.classList.remove('is-open');
+        const trigger = el.querySelector('.dk-filter-dropdown__trigger');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  // Close popover on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.dk-filter-dropdown').forEach(el => {
+        el.classList.remove('is-open');
+      });
+      dkCloseMobileDrawer();
+    }
+  });
+
+  // Apply Sort
+  function dkApplySort(value) {
+    const sortInput = document.getElementById('FilterSortByInput');
+    if (sortInput) sortInput.value = value;
+    const form = document.getElementById('CollectionFiltersForm');
+    if (form) form.submit();
+  }
+
+  // Mobile Drawer
+  function dkOpenMobileDrawer(mode) {
+    const drawer = document.getElementById('CollectionFilterDrawer');
+    const backdrop = document.getElementById('CollectionFilterBackdrop');
+    if (drawer && backdrop) {
+      drawer.classList.add('is-open');
+      backdrop.classList.add('is-active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function dkCloseMobileDrawer() {
+    const drawer = document.getElementById('CollectionFilterDrawer');
+    const backdrop = document.getElementById('CollectionFilterBackdrop');
+    if (drawer && backdrop) {
+      drawer.classList.remove('is-open');
+      backdrop.classList.remove('is-active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function dkResetMobileForm() {
+    const form = document.getElementById('CollectionFiltersForm');
+    if (form) {
+      form.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      form.querySelectorAll('input[type="number"]').forEach(num => num.value = '');
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 6,
+      "max": 36,
+      "step": 3,
+      "default": 18,
+      "label": "Products per page"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable Filtering",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable Sorting",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Grid"
+    }
+  ]
+}
+{% endschema %}

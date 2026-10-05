@@ -1,0 +1,655 @@
+{%- liquid
+  assign handle = section.settings.instagram_handle | default: 'delishakarigari' | remove: '@'
+  assign ig_url = 'https://www.instagram.com/' | append: handle | append: '/'
+  assign feed_mode = section.settings.feed_mode | default: 'auto'
+-%}
+
+<section
+  id="dk-social-gallery-{{ section.id }}"
+  class="dk-ig-sec"
+  style="background-color: {{ section.settings.bg_color | default: '#FAF6F0' }}; padding-top: {{ section.settings.padding_top | default: 70 }}px; padding-bottom: {{ section.settings.padding_bottom | default: 75 }}px;"
+>
+  <div class="dk-ig-container">
+    
+    <!-- CENTERED MINIMAL & PRICELESS EDITORIAL HEADER -->
+    <div class="dk-ig-header text-center">
+      {%- if section.settings.subheading != blank -%}
+        <span class="dk-ig-eyebrow">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+      
+      <h2 class="dk-ig-title">
+        {{ section.settings.heading | default: 'Follow Our Karigari' | escape }}
+      </h2>
+
+      {%- if section.settings.description != blank -%}
+        <p class="dk-ig-subtitle">{{ section.settings.description | escape }}</p>
+      {%- endif -%}
+
+      <!-- CENTERPIECE INTERACTIVE INSTAGRAM ID BADGE -->
+      <div class="dk-ig-center-badge-wrap">
+        <a href="{{ ig_url }}" target="_blank" rel="noopener noreferrer" class="dk-ig-center-pill" aria-label="Visit @{{ handle }} on Instagram">
+          <!-- LIVE PULSE INDICATOR -->
+          <span class="dk-ig-pulse-dot" aria-hidden="true">
+            <span class="dk-ig-pulse-ring"></span>
+            <span class="dk-ig-pulse-core"></span>
+          </span>
+
+          <!-- INSTAGRAM GLYPH -->
+          <svg class="dk-ig-pill-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+
+          <!-- PROMINENT CENTERED ID -->
+          <span class="dk-ig-pill-handle">@{{ handle }}</span>
+
+          <span class="dk-ig-pill-separator" aria-hidden="true">&bull;</span>
+          <span class="dk-ig-pill-cta">JOIN COMMUNITY &rarr;</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SHOPIFY INSTAFEED APP HOOK (IF INSTALLED) -->
+    {%- if feed_mode == 'instafeed_app' -%}
+      <div id="insta-feed" class="dk-instafeed-app-wrap"></div>
+    {%- elsif feed_mode == 'embed_code' and section.settings.embed_code != blank -%}
+      <div class="dk-custom-embed-wrap">
+        {{ section.settings.embed_code }}
+      </div>
+    {%- endif -%}
+
+    <!-- INTERACTIVE 6-FRAME EDITORIAL GALLERY -->
+    <div
+      id="dkSocialGrid-{{ section.id }}"
+      class="dk-ig-grid {% if feed_mode == 'instafeed_app' or feed_mode == 'embed_code' %}dk-ig-grid--fallback{% endif %}"
+      data-feed-url="{{ section.settings.feed_api_url | escape }}"
+      data-ig-handle="{{ handle }}"
+    >
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign post_url = block.settings.link -%}
+          {%- if post_url == blank or post_url == '#' -%}
+            {%- assign post_url = ig_url -%}
+          {%- endif -%}
+
+          <a href="{{ post_url }}" target="_blank" rel="noopener noreferrer" class="dk-ig-card" {{ block.shopify_attributes }} aria-label="View post on Instagram">
+            <div class="dk-ig-card__frame">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.image.alt | default: 'Delisha Karigari Handmade Decor & Gifts' | escape }}"
+                  class="dk-ig-card__img"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {%- else -%}
+                {%- case forloop.index -%}
+                  {%- when 1 -%}{%- assign fallback_img = 'dk-soc-1.jpg' -%}
+                  {%- when 2 -%}{%- assign fallback_img = 'dk-soc-2.jpg' -%}
+                  {%- when 3 -%}{%- assign fallback_img = 'dk-soc-3.jpg' -%}
+                  {%- when 4 -%}{%- assign fallback_img = 'dk-soc-4.jpg' -%}
+                  {%- when 5 -%}{%- assign fallback_img = 'dk-soc-5.jpg' -%}
+                  {%- else -%}{%- assign fallback_img = 'dk-soc-6.jpg' -%}
+                {%- endcase -%}
+                <img
+                  src="{{ fallback_img | asset_url }}"
+                  alt="Delisha Karigari Handmade Decor & Gifts"
+                  class="dk-ig-card__img"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {%- endif -%}
+
+              <!-- MINIMAL LUXURY OVERLAY WITH BRAND BURGUNDY -->
+              <div class="dk-ig-card__overlay">
+                <span class="dk-ig-card__icon-ring">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                </span>
+                <span class="dk-ig-card__btn-pill">VIEW POST &nearr;</span>
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..6) -%}
+          {%- case i -%}
+            {%- when 1 -%}{%- assign fallback_img = 'dk-soc-1.jpg' -%}
+            {%- when 2 -%}{%- assign fallback_img = 'dk-soc-2.jpg' -%}
+            {%- when 3 -%}{%- assign fallback_img = 'dk-soc-3.jpg' -%}
+            {%- when 4 -%}{%- assign fallback_img = 'dk-soc-4.jpg' -%}
+            {%- when 5 -%}{%- assign fallback_img = 'dk-soc-5.jpg' -%}
+            {%- else -%}{%- assign fallback_img = 'dk-soc-6.jpg' -%}
+          {%- endcase -%}
+          <a href="{{ ig_url }}" target="_blank" rel="noopener noreferrer" class="dk-ig-card" aria-label="View post on Instagram">
+            <div class="dk-ig-card__frame">
+              <img
+                src="{{ fallback_img | asset_url }}"
+                alt="Delisha Karigari Handmade Decor & Gifts"
+                class="dk-ig-card__img"
+                loading="lazy"
+                width="600"
+                height="600"
+              >
+              <div class="dk-ig-card__overlay">
+                <span class="dk-ig-card__icon-ring">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                </span>
+                <span class="dk-ig-card__btn-pill">VIEW POST &nearr;</span>
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    <!-- MINIMAL BRAND FOOTNOTE -->
+    <div class="dk-ig-footer-ticker">
+      <span>✦ Handcrafted In India</span>
+      <span class="dk-ig-ticker-dot">•</span>
+      <span>Daily Festive Stories</span>
+      <span class="dk-ig-ticker-dot">•</span>
+      <span>Bespoke Customizations</span>
+      <span class="dk-ig-ticker-dot">•</span>
+      <span>Pan-India Dispatch</span>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .dk-ig-sec {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .dk-ig-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 3.2vw, 36px);
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  /* CENTERED EDITORIAL HEADER */
+  .dk-ig-header {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 2.4rem auto;
+  }
+  .dk-ig-eyebrow {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: #B89A62;
+    display: block;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .dk-ig-title {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: clamp(2.1rem, 3.4vw, 2.9rem);
+    font-weight: 500;
+    color: #252525;
+    margin: 0 0 8px 0;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+  .dk-ig-subtitle {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: #6A5B55;
+    margin: 0 0 1.25rem 0;
+  }
+
+  /* CENTERPIECE INTERACTIVE PILL */
+  .dk-ig-center-badge-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+  }
+  .dk-ig-center-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+    color: #641A28 !important;
+    border: 1.5px solid #E6D8CA;
+    padding: 8px 24px;
+    border-radius: 40px;
+    text-decoration: none;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.86rem;
+    font-weight: 600;
+    box-shadow: 0 4px 18px rgba(100, 26, 40, 0.06);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .dk-ig-center-pill:hover {
+    background: #641A28;
+    color: #FFFFFF !important;
+    border-color: #641A28;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px rgba(100, 26, 40, 0.22);
+  }
+  .dk-ig-center-pill:hover .dk-ig-pill-icon,
+  .dk-ig-center-pill:hover .dk-ig-pill-handle,
+  .dk-ig-center-pill:hover .dk-ig-pill-cta {
+    color: #FFFFFF !important;
+  }
+  .dk-ig-center-pill:hover .dk-ig-pill-cta {
+    transform: translateX(3px);
+  }
+
+  /* PULSING LIVE DOT */
+  .dk-ig-pulse-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .dk-ig-pulse-core {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #B89A62;
+  }
+  .dk-ig-pulse-ring {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid #B89A62;
+    animation: dkPulse 2.2s infinite ease-out;
+  }
+  @keyframes dkPulse {
+    0% { transform: scale(0.6); opacity: 1; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  .dk-ig-pill-icon {
+    color: #641A28;
+    flex-shrink: 0;
+    transition: color 0.3s ease;
+  }
+  .dk-ig-pill-handle {
+    font-size: 0.94rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #641A28;
+    transition: color 0.3s ease;
+  }
+  .dk-ig-pill-separator {
+    color: #C8B8AC;
+    font-size: 0.75rem;
+  }
+  .dk-ig-pill-cta {
+    font-size: 0.76rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #B89A62;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  /* 6-CARD GRID (MINIMAL & PRICELESS) */
+  .dk-ig-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  .dk-ig-card {
+    display: block;
+    text-decoration: none;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(100, 26, 40, 0.05);
+    border: 1px solid rgba(230, 216, 202, 0.6);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .dk-ig-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 30px rgba(100, 26, 40, 0.16);
+    border-color: #B89A62;
+  }
+  .dk-ig-card__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #F2E5DD;
+  }
+  .dk-ig-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .dk-ig-card:hover .dk-ig-card__img {
+    transform: scale(1.08);
+  }
+
+  /* OVERLAY */
+  .dk-ig-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(100, 26, 40, 0.88) 0%,
+      rgba(56, 12, 22, 0.94) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #FFFFFF;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    padding: 12px;
+    box-sizing: border-box;
+  }
+  .dk-ig-card:hover .dk-ig-card__overlay {
+    opacity: 1;
+  }
+  .dk-ig-card__icon-ring {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    transition: transform 0.3s ease;
+  }
+  .dk-ig-card:hover .dk-ig-card__icon-ring {
+    transform: scale(1.1);
+  }
+  .dk-ig-card__btn-pill {
+    background: #FFFFFF;
+    color: #641A28;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.25s ease;
+  }
+  .dk-ig-card:hover .dk-ig-card__btn-pill {
+    background: #B89A62;
+    color: #FFFFFF;
+  }
+
+  /* FOOTNOTE TICKER */
+  .dk-ig-footer-ticker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #7A6C66;
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid rgba(230, 216, 202, 0.5);
+  }
+  .dk-ig-ticker-dot {
+    color: #B89A62;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 1024px) {
+    .dk-ig-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .dk-ig-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .dk-ig-card__btn-pill {
+      display: none;
+    }
+    .dk-ig-center-pill {
+      padding: 6px 16px;
+      font-size: 0.8rem;
+    }
+    .dk-ig-pill-cta {
+      display: none;
+    }
+    .dk-ig-pill-separator {
+      display: none;
+    }
+    .dk-ig-footer-ticker {
+      font-size: 0.72rem;
+      gap: 8px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var grid = document.getElementById('dkSocialGrid-{{ section.id }}');
+    if (!grid) return;
+
+    var feedUrl = grid.getAttribute('data-feed-url');
+    var handle = grid.getAttribute('data-ig-handle') || 'delishakarigari';
+
+    if (feedUrl && feedUrl.trim() !== '') {
+      fetch(feedUrl)
+        .then(function(res) {
+          if (!res.ok) throw new Error('Feed fetch failed');
+          return res.json();
+        })
+        .then(function(data) {
+          var posts = [];
+          if (Array.isArray(data)) {
+            posts = data;
+          } else if (data.data && Array.isArray(data.data)) {
+            posts = data.data;
+          } else if (data.posts && Array.isArray(data.posts)) {
+            posts = data.posts;
+          }
+
+          if (posts.length > 0) {
+            var html = '';
+            var count = Math.min(posts.length, 6);
+
+            for (var i = 0; i < count; i++) {
+              var p = posts[i];
+              var imgUrl = p.mediaUrl || p.media_url || p.thumbnailUrl || p.thumbnail_url || (p.images && p.images.standard_resolution && p.images.standard_resolution.url);
+              var permalink = p.permalink || p.link || ('https://www.instagram.com/' + handle + '/');
+              var caption = p.caption || p.text || 'Delisha Karigari Instagram Post';
+
+              if (!imgUrl) continue;
+
+              html += '<a href="' + permalink + '" target="_blank" rel="noopener noreferrer" class="dk-ig-card" aria-label="View post on Instagram">';
+              html += '  <div class="dk-ig-card__frame">';
+              html += '    <img src="' + imgUrl + '" alt="' + caption.replace(/"/g, '&quot;').slice(0, 80) + '" class="dk-ig-card__img" loading="lazy" width="600" height="600">';
+              html += '    <div class="dk-ig-card__overlay">';
+              html += '      <span class="dk-ig-card__icon-ring">';
+              html += '        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>';
+              html += '      </span>';
+              html += '      <span class="dk-ig-card__btn-pill">VIEW POST &nearr;</span>';
+              html += '    </div>';
+              html += '  </div>';
+              html += '</a>';
+            }
+
+            if (html !== '') {
+              grid.innerHTML = html;
+            }
+          }
+        })
+        .catch(function(err) {
+          console.warn('Delisha Karigari live Instagram feed notice:', err);
+        });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "DELISHA Social Gallery",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Eyebrow Text",
+      "default": "✦ THE SOCIAL JOURNAL ✦"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Follow Our Karigari"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Handcrafted moments, festive doorways and bespoke gifting stories from our Delhi workshop."
+    },
+    {
+      "type": "text",
+      "id": "instagram_handle",
+      "label": "Instagram Handle",
+      "default": "delishakarigari"
+    },
+    {
+      "type": "header",
+      "content": "Live Feed Integration"
+    },
+    {
+      "type": "select",
+      "id": "feed_mode",
+      "label": "Feed Connection Mode",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Live Feed URL (e.g. Behold.so / Curator)"
+        },
+        {
+          "value": "instafeed_app",
+          "label": "Shopify App (Instafeed by Mintt Studio)"
+        },
+        {
+          "value": "embed_code",
+          "label": "Custom Widget / Embed Snippet"
+        },
+        {
+          "value": "manual",
+          "label": "Manual Photos & Links"
+        }
+      ],
+      "default": "auto",
+      "info": "To show live posts that update automatically, connect via Behold.so or the free Instafeed Shopify App."
+    },
+    {
+      "type": "text",
+      "id": "feed_api_url",
+      "label": "Live Feed JSON URL (Behold.so / API)",
+      "info": "Paste your Behold.so feed URL (e.g. https://feeds.behold.so/YOUR_ID) or any JSON feed URL. Posts will refresh automatically."
+    },
+    {
+      "type": "html",
+      "id": "embed_code",
+      "label": "Custom Embed Code",
+      "info": "Paste embed code from Elfsight, SnapWidget, or Tagembed if using 'Custom Widget' mode."
+    },
+    {
+      "type": "header",
+      "content": "Appearance & Padding"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FAF6F0"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 70
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social_image",
+      "name": "Social Photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Post Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DELISHA Social Gallery",
+      "blocks": [
+        { "type": "social_image" },
+        { "type": "social_image" },
+        { "type": "social_image" },
+        { "type": "social_image" },
+        { "type": "social_image" },
+        { "type": "social_image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

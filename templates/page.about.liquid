@@ -1,0 +1,363 @@
+<div class="about-page-container">
+  
+  <!-- HERO BANNER -->
+  <div class="about-hero">
+    <div class="about-hero-content">
+      <span class="about-subtitle">Preserving Indian Craftsmanship</span>
+      <h1 class="about-title">About Delisha Karigari</h1>
+      <p class="about-lead">Where Indian Heritage Meets Handmade Elegance</p>
+    </div>
+  </div>
+
+  <!-- OUR STORY SECTION -->
+  <div class="about-section story-section">
+    <div class="about-grid">
+      <div class="about-content">
+        <h2 class="section-title">Our Story & Roots</h2>
+        <p>Delisha Karigari was born out of a deep passion for India's rich artistic heritage and a desire to bring handcrafted elegance into modern homes. "Karigari" translates to craftsmanship, and that is the soul of everything we create.</p>
+        <p>Our journey began with a simple observation: in a world dominated by mass-produced machine goods, the warmth and soul of handcrafted art were fading away. We set out to change that. We traveled across India's vibrant heartlands, collaborating with traditional artisans who have inherited centuries-old techniques from their ancestors.</p>
+        <p>By blending these ancient craft traditions with contemporary aesthetics, we created a collection that is both culturally rich and modern. From our signature Bandhanwars and Latkans for gates, doors and mandirs to handmade Diwali décor, Karwa Chauth thali sets and thoughtful gifts for her, every piece is made with intention and love.</p>
+      </div>
+      
+      <div class="about-image-placeholder">
+        <div class="story-card">
+          <div class="story-card-inner">
+            <span class="card-quote">"A gift is more than just an object — it is a feeling, a memory, and a little piece of love."</span>
+            <span class="card-author">— Delisha Karigari</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSION & VALUES -->
+  <div class="about-section values-section">
+    <div class="values-container">
+      <h2 class="section-title text-center">Our Core Philosophy</h2>
+      <p class="section-desc text-center">Every thread we weave and every design we craft is guided by our three core pillars.</p>
+      
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">✨</div>
+          <h3>100% Handcrafted</h3>
+          <p>No mass production, no machines. Every item is individually handcrafted by skilled artisans, ensuring that each piece is unique and carries its own character.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <h3>Supporting Artisans</h3>
+          <p>We work directly with local artisan families in India. By offering fair wages and sustainable partnerships, we help preserve traditional art forms and support rural communities.</p>
+        </div>
+        
+        <div class="value-card">
+          <div class="value-icon">🎁</div>
+          <h3>Heritage & Quality</h3>
+          <p>We use premium materials and rigorous quality checks so that your decor pieces remain a treasured part of your home celebrations for years to come.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS / BANNER -->
+  <div class="about-process-banner">
+    <div class="process-banner-content">
+      <h2>Handcrafted with Love in India</h2>
+      <p>Thank you for supporting traditional craftsmanship and bringing a slice of Indian heritage into your beautiful home.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="explore-btn">Explore Our Collection</a>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.about-page-container {
+  font-family: 'Poppins', sans-serif;
+  color: #222222;
+  background-color: #f8f3ea; /* Soft cream background */
+  overflow: hidden;
+}
+
+/* Hero Banner */
+.about-hero {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.75) 100%), 
+              url('https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&q=80&w=1600') no-repeat center center;
+  background-size: cover;
+  padding: 150px 20px 110px 20px;
+  text-align: center;
+  color: #ffffff;
+}
+.about-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.about-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: #caa25d; /* Gold */
+  margin-bottom: 15px;
+  display: block;
+}
+.about-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 50px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.about-lead {
+  font-size: 18px;
+  opacity: 0.9;
+  font-weight: 300;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Sections */
+.about-section {
+  padding: 90px 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.about-grid {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+.about-content {
+  flex: 1.2;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #222222;
+  margin: 0 0 25px 0;
+  line-height: 1.2;
+  position: relative;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #caa25d;
+  margin-top: 15px;
+}
+.about-content p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555555;
+  margin-bottom: 20px;
+}
+.about-image-placeholder {
+  flex: 0.8;
+  display: flex;
+  justify-content: center;
+}
+.story-card {
+  background: #000000;
+  border-radius: 24px;
+  padding: 55px 45px;
+  color: #ffffff;
+  border: 1px solid rgba(202, 162, 93, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+  box-sizing: border-box;
+}
+.story-card::before {
+  content: '“';
+  position: absolute;
+  top: 15px;
+  left: 35px;
+  font-family: 'Playfair Display', serif;
+  font-size: 130px;
+  color: rgba(202, 162, 93, 0.15);
+  line-height: 1;
+}
+.story-card-inner {
+  position: relative;
+  z-index: 2;
+}
+.card-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  line-height: 1.6;
+  font-style: italic;
+  display: block;
+  margin-bottom: 30px;
+  color: #f8f3ea;
+}
+.card-author {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #caa25d;
+  font-weight: 600;
+  display: block;
+}
+
+/* Values Section */
+.values-section {
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 80px 40px;
+  margin: 40px auto;
+  width: calc(100% - 80px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.02);
+}
+.values-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.text-center {
+  text-align: center;
+}
+.text-center::after {
+  margin: 15px auto 0 auto;
+}
+.section-desc {
+  font-size: 15px;
+  color: #666666;
+  margin: -10px 0 50px 0;
+  line-height: 1.6;
+}
+.values-grid {
+  display: flex;
+  gap: 30px;
+}
+.value-card {
+  flex: 1;
+  padding: 45px 35px;
+  background: #fbfbf9;
+  border: 1px solid rgba(202, 162, 93, 0.1);
+  border-radius: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+.value-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(202, 162, 93, 0.12);
+  border-color: #caa25d;
+}
+.value-icon {
+  font-size: 40px;
+  margin-bottom: 20px;
+  display: block;
+}
+.value-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  color: #222222;
+}
+.value-card p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666666;
+  margin: 0;
+}
+
+/* Process Banner */
+.about-process-banner {
+  background: linear-gradient(rgba(34,34,34,0.85), rgba(34,34,34,0.85)), 
+              url('https://images.unsplash.com/photo-1590736969955-71cb94801759?auto=format&fit=crop&q=80&w=1600') no-repeat center center;
+  background-size: cover;
+  padding: 110px 20px;
+  text-align: center;
+  color: #ffffff;
+  margin-top: 40px;
+}
+.process-banner-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+.about-process-banner h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: #caa25d;
+}
+.about-process-banner p {
+  font-size: 16px;
+  line-height: 1.8;
+  opacity: 0.9;
+  margin-bottom: 35px;
+  font-weight: 300;
+}
+.explore-btn {
+  background: #caa25d;
+  color: #ffffff;
+  padding: 15px 35px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-radius: 50px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: 1px solid #caa25d;
+}
+.explore-btn:hover {
+  background: transparent;
+  color: #caa25d;
+  box-shadow: 0 5px 15px rgba(202, 162, 93, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .about-grid {
+    flex-direction: column;
+    gap: 50px;
+  }
+  .about-image-placeholder {
+    width: 100%;
+  }
+  .story-card {
+    max-width: 100%;
+    width: 100%;
+  }
+  .values-grid {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .values-section {
+    width: calc(100% - 40px);
+  }
+}
+@media (max-width: 768px) {
+  .about-hero {
+    padding: 110px 20px 80px 20px;
+  }
+  .about-title {
+    font-size: 36px;
+  }
+  .about-lead {
+    font-size: 16px;
+  }
+  .about-section {
+    padding: 60px 20px;
+  }
+  .section-title {
+    font-size: 32px;
+  }
+  .values-section {
+    margin: 20px auto;
+    padding: 50px 20px;
+    width: calc(100% - 30px);
+  }
+  .about-process-banner h2 {
+    font-size: 30px;
+  }
+}
+</style>

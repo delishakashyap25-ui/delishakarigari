@@ -1,0 +1,49 @@
+<section class="dk-404-sec" style="background-color: var(--dk-color-background, #F9F5EE); padding: 90px 0 110px 0;">
+  <div class="container text-center">
+    <span class="dk-subtitle" style="color: var(--dk-color-gold, #B89552); letter-spacing: 3px; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; display: block; margin-bottom: 8px;">
+      ERROR 404
+    </span>
+    <h1 class="dk-heading" style="font-family: var(--dk-font-heading, 'Playfair Display', serif); font-size: clamp(2.4rem, 4.5vw, 3.5rem); font-weight: 700; color: var(--dk-color-primary, #6E1F2A); margin: 0 0 16px 0;">
+      Page Not Found
+    </h1>
+    <p style="font-family: var(--dk-font-body, 'Poppins', sans-serif); font-size: 1.05rem; color: var(--dk-color-text-muted, #555555); max-width: 540px; margin: 0 auto 32px auto; line-height: 1.6;">
+      The page or collection you are looking for might have been moved, renamed, or is currently being curated in our inventory.
+    </p>
+
+    <!-- SEARCH BAR -->
+    <div style="max-width: 480px; margin: 0 auto 36px auto;">
+      <form action="{{ routes.search_url }}" method="get" role="search" style="display: flex; gap: 8px;">
+        <input
+          type="search"
+          name="q"
+          placeholder="Search for Rakhis, Lumbas, Gifts..."
+          style="flex: 1; padding: 12px 18px; border: 1.5px solid rgba(110,31,42,0.2); border-radius: 4px; font-family: var(--dk-font-body, 'Poppins', sans-serif); font-size: 0.9rem; outline: none; background: #FFFFFF;"
+        >
+        <button
+          type="submit"
+          class="dk-btn dk-btn-primary"
+          style="padding: 12px 24px; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px;"
+        >
+          SEARCH
+        </button>
+      </form>
+    </div>
+
+    <!-- ACTION BUTTONS -->
+    <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+      <a href="{{ routes.root_url }}" class="dk-btn dk-btn-primary" style="padding: 14px 36px; font-size: 0.85rem; letter-spacing: 1.8px;">
+        RETURN TO HOME
+      </a>
+      <a href="{{ routes.all_products_collection_url }}" class="dk-btn dk-btn-outline" style="padding: 14px 36px; font-size: 0.85rem; letter-spacing: 1.8px;">
+        EXPLORE ALL PRODUCTS
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "settings": []
+}
+{% endschema %}

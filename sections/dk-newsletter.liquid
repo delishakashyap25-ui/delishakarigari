@@ -1,0 +1,205 @@
+<section
+  id="dk-newsletter-{{ section.id }}"
+  class="dk-newsletter-sec"
+  style="background-color: {{ section.settings.bg_color | default: '#6E1F2A' }}; padding: {{ section.settings.padding_top | default: 80 }}px 0 {{ section.settings.padding_bottom | default: 80 }}px 0;"
+>
+  <div class="container">
+    <div class="dk-newsletter-card text-center">
+      {%- if section.settings.subheading != blank -%}
+        <span class="dk-newsletter-subtitle">{{ section.settings.subheading | escape }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="dk-newsletter-heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <p class="dk-newsletter-text">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+
+      {% form 'customer', class: 'dk-newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        
+        {% if form.posted_successfully? %}
+          <div class="dk-newsletter-success">
+            <span>Thank you for joining the DELISHA Circle! Welcome to our family.</span>
+          </div>
+        {% else %}
+          <div class="dk-newsletter-form-row">
+            <input
+              type="email"
+              name="contact[email]"
+              class="dk-newsletter-input"
+              value="{{ form.email }}"
+              aria-label="Email Address"
+              placeholder="Enter your email address"
+              required
+            >
+            <button type="submit" class="dk-btn dk-btn-gold dk-newsletter-btn">
+              {{ section.settings.button_label | default: 'JOIN US' | escape }}
+            </button>
+          </div>
+          {% if form.errors %}
+            <div class="dk-newsletter-error">
+              {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .dk-newsletter-sec {
+    position: relative;
+    overflow: hidden;
+  }
+  .dk-newsletter-card {
+    max-width: 680px;
+    margin: 0 auto;
+    color: #FFFFFF;
+  }
+  .dk-newsletter-subtitle {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--dk-color-gold, #B89552);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .dk-newsletter-heading {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin-bottom: var(--dk-space-md, 1rem);
+  }
+  .dk-newsletter-text {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.88);
+    margin-bottom: var(--dk-space-xl, 2.5rem);
+    font-weight: 300;
+  }
+  .dk-newsletter-form-row {
+    display: flex;
+    gap: 10px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .dk-newsletter-input {
+    flex: 1;
+    height: 52px;
+    padding: 0 20px;
+    border-radius: var(--dk-radius-md, 8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    background-color: rgba(255,255,255,0.1);
+    color: #FFFFFF;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+  .dk-newsletter-input::placeholder {
+    color: rgba(255,255,255,0.6);
+  }
+  .dk-newsletter-input:focus {
+    border-color: var(--dk-color-gold, #B89552);
+    background-color: rgba(255,255,255,0.15);
+  }
+  .dk-newsletter-btn {
+    height: 52px;
+    padding: 0 32px;
+    white-space: nowrap;
+  }
+  .dk-newsletter-success {
+    background-color: rgba(255,255,255,0.15);
+    border: 1px solid var(--dk-color-gold, #B89552);
+    padding: 16px 24px;
+    border-radius: var(--dk-radius-md, 8px);
+    color: #FFFFFF;
+    font-size: 0.95rem;
+  }
+  .dk-newsletter-error {
+    color: #FFB4B4;
+    font-size: 0.85rem;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 600px) {
+    .dk-newsletter-form-row {
+      flex-direction: column;
+    }
+    .dk-newsletter-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "DELISHA Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "JOIN OUR FAMILY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in the DELISHA Circle"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Description",
+      "default": "Be the first to discover new collections, festive edits, artisanal stories and special member offers."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "JOIN US"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#6E1F2A"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 140,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 140,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "DELISHA Newsletter"
+    }
+  ]
+}
+{% endschema %}

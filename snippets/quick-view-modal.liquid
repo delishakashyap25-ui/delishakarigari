@@ -1,0 +1,534 @@
+{%- comment -%}
+  DELISHA KARIGARI — Luxury Quick View Modal
+  Tiffany & Co. Minimalist Luxury standard with cursor zoom and description categories
+{%- endcomment -%}
+
+<div class="dk-quickview-modal" id="dkQuickViewModal" aria-hidden="true" role="dialog" aria-label="Product Quick View">
+  <div class="dk-quickview-backdrop" onclick="closeQuickView()"></div>
+  <div class="dk-quickview-dialog">
+    <button type="button" class="dk-quickview-close" onclick="closeQuickView()" aria-label="Close modal">&times;</button>
+    <div class="dk-quickview-content" id="dkQuickViewContent">
+      <div class="dk-quickview-loading">
+        <div class="dk-spinner"></div>
+        <span>Loading handcrafted details...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ==========================================================================
+   QUICK VIEW MODAL STYLES (TIFFANY & CO. MINIMAL LUXURY)
+   ========================================================================== */
+.dk-quickview-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.dk-quickview-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dk-quickview-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.dk-quickview-dialog {
+  position: relative;
+  z-index: 2;
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 940px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid #EAEAEA;
+  scrollbar-width: thin;
+}
+
+.dk-quickview-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #F5F5F5;
+  color: #111111;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.dk-quickview-close:hover {
+  background: #111111;
+  color: #FFFFFF;
+  transform: rotate(90deg);
+}
+
+.dk-quickview-loading {
+  padding: 80px 20px;
+  text-align: center;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  color: #666666;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dk-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #EAEAEA;
+  border-top-color: #111111;
+  border-radius: 50%;
+  animation: dkSpin 0.8s linear infinite;
+}
+
+@keyframes dkSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Quick View Inner Grid */
+.qv-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.qv-gallery-col {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #FFFFFF;
+}
+
+.qv-info-col {
+  flex: 0 0 50%;
+  max-width: 50%;
+  padding: 32px;
+  box-sizing: border-box;
+  border-left: 1px solid #EAEAEA;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Quick View Zoom Container */
+.qv-main-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid #EAEAEA;
+  border-radius: 4px;
+  cursor: crosshair;
+  background: #FFFFFF;
+  margin-bottom: 12px;
+}
+
+.qv-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform-origin: center center;
+  transition: transform 0.15s ease-out;
+  pointer-events: none;
+}
+
+.qv-zoom-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #444;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.qv-main-img-wrap.is-zoomed .qv-zoom-badge {
+  opacity: 0;
+}
+
+.qv-thumbnails {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.qv-thumb {
+  width: 60px;
+  height: 60px;
+  border: 1.5px solid #EAEAEA;
+  border-radius: 2px;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.qv-thumb.active {
+  border-color: #111111;
+}
+
+.qv-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Info Elements */
+.qv-tag {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: var(--dk-gold, #B89A62);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.qv-title {
+  font-family: var(--dk-font-heading, 'Playfair Display', serif);
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--dk-charcoal, #211A18);
+  margin: 0 0 12px 0;
+}
+
+.qv-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.qv-price {
+  font-family: var(--dk-font-heading, serif);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--dk-burgundy, #641A28);
+}
+
+.qv-compare {
+  font-size: 1rem;
+  color: #888888;
+  text-decoration: line-through;
+}
+
+.qv-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.qv-add-btn {
+  flex: 1;
+  height: 48px;
+  background: var(--dk-burgundy, #641A28);
+  color: #FFFFFF;
+  border: 1px solid var(--dk-gold, #B89A62);
+  border-radius: 3px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.qv-add-btn:hover {
+  background: var(--dk-dark-burgundy, #4A111C);
+  box-shadow: 0 4px 14px rgba(100, 26, 40, 0.25);
+}
+
+.qv-full-btn {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--dk-burgundy, #641A28);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-bottom: 20px;
+}
+
+/* Quick View Description Accordions */
+.qv-accordions {
+  border-top: 1px solid #EAEAEA;
+  margin-top: 12px;
+}
+
+.qv-acc-item {
+  border-bottom: 1px solid #EAEAEA;
+}
+
+.qv-acc-trigger {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--dk-font-heading, 'Playfair Display', serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #111111;
+  cursor: pointer;
+  text-align: left;
+}
+
+.qv-acc-content {
+  display: none;
+  padding-bottom: 14px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #555555;
+}
+
+@media(max-width: 768px) {
+  .qv-gallery-col,
+  .qv-info-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 20px;
+  }
+  .qv-info-col {
+    border-left: none;
+    border-top: 1px solid #EAEAEA;
+  }
+}
+</style>
+
+<script>
+function openQuickView(handle) {
+  const modal = document.getElementById('dkQuickViewModal');
+  const content = document.getElementById('dkQuickViewContent');
+  if (!modal || !content) return;
+
+  modal.classList.add('is-open');
+  document.body.classList.add('overflow-hidden');
+  content.innerHTML = `
+    <div class="dk-quickview-loading">
+      <div class="dk-spinner"></div>
+      <span>Loading handcrafted details...</span>
+    </div>
+  `;
+
+  fetch(`/products/${handle}.js`)
+    .then(res => res.json())
+    .then(prod => {
+      renderQuickViewProduct(prod);
+    })
+    .catch(err => {
+      content.innerHTML = `
+        <div style="padding: 40px; text-align: center;">
+          <p>Could not load product preview.</p>
+          <a href="/products/${handle}" style="color: #111; font-weight: 600; text-decoration: underline;">Open Product Page &rarr;</a>
+        </div>
+      `;
+    });
+}
+
+function closeQuickView() {
+  const modal = document.getElementById('dkQuickViewModal');
+  if (modal) {
+    modal.classList.remove('is-open');
+    document.body.classList.remove('overflow-hidden');
+  }
+}
+
+function renderQuickViewProduct(p) {
+  const content = document.getElementById('dkQuickViewContent');
+  if (!content) return;
+
+  const firstImg = p.featured_image || (p.images && p.images[0]) || '';
+  const price = (p.price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }).replace('.00', '');
+  const compare = (p.compare_at_price && p.compare_at_price > p.price)
+    ? (p.compare_at_price / 100).toLocaleString('en-IN', { style: 'currency', currency: 'INR' }).replace('.00', '')
+    : '';
+
+  let thumbsHtml = '';
+  if (p.images && p.images.length > 1) {
+    thumbsHtml = '<div class="qv-thumbnails">';
+    p.images.forEach((img, i) => {
+      thumbsHtml += `
+        <div class="qv-thumb ${i === 0 ? 'active' : ''}" onclick="qvSwitchImage(this, '${img}')">
+          <img src="${img}" alt="${p.title}" loading="lazy">
+        </div>
+      `;
+    });
+    thumbsHtml += '</div>';
+  }
+
+  content.innerHTML = `
+    <div class="qv-grid">
+      <!-- Gallery Column with Cursor Zoom -->
+      <div class="qv-gallery-col">
+        <div class="qv-main-img-wrap" id="QvMainWrap">
+          <img src="${firstImg}" alt="${p.title}" class="qv-main-img" id="QvMainImg">
+          <div class="qv-zoom-badge">Roll cursor to zoom</div>
+        </div>
+        ${thumbsHtml}
+      </div>
+
+      <!-- Info Column with Description Categories -->
+      <div class="qv-info-col">
+        <span class="qv-tag">✦ DELISHA KARIGARI BESPOKE</span>
+        <h2 class="qv-title">${p.title}</h2>
+
+        <div class="qv-price-row">
+          <span class="qv-price">${price}</span>
+          ${compare ? `<s class="qv-compare">${compare}</s>` : ''}
+        </div>
+
+        <div class="qv-actions-row">
+          <button type="button" class="qv-add-btn" onclick="qvAddToCart(${p.variants[0].id})">
+            Add to Bag &bull; ${price}
+          </button>
+        </div>
+
+        <a href="${p.url}" class="qv-full-btn">Explore Full Product Details &rarr;</a>
+
+        <!-- Description Categories Accordion -->
+        <div class="qv-accordions">
+          <div class="qv-acc-item">
+            <button type="button" class="qv-acc-trigger" onclick="qvToggleAcc(this)">
+              <span>Description &amp; Highlights</span>
+              <span>&minus;</span>
+            </button>
+            <div class="qv-acc-content" style="display: block;">
+              <p>${p.description ? p.description.replace(/<[^>]*>?/gm, '').slice(0, 180) + '...' : 'Handcrafted with bespoke Indian Karigari to bring warmth, beauty and tradition to your celebrations.'}</p>
+            </div>
+          </div>
+
+          <div class="qv-acc-item">
+            <button type="button" class="qv-acc-trigger" onclick="qvToggleAcc(this)">
+              <span>Artisanal Craftsmanship</span>
+              <span>&plus;</span>
+            </button>
+            <div class="qv-acc-content">
+              <p>Mindfully handcrafted in India using authentic gota patti, Kundan stones, pearls, brass ghungroos and traditional threads.</p>
+            </div>
+          </div>
+
+          <div class="qv-acc-item">
+            <button type="button" class="qv-acc-trigger" onclick="qvToggleAcc(this)">
+              <span>Complimentary Gifting &amp; Care</span>
+              <span>&plus;</span>
+            </button>
+            <div class="qv-acc-content">
+              <p>Signature festive gift packaging included. Dry wipe clean with soft microfibre cloth. Pan-India dispatch in 24-48 hours.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  initQvZoom();
+}
+
+function qvSwitchImage(el, url) {
+  const img = document.getElementById('QvMainImg');
+  if (img) {
+    img.src = url;
+    img.style.transform = 'scale(1)';
+    img.style.transformOrigin = 'center center';
+  }
+  document.querySelectorAll('.qv-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function initQvZoom() {
+  const wrap = document.getElementById('QvMainWrap');
+  const img = document.getElementById('QvMainImg');
+  if (!wrap || !img) return;
+
+  wrap.addEventListener('mousemove', function(e) {
+    const rect = wrap.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    img.style.transformOrigin = `${x}% ${y}%`;
+    img.style.transform = 'scale(2.3)';
+    wrap.classList.add('is-zoomed');
+  });
+
+  wrap.addEventListener('mouseleave', function() {
+    img.style.transform = 'scale(1)';
+    img.style.transformOrigin = 'center center';
+    wrap.classList.remove('is-zoomed');
+  });
+}
+
+function qvToggleAcc(btn) {
+  const content = btn.nextElementSibling;
+  const icon = btn.querySelector('span:last-child');
+  if (!content) return;
+
+  const isOpen = (content.style.display === 'block');
+  if (isOpen) {
+    content.style.display = 'none';
+    if (icon) icon.innerHTML = '&plus;';
+  } else {
+    content.style.display = 'block';
+    if (icon) icon.innerHTML = '&minus;';
+  }
+}
+
+function qvAddToCart(variantId) {
+  if (typeof ShopifyCart !== 'undefined' && typeof ShopifyCart.addItem === 'function') {
+    const form = document.createElement('form');
+    const input = document.createElement('input');
+    input.name = 'id';
+    input.value = variantId;
+    form.appendChild(input);
+    ShopifyCart.addItem(form);
+    closeQuickView();
+  } else {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    }).then(() => {
+      window.location.href = '/cart';
+    });
+  }
+}
+
+// Close on escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeQuickView();
+});
+</script>

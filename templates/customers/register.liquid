@@ -1,0 +1,291 @@
+<div class="customer-login-container">
+  <div class="login-card">
+    
+    <div class="login-form-wrapper">
+      <h1 class="login-title">Create Account</h1>
+      <p class="login-subtitle">Please fill in the details below to create your account.</p>
+      
+      {% form 'create_customer', class: 'login-form' %}
+        {% if form.errors %}
+          <div class="errors">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <div class="input-row">
+          <div class="input-group flex-1">
+            <label for="FirstName" class="input-label">First Name</label>
+            <input
+              type="text"
+              name="customer[first_name]"
+              id="FirstName"
+              class="input-field"
+              {% if form.first_name %}value="{{ form.first_name }}"{% endif %}
+              placeholder="First name"
+              autocomplete="given-name"
+            >
+          </div>
+
+          <div class="input-group flex-1">
+            <label for="LastName" class="input-label">Last Name</label>
+            <input
+              type="text"
+              name="customer[last_name]"
+              id="LastName"
+              class="input-field"
+              {% if form.last_name %}value="{{ form.last_name }}"{% endif %}
+              placeholder="Last name"
+              autocomplete="family-name"
+            >
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="RegisterEmail" class="input-label">Email Address</label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="RegisterEmail"
+            class="input-field {% if form.errors contains 'email' %}input-error{% endif %}"
+            {% if form.email %}value="{{ form.email }}"{% endif %}
+            placeholder="Enter your email"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+          >
+        </div>
+
+        <div class="input-group">
+          <label for="RegisterPassword" class="input-label">Password</label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="RegisterPassword"
+            class="input-field {% if form.errors contains 'password' %}input-error{% endif %}"
+            placeholder="Create password"
+            autocomplete="new-password"
+            required
+          >
+        </div>
+
+        <div class="action-btn-group">
+          <button type="submit" class="submit-btn">Create Account</button>
+        </div>
+
+        <div class="form-footer-text">
+          Already have an account? <a href="{{ routes.account_login_url }}" class="register-link">Sign In</a>
+        </div>
+      {% endform %}
+    </div>
+
+  </div>
+</div>
+
+<style>
+.customer-login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 75vh;
+  padding: 80px 20px;
+  background-color: #f8f3ea;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+.login-card {
+  background: #ffffff;
+  border: 1px solid rgba(202, 162, 93, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 480px;
+  padding: 50px 40px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.login-form-wrapper {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.login-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: #222222;
+  margin: 0 0 10px 0;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.login-subtitle {
+  font-size: 14px;
+  color: #666666;
+  margin: 0 0 35px 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.input-row {
+  display: flex;
+  gap: 15px;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #222222;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.input-field {
+  background: #fbfbf9;
+  border: 1px solid #e2e0da;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  color: #222222;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-field::placeholder {
+  color: #a4a29c;
+  opacity: 0.8;
+}
+
+.input-field:focus {
+  border-color: #caa25d;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(202, 162, 93, 0.12);
+}
+
+.input-field.input-error {
+  border-color: #d9534f;
+  box-shadow: 0 0 0 4px rgba(217, 83, 79, 0.1);
+}
+
+.errors, .errors * {
+  color: #9b1c1c !important;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.errors {
+  background: #fdf2f2;
+  border: 1px solid #f8b4b4;
+  border-radius: 12px;
+  padding: 12px 18px;
+  margin-bottom: 5px;
+}
+
+.errors ul {
+  margin: 5px 0 0 0;
+  padding-left: 20px;
+}
+
+.action-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.submit-btn {
+  background: #222222;
+  color: #ffffff;
+  border: 1px solid #222222;
+  border-radius: 50px;
+  padding: 15px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submit-btn:hover {
+  background: #caa25d;
+  border-color: #caa25d;
+  box-shadow: 0 5px 15px rgba(202, 162, 93, 0.3);
+  transform: translateY(-2px);
+}
+
+.form-footer-text {
+  text-align: center;
+  font-size: 14px;
+  color: #666666;
+  margin-top: 15px;
+}
+
+.register-link {
+  color: #caa25d;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link:hover {
+  color: #8e6c38;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .customer-login-container {
+    padding: 50px 15px;
+    min-height: 65vh;
+  }
+  
+  .login-card {
+    padding: 35px 25px;
+    border-radius: 20px;
+  }
+  
+  .login-title {
+    font-size: 28px;
+  }
+  
+  .input-row {
+    flex-direction: column;
+    gap: 22px;
+  }
+  
+  .input-field {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .submit-btn {
+    padding: 13px;
+    font-size: 12px;
+  }
+}
+</style>

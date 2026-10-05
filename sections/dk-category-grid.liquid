@@ -1,0 +1,333 @@
+<section
+  id="dk-category-grid-{{ section.id }}"
+  class="dk-category-grid-sec"
+  style="background-color: {{ section.settings.bg_color | default: '#F9F5EE' }}; padding: {{ section.settings.padding_top | default: 60 }}px 0 {{ section.settings.padding_bottom | default: 60 }}px 0;"
+>
+  <div class="container">
+    {%- if section.settings.subheading != blank or section.settings.heading != blank -%}
+      <div class="dk-section-header text-center">
+        {%- if section.settings.subheading != blank -%}
+          <span class="dk-subtitle">{{ section.settings.subheading | escape }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="dk-heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="dk-category-grid" style="--dk-grid-cols: {{ section.blocks.size | default: 5 }};">
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign collection = collections[block.settings.collection] -%}
+          {%- assign card_title = block.settings.title | default: collection.title | default: 'Category' -%}
+          {%- assign card_url = block.settings.link -%}
+          {%- if card_url == blank and collection.url != blank -%}
+            {%- assign card_url = collection.url -%}
+          {%- endif -%}
+          {%- if card_url == blank or card_url == '#' -%}
+            {%- assign card_url = routes.all_products_collection_url -%}
+          {%- endif -%}
+
+          <a href="{{ card_url }}" class="dk-category-tile" {{ block.shopify_attributes }}>
+            <div class="dk-category-tile__image-wrap">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ card_title | escape }}"
+                  class="dk-category-tile__img"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {%- elsif collection.image != blank -%}
+                <img
+                  src="{{ collection.image | image_url: width: 600 }}"
+                  alt="{{ card_title | escape }}"
+                  class="dk-category-tile__img"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {%- else -%}
+                {%- case forloop.index -%}
+                  {%- when 1 -%}{%- assign fallback_img = 'dk-cat-karwa-chauth.jpg' -%}
+                  {%- when 2 -%}{%- assign fallback_img = 'dk-cat-diwali-decor.jpg' -%}
+                  {%- when 3 -%}{%- assign fallback_img = 'dk-cat-latkan.jpg' -%}
+                  {%- when 4 -%}{%- assign fallback_img = 'dk-cat-bandhanwar.jpg' -%}
+                  {%- when 5 -%}{%- assign fallback_img = 'dk-cat-for-her.jpg' -%}
+                  {%- when 6 -%}{%- assign fallback_img = 'dk-cat-festive.jpg' -%}
+                  {%- else -%}{%- assign fallback_img = 'dk-cat-diwali-decor.jpg' -%}
+                {%- endcase -%}
+                <img
+                  src="{{ fallback_img | asset_url }}"
+                  alt="{{ card_title | escape }}"
+                  class="dk-category-tile__img"
+                  loading="lazy"
+                  width="600"
+                  height="600"
+                >
+              {%- endif -%}
+              <div class="dk-category-tile__overlay"></div>
+            </div>
+
+            <div class="dk-category-tile__content">
+              <h3 class="dk-category-tile__title">{{ card_title | escape }}</h3>
+              {%- if block.settings.subtitle != blank -%}
+                <span class="dk-category-tile__subtitle">{{ block.settings.subtitle | escape }}</span>
+              {%- endif -%}
+            </div>
+          </a>
+        {%- endfor -%}
+      {%- else -%}
+        <!-- FALLBACK DEFAULT CATEGORY TILES -->
+        {%- assign fallback_categories = "Karwa Chauth Special,Diwali Decor,Latkan,Bandhanwar,For Her (Accessories),Under @199" | split: "," -%}
+        {%- for cat in fallback_categories -%}
+          <div class="dk-category-tile">
+            <div class="dk-category-tile__image-wrap">
+              {{ 'collection-1' | placeholder_svg_tag: 'dk-category-tile__placeholder' }}
+              <div class="dk-category-tile__overlay"></div>
+            </div>
+            <div class="dk-category-tile__content">
+              <h3 class="dk-category-tile__title">{{ cat }}</h3>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .dk-section-header {
+    margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .dk-section-header .dk-subtitle {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--dk-color-gold, #B89A62);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .dk-section-header .dk-heading {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: clamp(2rem, 3.8vw, 2.9rem);
+    font-weight: 700;
+    color: var(--dk-color-primary, #641A28);
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .dk-category-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--dk-grid-cols, 6), 1fr);
+    gap: var(--dk-space-md, 1rem);
+  }
+  .dk-category-tile {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(100, 26, 40, 0.12);
+    box-shadow: 0 4px 18px rgba(100, 26, 40, 0.05);
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .dk-category-tile:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(100, 26, 40, 0.14);
+    border-color: rgba(184, 154, 98, 0.6);
+  }
+  .dk-category-tile__image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    overflow: hidden;
+    background-color: #F8F5EE;
+  }
+  .dk-category-tile__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .dk-category-tile:hover .dk-category-tile__img {
+    transform: scale(1.06);
+  }
+  .dk-category-tile__placeholder {
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+  }
+  .dk-category-tile__overlay {
+    display: none;
+  }
+  .dk-category-tile__content {
+    position: relative;
+    width: 100%;
+    background-color: #FFFFFF;
+    text-align: center;
+    padding: 14px 10px 16px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-grow: 1;
+    border-top: 1px solid rgba(184, 154, 98, 0.22);
+  }
+  .dk-category-tile__title {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: clamp(0.92rem, 1.1vw, 1.08rem);
+    font-weight: 700;
+    color: var(--dk-color-primary, #641A28);
+    margin: 0;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    transition: color 0.3s ease;
+  }
+  .dk-category-tile:hover .dk-category-tile__title {
+    color: #822234;
+  }
+  .dk-category-tile__subtitle {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #641A28;
+    background: #FDF9F3;
+    border: 1px solid rgba(184, 154, 98, 0.45);
+    letter-spacing: 0.4px;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+  }
+  .dk-category-tile:hover .dk-category-tile__subtitle {
+    background: var(--dk-color-primary, #641A28);
+    color: #FFFFFF;
+    border-color: var(--dk-color-primary, #641A28);
+    box-shadow: 0 2px 8px rgba(100, 26, 40, 0.25);
+  }
+
+  @media (max-width: 1100px) {
+    .dk-category-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--dk-space-md, 1rem);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .dk-category-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--dk-space-sm, 0.5rem);
+    }
+    .dk-category-tile__content {
+      padding: 12px 6px 10px 6px;
+    }
+    .dk-category-tile__title {
+      font-size: 0.85rem;
+    }
+    .dk-category-tile__subtitle {
+      font-size: 0.66rem;
+      padding: 2px 6px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "DELISHA Quick Shop Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Section Subheading",
+      "default": "CURATED FOR YOU"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F9F5EE"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_tile",
+      "name": "Category Tile",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle / Tag",
+          "default": "Explore"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Shopify Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Category Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "DELISHA Quick Shop Grid",
+      "blocks": [
+        { "type": "category_tile", "settings": { "title": "Rakhi" } },
+        { "type": "category_tile", "settings": { "title": "Toran & Latkan" } },
+        { "type": "category_tile", "settings": { "title": "Jewellery" } },
+        { "type": "category_tile", "settings": { "title": "Gifting" } },
+        { "type": "category_tile", "settings": { "title": "Festive Decor" } },
+        { "type": "category_tile", "settings": { "title": "Kids Products" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1136 @@
+<div id="hero--{{ section.id }}" class="elinor-hero-banner-section"
+  aria-label="{{ section.settings.accessibility_label | default: 'Hero Banner' }}">
+  <div class="elinor-hero-slider-container" data-autoplay="{{ section.settings.enable_autoplay }}"
+    data-speed="{{ section.settings.autoplay_speed | default: 5 | times: 1000 }}">
+
+    <div class="elinor-hero-slides-wrapper">
+      {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+      <div class="elinor-hero-slide {% if forloop.first %}active{% endif %}" {{ block.shopify_attributes }}
+        data-index="{{ forloop.index0 }}">
+        <div class="elinor-hero-bg">
+          {%- if block.settings.image != blank or block.settings.image_mobile != blank or section.settings.image !=
+          blank or section.settings.image_mobile != blank -%}
+          <picture class="elinor-hero-picture">
+            {%- if block.settings.image_mobile != blank -%}
+            <source media="(max-width: 768px)" srcset="{{ block.settings.image_mobile | image_url: width: 1200 }}">
+            {%- elsif section.settings.image_mobile != blank -%}
+            <source media="(max-width: 768px)" srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}">
+            {%- endif -%}
+
+            {%- if block.settings.image != blank -%}
+            {{
+            block.settings.image
+            | image_url: width: 3840
+            | image_tag:
+            width: block.settings.image.width,
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 2000, 3000, 3840',
+            fetchpriority: 'high',
+            class: 'elinor-hero-img'
+            }}
+            {%- elsif section.settings.image != blank -%}
+            {{
+            section.settings.image
+            | image_url: width: 3840
+            | image_tag:
+            width: section.settings.image.width,
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 2000, 3000, 3840',
+            fetchpriority: 'high',
+            class: 'elinor-hero-img'
+            }}
+            {%- elsif block.settings.image_mobile != blank -%}
+            <img src="{{ block.settings.image_mobile | image_url: width: 1200 }}" class="elinor-hero-img" alt="Hero Mobile Image" loading="lazy" width="1200" height="800">
+                  {%- else -%}
+            <img src="{{ section.settings.image_mobile | image_url: width: 1200 }}" class="elinor-hero-img" alt="Hero Mobile Image" loading="lazy" width="1200" height="800">
+                  {%- endif -%}
+          </picture>
+          {%- else -%}
+          <div class="elinor-hero-placeholder">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_overlay -%}
+          <div class="elinor-hero-overlay"
+            style="background-color: {{ section.settings.overlay_color | default: '#000000' }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
+          </div>
+          {%- endif -%}
+        </div>
+
+        <div class="elinor-hero-content-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+          <div class="elinor-hero-content-box" style="position: absolute; top: {{ block.settings.btn_pos_y }}%; left: {{ block.settings.btn_pos_x }}%; transform: translate(-50%, -50%); pointer-events: auto; text-align: center;">
+            {%- if block.settings.subtitle != blank -%}
+            <div class="elinor-hero-subtitle">
+              {{ block.settings.subtitle }}
+            </div>
+            {%- endif -%}
+
+            {%- if block.settings.heading != blank -%}
+            <h1 class="elinor-hero-heading">
+              {{ block.settings.heading }}
+            </h1>
+            {%- endif -%}
+
+            {%- if block.settings.badge_text != blank -%}
+            <div class="elinor-hero-badge">
+              {{ block.settings.badge_text }}
+            </div>
+            {%- endif -%}
+
+            {%- if block.settings.button_label != blank -%}
+            <a href="{{ block.settings.button_link | default: '#' }}" class="elinor-hero-btn">
+              {{ block.settings.button_label }}
+            </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+      {%- endfor -%}
+      {%- else -%}
+      <!-- Fallback Single Slide -->
+      <div class="elinor-hero-slide active" data-index="0">
+        <div class="elinor-hero-bg">
+          {%- if section.settings.image != blank or section.settings.image_mobile != blank -%}
+          <picture class="elinor-hero-picture">
+            {%- if section.settings.image_mobile != blank -%}
+            <source media="(max-width: 768px)" srcset="{{ section.settings.image_mobile | image_url: width: 1200 }}">
+            {%- endif -%}
+
+            {%- if section.settings.image != blank -%}
+            {{
+            section.settings.image
+            | image_url: width: 3840
+            | image_tag:
+            width: section.settings.image.width,
+            sizes: '100vw',
+            widths: '375, 550, 750, 1100, 1500, 2000, 3000, 3840',
+            fetchpriority: 'high',
+            class: 'elinor-hero-img'
+            }}
+            {%- else -%}
+            <img src="{{ section.settings.image_mobile | image_url: width: 1200 }}" class="elinor-hero-img" alt="Hero Mobile Image" loading="lazy" width="1200" height="800">
+                {%- endif -%}
+          </picture>
+          {%- else -%}
+          <div class="elinor-hero-placeholder">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_overlay -%}
+          <div class="elinor-hero-overlay"
+            style="background-color: {{ section.settings.overlay_color | default: '#000000' }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
+          </div>
+          {%- endif -%}
+        </div>
+
+        <div class="elinor-hero-content-wrapper" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
+          <div class="elinor-hero-content-box" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: auto; text-align: center;">
+            {%- if section.settings.subtitle != blank -%}
+            <div class="elinor-hero-subtitle">
+              {{ section.settings.subtitle }}
+            </div>
+            {%- endif -%}
+
+            {%- if section.settings.heading != blank -%}
+            <h1 class="elinor-hero-heading">
+              {{ section.settings.heading }}
+            </h1>
+            {%- endif -%}
+
+            {%- if section.settings.badge_text != blank -%}
+            <div class="elinor-hero-badge">
+              {{ section.settings.badge_text }}
+            </div>
+            {%- endif -%}
+
+            {%- if section.settings.button_label != blank -%}
+            <a href="{{ section.settings.button_link | default: '#' }}" class="elinor-hero-btn">
+              {{ section.settings.button_label }}
+            </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+      {%- endif -%}
+    </div>
+
+    {%- assign total_slides = section.blocks.size -%}
+    {%- if total_slides > 1 -%}
+    {%- if section.settings.show_arrows -%}
+    <button type="button" class="elinor-hero-arrow prev" aria-label="Previous slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+    <button type="button" class="elinor-hero-arrow next" aria-label="Next slide">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+    {%- endif -%}
+
+    {%- if section.settings.show_dots -%}
+    <div class="elinor-hero-dots">
+      {%- for block in section.blocks -%}
+      <button type="button" class="elinor-hero-dot {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}" aria-label="Slide {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+    {%- endif -%}
+    {%- endif -%}
+
+  </div>
+</div>
+<!-- DELISHA RAKHI MARQUEE -->
+<div class="delisha-rakhi-strip">
+  <div class="delisha-rakhi-track" id="delishaRakhiTrack">
+
+    <div class="delisha-rakhi-content">
+      <span>✦ HANDCRAFTED RAKHIS</span>
+      <span>✦ BHAIYA BHABHI RAKHI SET</span>
+      <span>✦ BEAUTIFUL BONDS, BEAUTIFUL MEMORIES</span>
+      <span>✦ FREE SHIPPING SITEWIDE</span>
+      <span>✦ READY TO GIFT</span>
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* =========================================
+DELISHA RAKHI MARQUEE
+========================================= */
+
+.delisha-rakhi-strip {
+width: 100%;
+height: 42px;
+overflow: hidden;
+background-color: #f4e9df;
+color: #000000ff;
+display: flex;
+align-items: center;
+position: relative;
+white-space: nowrap;
+}
+
+.delisha-rakhi-track {
+display: flex;
+align-items: center;
+width: max-content;
+height: 100%;
+transform: translate3d(0, 0, 0);
+will-change: transform;
+}
+
+.delisha-rakhi-content {
+display: flex;
+align-items: center;
+flex-shrink: 0;
+height: 100%;
+gap: 55px;
+padding-right: 55px;
+}
+
+.delisha-rakhi-content span {
+display: inline-block;
+flex-shrink: 0;
+font-family: 'EB Garamond', sans-serif;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 1.2px;
+line-height: 1;
+text-transform: uppercase;
+}
+
+@media screen and (max-width: 768px) {
+
+.delisha-rakhi-strip {
+height: 36px;
+}
+
+.delisha-rakhi-content {
+gap: 32px;
+padding-right: 32px;
+}
+
+.delisha-rakhi-content span {
+font-size: 9px;
+letter-spacing: 0.8px;
+}
+
+}
+</style>
+<style>
+  .elinor-hero-banner-section {
+    position: relative;
+    width: 100%;
+  }
+
+  .elinor-hero-slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    {% if section.settings.height_mode == 'cover' %}
+      height: 75vh;
+      min-height: 450px;
+    {% elsif section.settings.height_mode == 'adapt' %}
+      height: auto;
+      aspect-ratio: 16 / 9;
+    {% else %}
+      height: {{ section.settings.desktop_height | default: 625 }}px;
+      min-height: {{ section.settings.desktop_height | default: 625 }}px;
+    {% endif %}
+  }
+
+  .elinor-hero-slides-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+  }
+
+  .elinor-hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+  }
+
+  .elinor-hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+  }
+
+  .elinor-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .elinor-hero-picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .elinor-hero-img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: {
+        {
+        section.settings.image_fit | default: 'cover'
+      }
+    }
+
+    ;
+    object-position: center;
+  }
+
+  .elinor-hero-placeholder svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elinor-hero-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .elinor-hero-content-wrapper {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 40px 60px;
+    box-sizing: border-box;
+    display: flex;
+  }
+
+  .elinor-hero-content-wrapper.align-left {
+    justify-content: flex-start;
+  }
+
+  .elinor-hero-content-wrapper.align-left .elinor-hero-content-box {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .elinor-hero-content-wrapper.align-center {
+    justify-content: center;
+  }
+
+  .elinor-hero-content-wrapper.align-center .elinor-hero-content-box {
+    align-items: center;
+    text-align: center;
+  }
+
+  .elinor-hero-content-wrapper.align-right {
+    justify-content: flex-end;
+  }
+
+  .elinor-hero-content-wrapper.align-right .elinor-hero-content-box {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .elinor-hero-content-box {
+    max-width: 580px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Subtitle */
+  .elinor-hero-subtitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 34px;
+    font-weight: 400;
+    color: #ffffff;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Heading */
+  .elinor-hero-heading {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 52px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.1;
+    margin: 0;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Offer Badge */
+  .elinor-hero-badge {
+    background-color: #fbf0e8;
+    color: #4a1525;
+    padding: 12px 32px;
+    border-radius: 4px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    display: inline-block;
+  }
+
+  .elinor-hero-badge em,
+  .elinor-hero-badge i {
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  /* Button */
+  .elinor-hero-btn {
+    display: inline-block;
+    padding: 14px 40px;
+    background-color: #4a1525;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .elinor-hero-btn:hover {
+    background-color: #2c0b15;
+    transform: translateY(-2px);
+  }
+
+  /* Slider Navigation Controls */
+  .elinor-hero-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .elinor-hero-arrow:hover {
+    background: rgba(74, 21, 37, 0.9);
+    border-color: #ffffff;
+  }
+
+  .elinor-hero-arrow.prev {
+    left: 20px;
+  }
+
+  .elinor-hero-arrow.next {
+    right: 20px;
+  }
+
+  .elinor-hero-dots {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .elinor-hero-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .elinor-hero-dot.active,
+  .elinor-hero-dot:hover {
+    background: #ffffff;
+    width: 28px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 991px) {
+    .elinor-hero-slider-container {
+      {% if section.settings.mobile_height_mode == 'cover' %}
+        height: 60vh;
+        min-height: 380px;
+      {% elsif section.settings.mobile_height_mode == 'adapt' %}
+        height: auto;
+        aspect-ratio: 3 / 4;
+      {% else %}
+        height: {{ section.settings.mobile_height | default: 480 }}px;
+        min-height: {{ section.settings.mobile_height | default: 480 }}px;
+      {% endif %}
+    }
+
+    .elinor-hero-content-wrapper {
+      padding: 30px 20px;
+      justify-content: center !important;
+      align-items: flex-start;
+      padding-top: 50px;
+    }
+
+    .elinor-hero-content-box {
+      align-items: center !important;
+      text-align: center !important;
+    }
+
+    .elinor-hero-subtitle {
+      font-size: 22px;
+    }
+
+    .elinor-hero-heading {
+      font-size: 32px;
+    }
+
+    .elinor-hero-badge {
+      font-size: 18px;
+      padding: 8px 18px;
+    }
+
+    .elinor-hero-arrow {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .elinor-hero-subtitle {
+      font-size: 20px;
+    }
+
+    .elinor-hero-heading {
+      font-size: 28px;
+    }
+
+    .elinor-hero-badge {
+      font-size: 16px;
+      padding: 6px 14px;
+    }
+
+    .elinor-hero-btn {
+      padding: 10px 28px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .elinor-hero-arrow.prev {
+      left: 10px;
+    }
+
+    .elinor-hero-arrow.next {
+      right: 10px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    function initHeroSlider() {
+      var container = document.querySelector('#hero--{{ section.id }} .elinor-hero-slider-container');
+      if (!container) return;
+      
+      var slides = container.querySelectorAll('.elinor-hero-slide');
+      var dots = container.querySelectorAll('.elinor-hero-dot');
+      var prevBtn = container.querySelector('.elinor-hero-arrow.prev');
+      var nextBtn = container.querySelector('.elinor-hero-arrow.next');
+      if (slides.length <= 1) return;
+      
+      var currentIndex = 0;
+      var timer = null;
+      var autoplay = container.getAttribute('data-autoplay') === 'true';
+      var speed = parseInt(container.getAttribute('data-speed'), 10) || 5000;
+      
+      function goToSlide(index) {
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        for (var i = 0; i < slides.length; i++) {
+          if (i === index) {
+            slides[i].classList.add('active');
+          } else {
+            slides[i].classList.remove('active');
+          }
+        }
+        
+        for (var j = 0; j < dots.length; j++) {
+          if (j === index) {
+            dots[j].classList.add('active');
+          } else {
+            dots[j].classList.remove('active');
+          }
+        }
+        
+        currentIndex = index;
+      }
+      
+      function nextSlide() {
+        goToSlide(currentIndex + 1);
+      }
+      
+      function prevSlide() {
+        goToSlide(currentIndex - 1);
+      }
+      
+      function startAutoplay() {
+        if (!autoplay) return;
+        stopAutoplay();
+        timer = setInterval(nextSlide, speed);
+      }
+      
+      function stopAutoplay() {
+        if (timer) clearInterval(timer);
+      }
+      
+      if (nextBtn) {
+        nextBtn.onclick = function() {
+          nextSlide();
+          startAutoplay();
+        };
+      }
+      if (prevBtn) {
+        prevBtn.onclick = function() {
+          prevSlide();
+          startAutoplay();
+        };
+      }
+      
+      dots.forEach(function(dot) {
+        dot.onclick = function() {
+          var idx = parseInt(this.getAttribute('data-slide'), 10);
+          goToSlide(idx);
+          startAutoplay();
+        };
+      });
+      
+      container.onmouseenter = stopAutoplay;
+      container.onmouseleave = startAutoplay;
+      
+      var touchStartX = 0;
+      var touchEndX = 0;
+      container.ontouchstart = function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      };
+      container.ontouchend = function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchStartX - touchEndX > 40) {
+          nextSlide();
+          startAutoplay();
+        } else if (touchEndX - touchStartX > 40) {
+          prevSlide();
+          startAutoplay();
+        }
+      };
+      
+      startAutoplay();
+
+      // Theme Customizer live editor block selection listener
+      if (window.Shopify && Shopify.designMode) {
+        document.addEventListener('shopify:block:select', function(event) {
+          if (event.detail.sectionId === '{{ section.id }}') {
+            stopAutoplay();
+            var targetBlock = container.querySelector('[data-shopify-editor-block*="' + event.detail.blockId + '"]');
+            if (targetBlock && targetBlock.getAttribute('data-index')) {
+              var idx = parseInt(targetBlock.getAttribute('data-index'), 10);
+              goToSlide(idx);
+            }
+          }
+        });
+        document.addEventListener('shopify:block:deselect', function(event) {
+          if (event.detail.sectionId === '{{ section.id }}') {
+            startAutoplay();
+          }
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHeroSlider);
+    } else {
+      initHeroSlider();
+    }
+  })();
+</script>
+<script>
+  (function () {
+
+  function initDelishaRakhiMarquee() {
+
+    var track = document.getElementById('delishaRakhiTrack');
+
+    if (!track) return;
+
+    var original = track.querySelector('.delisha-rakhi-content');
+
+    if (!original) return;
+
+    /*
+      Remove previously generated copies.
+    */
+    track.querySelectorAll('.delisha-rakhi-clone').forEach(function (clone) {
+      clone.remove();
+    });
+
+    /*
+      Get the exact width of one complete group.
+    */
+    var groupWidth = original.getBoundingClientRect().width;
+
+    /*
+      Fill the track with enough copies to cover
+      the entire browser width plus extra space.
+    */
+    var screenWidth = window.innerWidth;
+
+    var copiesNeeded = Math.ceil(screenWidth / groupWidth) + 3;
+
+    for (var i = 0; i < copiesNeeded; i++) {
+
+      var clone = original.cloneNode(true);
+
+      clone.classList.add('delisha-rakhi-clone');
+
+      clone.setAttribute('aria-hidden', 'true');
+
+      track.appendChild(clone);
+    }
+
+    /*
+      Animation position.
+    */
+    var position = 0;
+
+    /*
+      Speed in pixels per second.
+    */
+    var speed = 45;
+
+    var lastTime = performance.now();
+
+    function animate(currentTime) {
+
+      var deltaTime = (currentTime - lastTime) / 1000;
+
+      lastTime = currentTime;
+
+      position -= speed * deltaTime;
+
+      /*
+        When exactly one complete group
+        has moved away, reset by exactly
+        one group width.
+      */
+      if (Math.abs(position) >= groupWidth) {
+
+        position += groupWidth;
+
+      }
+
+      track.style.transform =
+        'translate3d(' + position + 'px, 0, 0)';
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+
+  /*
+    Start after page loads.
+  */
+  if (document.readyState === 'loading') {
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      initDelishaRakhiMarquee
+    );
+
+  } else {
+
+    initDelishaRakhiMarquee();
+
+  }
+
+
+  /*
+    Recalculate on browser resize.
+  */
+  window.addEventListener('resize', function () {
+
+    clearTimeout(window.delishaMarqueeResizeTimer);
+
+    window.delishaMarqueeResizeTimer = setTimeout(
+      initDelishaRakhiMarquee,
+      250
+    );
+
+  });
+
+})();
+</script>
+{% schema %}
+{
+"name": "Elinor Hero Banner",
+"max_blocks": 15,
+"settings": [
+{
+"type": "header",
+"content": "Desktop & Mobile Background Images (Fallback)"
+},
+{
+"type": "image_picker",
+"id": "image",
+"label": "Desktop Background Image"
+},
+{
+"type": "image_picker",
+"id": "image_mobile",
+"label": "Mobile Background Image"
+},
+{
+"type": "text",
+"id": "subtitle",
+"label": "Subtitle Line",
+"default": "This Rakhi, Give Her"
+},
+{
+"type": "text",
+"id": "heading",
+"label": "Main Heading",
+"default": "Twice the Happiness."
+},
+{
+"type": "text",
+"id": "badge_text",
+"label": "Offer Badge Text",
+"default": "BUY 1 GET 1 FREE"
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Button Label",
+"default": "SHOP NOW"
+},
+{
+"type": "url",
+"id": "button_link",
+"label": "Button Link"
+},
+{
+"type": "header",
+"content": "Image Cover & Height Options"
+},
+{
+"type": "select",
+"id": "image_fit",
+"label": "Banner Image Fit (Cover Mode)",
+"options": [
+{
+"value": "cover",
+"label": "Cover - Crop to fill banner area"
+},
+{
+"value": "contain",
+"label": "Contain - Show complete image without cropping"
+}
+],
+"default": "cover"
+},
+{
+"type": "select",
+"id": "height_mode",
+"label": "Desktop Height Mode",
+"options": [
+{
+"value": "custom",
+"label": "Custom Height (px)"
+},
+{
+"value": "cover",
+"label": "Full Screen Cover (100vh)"
+},
+{
+"value": "adapt",
+"label": "Adapt to Image Aspect Ratio"
+}
+],
+"default": "custom"
+},
+{
+"type": "range",
+"id": "desktop_height",
+"min": 225,
+"max": 975,
+"step": 10,
+"unit": "px",
+"label": "Desktop Custom Height (px)",
+"default": 625
+},
+{
+"type": "select",
+"id": "mobile_height_mode",
+"label": "Mobile Height Mode",
+"options": [
+{
+"value": "custom",
+"label": "Custom Mobile Height (px)"
+},
+{
+"value": "adapt",
+"label": "Adapt to Mobile Image Ratio"
+},
+{
+"value": "cover",
+"label": "Full Mobile Screen (80vh)"
+}
+],
+"default": "custom"
+},
+{
+"type": "range",
+"id": "mobile_height",
+"min": 150,
+"max": 800,
+"step": 10,
+"unit": "px",
+"label": "Mobile Custom Height (px)",
+"default": 480
+},
+{
+"type": "header",
+"content": "Slider & Auto-Slide Settings"
+},
+{
+"type": "checkbox",
+"id": "enable_autoplay",
+"label": "Enable Auto-Slide",
+"default": true
+},
+{
+"type": "range",
+"id": "autoplay_speed",
+"min": 2,
+"max": 10,
+"step": 1,
+"unit": "s",
+"label": "Auto-Slide Duration (Seconds)",
+"default": 5
+},
+{
+"type": "checkbox",
+"id": "show_arrows",
+"label": "Show Navigation Arrows",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_dots",
+"label": "Show Pagination Dots",
+"default": true
+},
+{
+"type": "header",
+"content": "Background Overlay"
+},
+{
+"type": "checkbox",
+"id": "show_overlay",
+"label": "Enable Background Overlay",
+"default": true
+},
+{
+"type": "color",
+"id": "overlay_color",
+"label": "Overlay Color",
+"default": "#000000"
+},
+{
+"type": "range",
+"id": "overlay_opacity",
+"min": 0,
+"max": 80,
+"step": 5,
+"unit": "%",
+"label": "Overlay Opacity",
+"default": 20
+}
+],
+"blocks": [
+{
+"type": "slide",
+"name": "Image Slide",
+"settings": [
+{
+"type": "image_picker",
+"id": "image",
+"label": "Desktop Slide Image"
+},
+{
+"type": "image_picker",
+"id": "image_mobile",
+"label": "Mobile Slide Image"
+},
+{
+"type": "text",
+"id": "subtitle",
+"label": "Subtitle Line",
+"default": "Jewellery That Holds"
+},
+{
+"type": "text",
+"id": "heading",
+"label": "Main Heading",
+"default": "More Than Shine."
+},
+{
+"type": "text",
+"id": "badge_text",
+"label": "Offer Badge Text",
+"default": "It Holds Memories."
+},
+{
+"type": "text",
+"id": "button_label",
+"label": "Button Label",
+"default": "SHOP NOW"
+},
+{
+"type": "url",
+"id": "button_link",
+"label": "Button Link"
+},
+{
+"type": "range",
+"id": "btn_pos_y",
+"min": 0,
+"max": 100,
+"step": 1,
+"unit": "%",
+"label": "Button Vertical Position (%)",
+"default": 50
+},
+{
+"type": "range",
+"id": "btn_pos_x",
+"min": 0,
+"max": 100,
+"step": 1,
+"unit": "%",
+"label": "Button Horizontal Position (%)",
+"default": 50
+},
+{
+"type": "select",
+"id": "content_alignment",
+"label": "Content Alignment",
+"options": [
+{
+"value": "left",
+"label": "Left"
+},
+{
+"value": "center",
+"label": "Center"
+},
+{
+"value": "right",
+"label": "Right"
+}
+],
+"default": "right"
+}
+]
+}
+],
+"presets": [
+{
+"name": "Elinor Hero Banner",
+"blocks": [
+{
+"type": "slide"
+},
+{
+"type": "slide"
+}
+]
+}
+]
+}
+{% endschema %}

@@ -1,0 +1,385 @@
+<div class="list-collections-section padding-{{ section.id }}" style="background-color: {{ section.settings.bg_color }};">
+  <div class="lc-container">
+    
+    <!-- Breadcrumb -->
+    {% if section.settings.show_breadcrumb %}
+      <nav class="lc-breadcrumb" aria-label="breadcrumbs">
+        <a href="{{ routes.root_url }}" title="Home">Home</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span>{{ section.settings.heading | default: 'Collections' }}</span>
+      </nav>
+    {% endif %}
+
+    <!-- Header -->
+    <div class="lc-header" style="text-align: {{ section.settings.text_alignment }};">
+      {% if section.settings.heading != blank %}
+        <h1 class="lc-page-title" style="color: {{ section.settings.text_color }};">{{ section.settings.heading }}</h1>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="lc-page-subtext" style="color: {{ section.settings.text_color }}; opacity: 0.8;">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Grid -->
+    {% paginate collections by 50 %}
+    <div class="lc-grid columns-{{ section.settings.columns_desktop }}">
+      {%- liquid
+        case section.settings.sort
+          when 'products_high' or 'products_low'
+            assign collections_list = collections | sort: 'all_products_count'
+          when 'date' or 'date_reversed'
+            assign collections_list = collections | sort: 'published_at'
+          else
+            assign collections_list = collections
+        endcase
+
+        if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+          assign collections_list = collections_list | reverse
+        endif
+      -%}
+
+      {% assign visible_collections_count = 0 %}
+      {% for collection in collections_list %}
+        {% unless collection.handle == 'frontpage' %}
+          {% assign visible_collections_count = visible_collections_count | plus: 1 %}
+          <div class="lc-item">
+            <div class="lc-card-image-wrap" style="aspect-ratio: {{ section.settings.image_ratio }};">
+              {% if collection.image %}
+                <img src="{{ collection.image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" class="lc-card-image" loading="lazy" width="800" height="800">
+              {% elsif collection.products.first and collection.products.first.featured_image %}
+                <img src="{{ collection.products.first.featured_image | image_url: width: 800 }}" alt="{{ collection.title | escape }}" class="lc-card-image" loading="lazy" width="800" height="800">
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'lc-placeholder-svg' }}
+              {% endif %}
+              
+              <div class="lc-card-overlay" style="background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 60%);">
+                <h3 class="lc-card-title">{{ collection.title }}</h3>
+                {% if section.settings.show_explore_button %}
+                  <span class="lc-btn">EXPLORE</span>
+                {% endif %}
+              </div>
+              <a href="{{ collection.url }}" class="lc-card-link" aria-label="Explore {{ collection.title }}"></a>
+            </div>
+          </div>
+        {% endunless %}
+      {% endfor %}
+
+      {% if visible_collections_count == 0 %}
+        {%- comment -%} CURATED BRAND COLLECTIONS SHOWCASE {%- endcomment -%}
+        {%- assign cur_titles = "Karwa Chauth Special|Diwali Decor|Latkan|Bandhanwar|For her (Accessories)" | split: "|" -%}
+        {%- assign cur_counts = "Festive Puja & Gifts|Illuminated Living|Handcrafted Tassels|Auspicious Doorways|Jewellery & Accents" | split: "|" -%}
+        {%- assign cur_imgs = "dk-cat-karwa-chauth.jpg|dk-cat-diwali-decor.jpg|dk-cat-latkan.jpg|dk-cat-bandhanwar.jpg|dk-cat-for-her.jpg" | split: "|" -%}
+        {%- assign cur_urls = "/collections/karwa-chauth-special|/collections/diwali-decor|/collections/latkan|/collections/bandhanwar|/collections/for-her-accessories" | split: "|" -%}
+
+        {%- for i in (0..4) -%}
+          {%- assign c_title = cur_titles[i] -%}
+          {%- assign c_count = cur_counts[i] -%}
+          {%- assign c_img = cur_imgs[i] -%}
+          {%- assign c_url = cur_urls[i] -%}
+
+          <div class="lc-item">
+            <div class="lc-card-image-wrap" style="aspect-ratio: 1 / 1;">
+              <img src="{{ c_img | asset_url }}" alt="{{ c_title | escape }}" class="lc-card-image" loading="lazy" width="800" height="800">
+              <div class="lc-card-overlay" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%);">
+                <h3 class="lc-card-title">{{ c_title }}</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 14px; margin: 0 0 12px 0;">{{ c_count }}</p>
+                {% if section.settings.show_explore_button %}
+                  <span class="lc-btn">EXPLORE</span>
+                {% endif %}
+              </div>
+              <a href="{{ c_url }}" class="lc-card-link" aria-label="Explore {{ c_title }}"></a>
+            </div>
+          </div>
+        {%- endfor -%}
+      {% endif %}
+    </div>
+    {% endpaginate %}
+
+  </div>
+</div>
+
+<style>
+.list-collections-section {
+  font-family: var(--font-body, sans-serif);
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+.lc-container {
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Breadcrumbs */
+.lc-breadcrumb {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lc-breadcrumb a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.lc-breadcrumb a:hover {
+  color: #d8a85e;
+}
+
+/* Header */
+.lc-header {
+  margin-bottom: 50px;
+}
+.lc-page-title {
+  font-family: var(--font-heading, serif);
+  font-size: 40px;
+  margin: 0 0 10px 0;
+  letter-spacing: 2px;
+}
+.lc-page-subtext {
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Grid */
+.lc-grid {
+  display: grid;
+  gap: 30px;
+}
+.lc-grid.columns-2 { grid-template-columns: repeat(2, 1fr); }
+.lc-grid.columns-3 { grid-template-columns: repeat(3, 1fr); }
+.lc-grid.columns-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* Card */
+.lc-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: {{ section.settings.border_radius }}px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.lc-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+.lc-card-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.lc-card-image-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #fdfdfd;
+}
+.lc-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+.lc-placeholder-svg {
+  width: 100%;
+  height: 100%;
+  background-color: #f0f0f0;
+  fill: #ccc;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+.lc-item:hover .lc-card-image,
+.lc-item:hover .lc-placeholder-svg {
+  transform: scale(1.08);
+}
+
+/* Overlay & Text */
+.lc-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  z-index: 2;
+}
+.lc-card-title {
+  color: #fff;
+  font-family: var(--font-heading, serif);
+  font-size: 26px;
+  margin: 0 0 15px 0;
+  letter-spacing: 1px;
+}
+.lc-btn {
+  background: #d8a85e;
+  color: #fff;
+  padding: 10px 25px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  transition: background 0.3s ease;
+  opacity: 0.9;
+}
+.lc-btn:hover {
+  background: #c2934b;
+  opacity: 1;
+}
+
+/* Responsive */
+@media(max-width: 992px) {
+  .lc-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media(max-width: 768px) {
+  .lc-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .lc-page-title {
+    font-size: 32px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Collections List Page",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#fdfaf5"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumb",
+      "label": "Show Breadcrumb",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Text Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Page Heading",
+      "default": "Our Collections"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Explore our premium handcrafted categories."
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Grid Settings"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Columns on Desktop"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Card Aspect Ratio",
+      "options": [
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "3 / 4", "label": "Portrait (3:4)" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 12,
+      "label": "Card Border Radius"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_explore_button",
+      "label": "Show Explore Button",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "options": [
+        { "value": "alphabetical", "label": "Alphabetically, A-Z" },
+        { "value": "alphabetical_reversed", "label": "Alphabetically, Z-A" },
+        { "value": "date_reversed", "label": "Date, new to old" },
+        { "value": "date", "label": "Date, old to new" },
+        { "value": "products_high", "label": "Product count, high to low" },
+        { "value": "products_low", "label": "Product count, low to high" }
+      ],
+      "default": "alphabetical",
+      "label": "Sort collections by"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60,
+      "label": "Padding Bottom"
+    }
+  ]
+}
+{% endschema %}

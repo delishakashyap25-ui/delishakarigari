@@ -1,0 +1,44 @@
+<div class="main-page-section padding-{{ section.id }}" style="background-color: {{ section.settings.bg_color | default: '#F9F5EE' }}; padding-top: {{ section.settings.padding_top | default: 50 }}px; padding-bottom: {{ section.settings.padding_bottom | default: 60 }}px;">
+  <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+    <h1 class="page-title" style="font-family: var(--font-heading, 'Playfair Display', serif); font-size: 36px; text-align: center; color: #111111; margin-bottom: 30px;">
+      {{ page.title }}
+    </h1>
+    <div class="page-content rte" style="font-family: var(--font-body, 'Poppins', sans-serif); font-size: 15px; line-height: 1.8; color: #333333;">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page Content",
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#F9F5EE"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 60
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1749 @@
+/* ==========================================================================
+   DELISHA KARIGARI — BRAND DESIGN SYSTEM & CORE CSS ARCHITECTURE
+   Brand Identity: Premium, Elegant, Modern Indian, Handcrafted & Festive
+   ========================================================================== */
+
+/* 1. CENTRALIZED BRAND CSS CUSTOM PROPERTIES */
+:root {
+  /* Color Palette — Delisha Karigari Master Tonal System */
+  --dk-color-primary: #641A28;              /* Primary Deep Wine / Burgundy */
+  --dk-color-primary-dark: #4A111C;         /* Darker Wine for premium sections & states */
+  --dk-color-primary-hover: #4A111C;        /* Darker Wine Hover */
+  --dk-color-background: #F8F3EB;           /* Warm Ivory Background */
+  --dk-color-background-secondary: #E9D8C5; /* Soft Champagne Surface */
+  --dk-color-gold: #B89A62;                 /* Muted Antique Gold */
+  --dk-color-gold-hover: #9E814E;           /* Antique Gold Hover */
+  --dk-color-accent: #C28251;               /* Terracotta Warm Accent */
+  --dk-color-text: #211A18;                 /* Dark Text */
+  --dk-color-text-muted: #5A4B41;           /* Warm Muted Brown */
+  --dk-color-white: #FFFFFF;                /* Pure White */
+  --dk-color-border: rgba(100, 26, 40, 0.10); /* Subtle Wine Border */
+  --dk-color-border-subtle: rgba(184, 154, 98, 0.22); /* Subtle Gold Border */
+
+  /* Legacy & Theme Compatibility Mapping */
+  --color-primary: var(--dk-color-primary);
+  --color-background: var(--dk-color-background);
+  --color-text: var(--dk-color-text);
+  --color-gold: var(--dk-color-gold);
+
+  /* Typography System */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --dk-font-heading: var(--font-heading);
+  --dk-font-body: var(--font-body);
+
+  /* Spacing Scale (Generous Whitespace System) */
+  --dk-space-xs: 0.25rem;   /* 4px */
+  --dk-space-sm: 0.5rem;    /* 8px */
+  --dk-space-md: 1rem;      /* 16px */
+  --dk-space-lg: 1.5rem;    /* 24px */
+  --dk-space-xl: 2.5rem;    /* 40px */
+  --dk-space-2xl: 4rem;     /* 64px */
+
+  /* Component Surfaces & Radius */
+  --radius: 6px;            /* Refined subtle radius */
+  --dk-radius-sm: 4px;
+  --dk-radius-md: 6px;
+  --dk-radius-lg: 10px;
+  --dk-radius-pill: 40px;
+
+  /* Shadows & Elevation */
+  --shadow: 0 4px 20px rgba(100, 26, 40, 0.04);
+  --dk-shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.03);
+  --dk-shadow-hover: 0 8px 24px rgba(100, 26, 40, 0.08);
+
+  /* Timing & Transitions */
+  --transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --dk-transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --dk-transition-fast: all 0.15s ease;
+}
+
+/* 2. BASE RESET & ACCESSIBILITY */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--dk-font-body);
+  background-color: var(--dk-color-background);
+  color: var(--dk-color-text);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Focus Visible for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--dk-color-primary);
+  outline-offset: 2px;
+}
+
+/* 3. TYPOGRAPHY HIERARCHY */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6,
+.page-title,
+.dk-heading {
+  font-family: var(--dk-font-heading);
+  color: var(--dk-color-text);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-top: 0;
+}
+
+h1, .h1 { font-size: clamp(2rem, 4vw, 3rem); }
+h2, .h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); }
+h3, .h3 { font-size: clamp(1.25rem, 2.5vw, 1.75rem); }
+h4, .h4 { font-size: 1.25rem; }
+h5, .h5 { font-size: 1.1rem; }
+h6, .h6 { font-size: 1rem; }
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--dk-space-md);
+}
+
+.dk-subtitle {
+  font-family: var(--dk-font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--dk-color-gold);
+  font-weight: 600;
+  margin-bottom: var(--dk-space-xs);
+  display: block;
+}
+
+/* 4. BUTTONS & ACTIONS DESIGN SYSTEM */
+.dk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--dk-font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--dk-radius-sm, 4px);
+  padding: 14px 34px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: var(--dk-transition);
+  box-sizing: border-box;
+}
+
+.dk-btn-primary {
+  background: linear-gradient(135deg, #6E1F2A 0%, #541720 100%);
+  color: #FFFFFF !important;
+  border: 1.5px solid #B89552;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(110, 31, 42, 0.35);
+}
+
+.dk-btn-primary:hover {
+  background: linear-gradient(135deg, #822633 0%, #6E1F2A 100%);
+  border-color: #E2C078;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(184, 149, 82, 0.45);
+}
+
+.dk-btn-gold {
+  background: linear-gradient(135deg, #B89552 0%, #9F7E3E 100%);
+  color: #FFFFFF !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(184, 149, 82, 0.3);
+}
+
+.dk-btn-gold:hover {
+  background: linear-gradient(135deg, #CDB174 0%, #B89552 100%);
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(184, 149, 82, 0.45);
+}
+
+.dk-btn-outline {
+  background: transparent;
+  color: var(--dk-color-primary) !important;
+  border: 1.5px solid var(--dk-color-primary);
+}
+
+.dk-btn-outline:hover {
+  background: var(--dk-color-primary);
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+}
+
+/* 5. LAYOUT & CONTAINERS */
+.container,
+.dk-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 var(--dk-space-lg);
+}
+
+/* ==========================================================================
+   DELISHA KARIGARI — HEADER & NAVIGATION COMPONENT
+   ========================================================================== */
+/* ==========================================================================
+   DELISHA KARIGARI — HEADER & NAVIGATION COMPONENT (TIFFANY & CO. MINIMAL LUXURY)
+   ========================================================================== */
+.dk-header {
+  width: 100%;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #EAEAEA;
+  position: relative;
+  z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dk-header--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+  transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Ratnaya-Style Compact Luxury Sticky Header State */
+.dk-header--scrolled {
+  box-shadow: 0 4px 22px rgba(74, 17, 28, 0.08);
+}
+
+.dk-header--scrolled .dk-header__announcement {
+  height: 0 !important;
+  opacity: 0 !important;
+  padding: 0 16px !important;
+  overflow: hidden !important;
+  border-bottom: none !important;
+  pointer-events: none;
+}
+
+.dk-header--scrolled .dk-header__mobile-location {
+  height: 0 !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-bottom: none !important;
+  pointer-events: none;
+}
+
+.dk-header--scrolled .dk-header__top {
+  padding: 8px 0;
+  background-color: rgba(248, 243, 235, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.dk-header--scrolled .dk-header__logo-img {
+  max-height: 42px !important;
+  transform: scale(0.94);
+}
+
+.dk-header--scrolled .dk-header__nav {
+  border-top-color: rgba(100, 26, 40, 0.05);
+}
+
+.dk-header--scrolled .dk-header__menu-link {
+  padding: 8px 0;
+  font-size: 0.81rem;
+}
+
+/* 1. Delisha Karigari Master Announcement Bar (Brand Tone Wine / Burgundy - Rotating One by One) */
+.dk-header__announcement {
+  background-color: var(--dk-color-primary, #641A28);
+  color: #FFFFFF;
+  padding: 0 16px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(184, 154, 98, 0.35);
+  height: 35px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease, padding 0.3s ease;
+}
+
+.dk-header__announcement-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-announcement-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              visibility 0.45s;
+  pointer-events: none;
+}
+
+.dk-announcement-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dk-announcement-slide.is-exiting {
+  opacity: 0;
+  transform: translateY(-8px);
+  visibility: hidden;
+}
+
+.dk-announcement-star {
+  color: var(--dk-color-gold, #B89A62);
+  font-size: 10px;
+  line-height: 1;
+  display: inline-block;
+}
+
+.dk-announcement-text {
+  font-weight: 600;
+  letter-spacing: 2.2px;
+  color: #FFFFFF;
+}
+
+/* 2. Header Top Row */
+.dk-header__top {
+  border-bottom: 1px solid rgba(100, 26, 40, 0.08);
+  padding: 14px 0;
+  background-color: var(--dk-color-background, #F8F3EB);
+  transition: padding 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 0.3s ease;
+}
+
+.dk-header__top-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 clamp(16px, 3.5vw, 48px);
+  box-sizing: border-box;
+}
+
+.dk-header__left {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  grid-column: 1;
+  gap: 16px;
+}
+
+/* Mobile Toggle Trigger */
+.dk-header__toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #111111;
+  cursor: pointer;
+  padding: 6px;
+  min-width: 36px;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Search Icon Left */
+.dk-header__search-left {
+  width: 36px;
+  height: 36px;
+  color: #222222;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Location Button handled in Delivery Location section */
+
+/* Customer Service Link */
+.dk-header__cs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #333333;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+}
+
+.dk-header__cs-link:hover {
+  color: #111111;
+  text-decoration: underline;
+}
+
+.dk-cs-icon {
+  color: #333333;
+}
+
+/* Brand Wordmark & Logo (Center Aligned — Roman Serif Luxury) */
+.dk-header__logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  grid-column: 2;
+}
+
+.dk-header__logo-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+}
+
+.dk-header__logo-img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: opacity 0.25s ease;
+}
+
+.dk-header__wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.dk-header__wordmark-primary {
+  font-family: var(--dk-font-heading, 'Playfair Display', serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #111111;
+  text-transform: uppercase;
+  transition: color 0.25s ease;
+}
+
+.dk-header__wordmark-secondary {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: #777777;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Action Icons: My Account | Wishlist | Cart */
+.dk-header__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  justify-self: end;
+  grid-column: 3;
+  gap: 12px;
+}
+
+.dk-header__account-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #333333;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding: 6px 8px;
+  transition: color 0.2s ease;
+}
+
+.dk-header__account-link:hover {
+  color: #111111;
+}
+
+.dk-header__icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  color: #222222;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.dk-header__icon-btn:hover {
+  color: #111111;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.dk-header__actions .wishlist-count,
+.dk-header__actions .cart-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: var(--dk-color-primary, #6E1F2A);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3. Main Navigation Bar (Clean Minimalist Warm Beige / Off-White - Photo 4) */
+.dk-header__nav {
+  display: block;
+  background-color: var(--dk-color-background, #F8F3EB);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: none;
+  padding: 0;
+}
+
+.dk-header__nav-container {
+  display: flex;
+  justify-content: center;
+}
+
+.dk-header__menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: clamp(14px, 3.2vw, 44px);
+  flex-wrap: wrap;
+}
+
+.dk-header__menu-item {
+  position: relative;
+}
+
+.dk-header__menu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 13px 8px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: #2E2224 !important;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.dk-header__menu-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--dk-color-primary, #641A28);
+  transition: width 0.25s ease;
+}
+
+.dk-header__menu-link:hover {
+  color: var(--dk-color-primary, #641A28) !important;
+}
+
+.dk-header__menu-link:hover::after,
+.dk-header__menu-link.is-active::after {
+  width: 100%;
+}
+
+.dk-header__menu-link.is-active {
+  color: var(--dk-color-primary, #641A28) !important;
+  font-weight: 600;
+}
+
+/* Highlight "UNDER @199" in warm antique gold with underline as in Photo 2 */
+.dk-header__menu-link--highlight {
+  color: #9E743A !important; /* Antique Gold / Ochre */
+  font-weight: 600 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 5px !important;
+  text-decoration-thickness: 1.5px !important;
+  letter-spacing: 2px !important;
+}
+
+.dk-header__menu-link--highlight::after {
+  display: none !important;
+}
+
+.dk-header__menu-link--highlight:hover {
+  color: #641A28 !important;
+  text-decoration-color: #641A28 !important;
+}
+
+/* Mobile drawer highlight for Under @199 */
+.dk-mobile-menu__link--highlight {
+  color: #9E743A !important;
+  font-weight: 600 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+}
+
+.dk-header__menu-arrow {
+  color: rgba(46, 34, 36, 0.7);
+  transition: transform 0.25s ease;
+}
+
+.dk-header__menu-item:hover .dk-header__menu-arrow {
+  transform: rotate(180deg);
+}
+
+/* Mega Menu & Dropdown Placement */
+.dk-header__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 240px;
+  background-color: var(--dk-color-white);
+  border: 1px solid var(--dk-color-border);
+  box-shadow: 0 12px 30px rgba(110, 31, 42, 0.08);
+  border-radius: 0 0 var(--dk-radius-md) var(--dk-radius-md);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1005;
+}
+
+.dk-header__menu-item:hover .dk-header__dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Standard Dropdown Menu Styling */
+.dk-header__dropdown-menu {
+  list-style: none;
+  padding: var(--dk-space-xs) 0;
+  margin: 0;
+  min-width: 250px;
+}
+
+.dk-header__dropdown-item {
+  padding: 0;
+}
+
+.dk-header__dropdown-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-family: var(--dk-font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--dk-color-text);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dk-header__dropdown-link:hover {
+  background-color: rgba(110, 31, 42, 0.04);
+  color: var(--dk-color-primary);
+  padding-left: 24px;
+}
+
+/* Menu Badges & Highlight Offers */
+.dk-header__nav .dk-menu-highlight {
+  color: #FFE58F !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.dk-header__nav .dk-menu-highlight:hover {
+  color: #FFFFFF !important;
+}
+
+.dk-header__nav .dk-menu-badge {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #FAD961 0%, #F76B1C 100%);
+  color: #FFFFFF !important;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 6px;
+  line-height: 1.2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dk-mobile-menu .dk-menu-highlight {
+  color: var(--dk-color-primary, #6E1F2A) !important;
+  font-weight: 700 !important;
+}
+
+.dk-mobile-menu .dk-menu-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--dk-color-primary, #6E1F2A);
+  color: #FFFFFF !important;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-left: 6px;
+  line-height: 1.2;
+}
+
+/* Mega Menu Component Styling */
+.dk-mega-menu {
+  width: 100vw;
+  max-width: 1240px;
+  padding: var(--dk-space-xl);
+  box-sizing: border-box;
+}
+
+.dk-mega-menu__container {
+  display: flex;
+  gap: var(--dk-space-2xl);
+  justify-content: space-between;
+}
+
+.dk-mega-menu__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--dk-space-xl);
+  flex: 1;
+}
+
+.dk-mega-menu__heading {
+  font-family: var(--dk-font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--dk-color-primary);
+  text-decoration: none;
+  margin-bottom: var(--dk-space-sm);
+  display: block;
+  border-bottom: 1px solid var(--dk-color-border);
+  padding-bottom: var(--dk-space-xs);
+}
+
+.dk-mega-menu__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dk-mega-menu__item {
+  margin-bottom: var(--dk-space-xs);
+}
+
+.dk-mega-menu__link {
+  font-family: var(--dk-font-body);
+  font-size: 0.88rem;
+  color: var(--dk-color-text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.dk-mega-menu__link:hover {
+  color: var(--dk-color-primary);
+}
+
+/* Mega Menu Featured Card */
+.dk-mega-menu__featured {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.dk-mega-menu__featured-card {
+  display: block;
+  background-color: var(--dk-color-background-secondary);
+  border: 1px solid var(--dk-color-border);
+  border-radius: var(--dk-radius-md);
+  overflow: hidden;
+  text-decoration: none;
+  transition: var(--dk-transition);
+}
+
+.dk-mega-menu__featured-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--dk-shadow-hover);
+}
+
+.dk-mega-menu__featured-image-wrap {
+  height: 180px;
+  overflow: hidden;
+}
+
+.dk-mega-menu__featured-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.dk-mega-menu__featured-card:hover .dk-mega-menu__featured-image {
+  transform: scale(1.05);
+}
+
+.dk-mega-menu__featured-content {
+  padding: var(--dk-space-md);
+}
+
+.dk-mega-menu__featured-title {
+  font-family: var(--dk-font-heading);
+  font-size: 1.1rem;
+  color: var(--dk-color-text);
+  margin: var(--dk-space-xs) 0;
+}
+
+.dk-mega-menu__featured-btn {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--dk-color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   MOBILE SLIDE-OUT DRAWER NAVIGATION
+   ========================================================================== */
+.dk-mobile-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  max-width: 85vw;
+  height: 100%;
+  background-color: var(--dk-color-background);
+  z-index: 10002;
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.dk-mobile-drawer.is-open {
+  transform: translateX(0);
+}
+
+.dk-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(37, 37, 37, 0.5);
+  z-index: 10001;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.dk-mobile-overlay.is-open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.dk-mobile-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--dk-space-md) var(--dk-space-lg);
+  border-bottom: 1px solid var(--dk-color-border);
+}
+
+.dk-mobile-drawer__close {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--dk-color-text);
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-mobile-drawer__search {
+  padding: var(--dk-space-md) var(--dk-space-lg);
+  border-bottom: 1px solid var(--dk-color-border);
+}
+
+.dk-mobile-search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dk-mobile-search-input {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  min-height: 44px;
+  border: 1px solid var(--dk-color-border);
+  border-radius: var(--dk-radius-pill);
+  background-color: var(--dk-color-white);
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--dk-color-text);
+}
+
+.dk-mobile-search-btn {
+  position: absolute;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: var(--dk-color-text-muted);
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-mobile-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--dk-space-md) 0;
+}
+
+.dk-mobile-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dk-mobile-menu__row,
+.dk-mobile-submenu__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--dk-space-xs) var(--dk-space-lg);
+}
+
+.dk-mobile-menu__link {
+  font-family: var(--dk-font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--dk-color-text);
+  text-decoration: none;
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.dk-mobile-menu__accordion-toggle {
+  background: transparent;
+  border: none;
+  color: var(--dk-color-text);
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease;
+}
+
+.dk-mobile-menu__accordion-toggle.is-open {
+  transform: rotate(180deg);
+  color: var(--dk-color-primary);
+}
+
+.dk-mobile-submenu {
+  list-style: none;
+  padding: 0 0 0 var(--dk-space-lg);
+  margin: 0;
+  background-color: rgba(110, 31, 42, 0.03);
+}
+
+.dk-mobile-submenu__link {
+  font-family: var(--dk-font-body);
+  font-size: 0.9rem;
+  color: var(--dk-color-text-muted);
+  text-decoration: none;
+  flex: 1;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.dk-mobile-grandchild-menu {
+  list-style: none;
+  padding: 0 0 0 var(--dk-space-lg);
+  margin: 0;
+}
+
+.dk-mobile-grandchild-link {
+  font-family: var(--dk-font-body);
+  font-size: 0.85rem;
+  color: var(--dk-color-text-muted);
+  text-decoration: none;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive Header Breakpoints */
+@media (max-width: 992px) {
+  .dk-header__nav {
+    display: none;
+  }
+  .dk-header__toggle {
+    display: inline-flex;
+  }
+  .dk-header__top-container {
+    padding: 0 var(--dk-space-md);
+  }
+}
+
+/* ==========================================================================
+   DELISHA KARIGARI — PRODUCT CARD COMPONENT
+   ========================================================================== */
+.dk-product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(110, 31, 42, 0.12);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  box-sizing: border-box;
+}
+
+.dk-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(110, 31, 42, 0.15);
+  border-color: rgba(184, 149, 82, 0.45);
+}
+
+.dk-product-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: #FAF7F2;
+}
+
+.dk-product-card__image-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.dk-product-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.dk-product-card:hover .dk-product-card__img {
+  transform: scale(1.06);
+}
+
+.dk-product-card__badges {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.dk-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  background: var(--dk-color-primary, #6E1F2A);
+  color: #FFFFFF;
+  border: 1px solid rgba(184, 149, 82, 0.4);
+}
+
+.dk-badge--sale {
+  background: var(--dk-color-primary, #6E1F2A);
+  color: #FFFFFF;
+}
+
+.dk-product-card__wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dk-color-primary, #6E1F2A);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dk-product-card__wishlist-btn:hover {
+  background: #FFFFFF;
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(110, 31, 42, 0.2);
+}
+
+.dk-product-card__info {
+  padding: 14px 14px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+  text-align: center;
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.dk-product-card__title {
+  font-family: var(--dk-font-heading, 'Playfair Display', serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 0 0 6px 0;
+  color: #252525;
+}
+
+.dk-product-card__title a {
+  color: #252525 !important;
+  text-decoration: none !important;
+  transition: color 0.25s ease;
+}
+
+.dk-product-card__title a:hover {
+  color: var(--dk-color-primary, #6E1F2A) !important;
+}
+
+.dk-product-card__price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.dk-product-card__price-current {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--dk-color-primary, #6E1F2A);
+}
+
+.dk-product-card__price-compare {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.82rem;
+  color: #888888;
+  text-decoration: line-through;
+}
+
+.dk-product-card__add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 16px;
+  background: #FFFFFF;
+  color: #641A28 !important;
+  text-decoration: none !important;
+  border: 1.2px solid rgba(100, 26, 40, 0.4);
+  border-radius: 4px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.dk-product-card__add-btn:hover {
+  background: #641A28 !important;
+  border-color: #641A28;
+  color: #FFFFFF !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(100, 26, 40, 0.25);
+}
+
+/* ==========================================================================
+   DELIVERY LOCATION BUTTON & CHECKER MODAL (MINIMAL & QUIET LUXURY)
+   ========================================================================== */
+.dk-location-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #E6D8CA;
+  border-radius: 20px;
+  color: #2D2522;
+  cursor: pointer;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.77rem;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-sizing: border-box;
+}
+
+.dk-location-btn:hover {
+  background: #FFFFFF;
+  border-color: #B89A62;
+  box-shadow: 0 3px 12px rgba(100, 26, 40, 0.08);
+  transform: translateY(-1px);
+}
+
+.dk-location-btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dk-color-primary, #641A28);
+  flex-shrink: 0;
+}
+
+.dk-location-btn__text {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.77rem;
+  font-weight: 500;
+  color: #2D2522;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dk-location-btn__chevron {
+  color: #7A6C66;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.dk-location-btn:hover .dk-location-btn__chevron {
+  color: var(--dk-color-primary, #641A28);
+  transform: translateY(1px);
+}
+
+/* Dedicated Mobile Precision Delivery Location Bar (Desktop: Hidden) */
+.dk-header__mobile-location {
+  display: none;
+}
+
+/* LOCATION CHECKER MODAL */
+.dk-location-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.dk-location-modal.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dk-location-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 8, 10, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.dk-location-modal__dialog {
+  position: relative;
+  z-index: 2;
+  width: 92%;
+  max-width: 500px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(110, 31, 42, 0.12);
+  overflow: hidden;
+  transform: scale(0.94) translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.dk-location-modal.is-active .dk-location-modal__dialog {
+  transform: scale(1) translateY(0);
+}
+
+.dk-location-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  background-color: #FAF6F0;
+  border-bottom: 1px solid rgba(110, 31, 42, 0.1);
+}
+
+.dk-location-modal__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dk-location-modal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--dk-color-background-secondary, #E9D8C5);
+  color: var(--dk-color-primary, #641A28);
+}
+
+.dk-location-modal__title {
+  font-family: var(--dk-font-heading, 'Playfair Display', serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #252525;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.dk-location-modal__subtitle {
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.78rem;
+  color: #666666;
+  margin: 2px 0 0 0;
+}
+
+.dk-location-modal__close {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: #666666;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.dk-location-modal__close:hover {
+  color: #6E1F2A;
+  transform: scale(1.1);
+}
+
+.dk-location-modal__body {
+  padding: 22px 24px;
+}
+
+.dk-location-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.dk-location-input-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.dk-location-field-icon {
+  position: absolute;
+  left: 14px;
+  pointer-events: none;
+}
+
+.dk-location-input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  border: 1.5px solid rgba(110, 31, 42, 0.2);
+  border-radius: 6px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.95rem;
+  color: #252525;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  box-sizing: border-box;
+}
+
+.dk-location-input:focus {
+  border-color: var(--dk-color-primary, #641A28);
+  box-shadow: 0 0 0 3px rgba(100, 26, 40, 0.12);
+}
+
+.dk-location-check-btn {
+  padding: 0 22px;
+  background: linear-gradient(135deg, #6E1F2A 0%, #541720 100%);
+  border: 1.2px solid #B89552;
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dk-location-check-btn:hover {
+  background: #B89552;
+  border-color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(184, 149, 82, 0.35);
+}
+
+.dk-location-feedback {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.84rem;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+.dk-location-feedback--success {
+  background-color: #E8F5E9;
+  border: 1px solid #A5D6A7;
+  color: #1B5E20;
+}
+
+.dk-location-feedback--error {
+  background-color: #FFEBEE;
+  border: 1px solid #FFCDD2;
+  color: #B71C1C;
+}
+
+.dk-location-quick-cities {
+  margin-bottom: 18px;
+}
+
+.dk-location-quick-label {
+  display: block;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #555555;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dk-location-city-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dk-city-chip {
+  padding: 5px 11px;
+  background-color: #F7F3EE;
+  border: 1px solid rgba(110, 31, 42, 0.12);
+  border-radius: 20px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #333333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dk-city-chip:hover {
+  background-color: var(--dk-color-background-secondary, #E9D8C5);
+  border-color: var(--dk-color-primary, #641A28);
+  color: var(--dk-color-primary, #641A28);
+  transform: translateY(-1px);
+}
+
+.dk-location-features {
+  padding-top: 14px;
+  border-top: 1px solid rgba(110, 31, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dk-location-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  font-size: 0.76rem;
+  color: #666666;
+}
+
+.dk-location-feature-dot {
+  color: #B89552;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 768px) {
+  /* In mobile top header row, hide cramped button to give full room to logo & menu */
+  .dk-header__left .dk-location-btn {
+    display: none !important;
+  }
+  
+  /* Dedicated Mobile Precision Delivery Strip: 100% visible, crystal clear, elegant */
+  .dk-header__mobile-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: #FAF7F2;
+    border-bottom: 1px solid rgba(100, 26, 40, 0.08);
+    padding: 7px 16px;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.2s ease;
+  }
+  .dk-header__mobile-location:active {
+    background-color: #F2E9DE;
+  }
+  .dk-mobile-location-inner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.73rem;
+    color: #2D2522;
+    line-height: 1.2;
+    width: 100%;
+    max-width: 480px;
+  }
+  .dk-mobile-location-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dk-color-primary, #641A28);
+    flex-shrink: 0;
+  }
+  .dk-mobile-location-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .dk-mobile-location-muted {
+    color: #7A6C66;
+    font-weight: 400;
+  }
+  .dk-mobile-location-city {
+    color: #1C1514;
+    font-weight: 600;
+  }
+  .dk-mobile-location-pin {
+    color: #641A28;
+    font-weight: 500;
+    font-size: 0.70rem;
+    letter-spacing: 0.2px;
+  }
+  .dk-mobile-location-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--dk-color-gold, #B89A62);
+    font-size: 0.67rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+    padding-left: 7px;
+    border-left: 1px solid rgba(184, 154, 98, 0.4);
+    flex-shrink: 0;
+  }
+  .dk-mobile-location-cta svg {
+    color: var(--dk-color-gold, #B89A62);
+  }
+  .dk-header__logo-img {
+    max-width: 175px !important;
+  }
+  .dk-location-modal__dialog {
+    width: 95%;
+  }
+  .dk-location-modal__body {
+    padding: 16px 18px;
+  }
+}
+
+/* ==========================================================================
+   DELISHA KARIGARI — CUSTOM PEACOCK-FEATHER INSPIRED LUXURY CURSOR
+   ========================================================================== */
+.dk-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  margin-left: -3px;
+  background-color: var(--dk-color-primary, #641A28);
+  border: 1px solid var(--dk-color-gold, #B89A62);
+  border-radius: 50%;
+  pointer-events: none !important;
+  user-select: none !important;
+  z-index: 999999;
+  opacity: 0;
+  transition: opacity 0.25s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+  will-change: transform;
+}
+
+.dk-cursor-eye {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  margin-top: -13px;
+  margin-left: -13px;
+  pointer-events: none !important;
+  user-select: none !important;
+  z-index: 999998;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), height 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), margin 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dk-cursor-eye-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 4px rgba(100, 26, 40, 0.18));
+  transition: transform 0.25s ease;
+}
+
+.dk-cursor-dot.is-visible,
+.dk-cursor-eye.is-visible {
+  opacity: 1;
+}
+
+.dk-cursor-dot.is-hidden,
+.dk-cursor-eye.is-hidden {
+  opacity: 0 !important;
+}
+
+/* Hover State on Clickable Cards, Links, Buttons */
+.dk-cursor-dot.is-hover {
+  width: 4px;
+  height: 4px;
+  margin-top: -2px;
+  margin-left: -2px;
+  background-color: var(--dk-color-gold, #B89A62);
+}
+
+.dk-cursor-eye.is-hover {
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  margin-left: -18px;
+}
+
+.dk-cursor-eye.is-hover .dk-cursor-eye-svg {
+  transform: scale(1.18) rotate(-8deg);
+  filter: drop-shadow(0 2px 8px rgba(184, 154, 98, 0.35));
+}
+
+.dk-cursor-eye.is-hover .dk-eye-outer {
+  stroke: #B89A62;
+  stroke-width: 1.5;
+}
+
+.dk-cursor-eye.is-hover .dk-eye-core {
+  fill: #641A28;
+  fill-opacity: 0.38;
+}
+
+/* Active click state */
+.dk-cursor-dot.is-active {
+  transform: scale(0.7);
+}
+
+.dk-cursor-eye.is-active {
+  width: 20px;
+  height: 20px;
+  margin-top: -10px;
+  margin-left: -10px;
+}
+
+/* Strictly disabled on Touch / Mobile Devices */
+@media (hover: none) or (pointer: coarse) {
+  .dk-cursor-dot,
+  .dk-cursor-eye {
+    display: none !important;
+  }
+}

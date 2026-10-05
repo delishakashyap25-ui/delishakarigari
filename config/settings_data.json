@@ -1,0 +1,158 @@
+{
+  "current": {
+    "color_primary": "#6E1F2A",
+    "color_background": "#F9F5EE",
+    "color_background_secondary": "#F2E5DD",
+    "color_gold": "#B89552",
+    "color_text": "#252525",
+    "font_heading": "playfair_display_n6",
+    "font_body": "poppins_n4",
+    "_id": "69ea1f90992db2ade9d6c39b",
+    "merchantId": "69ea1f62c949b02fd4c0c99f",
+    "__v": 0,
+    "accentColor": "#B89552",
+    "checkoutMode": "standard",
+    "currency": "INR",
+    "fontFamily": "Playfair Display",
+    "googleAdsConnected": false,
+    "metaAdsConnected": false,
+    "primaryColor": "#6E1F2A",
+    "shippingCharge": 0,
+    "storeName": "delishakarigari",
+    "taxRate": 0,
+    "trackAddToCart": true,
+    "trackInitiateCheckout": true,
+    "trackPageView": true,
+    "trackPurchase": true,
+    "trackViewContent": true,
+    "videoAutoplay": true,
+    "whatsappMessage": "Hello! I have a question about DELISHA KARIGARI products.",
+    "whatsappNumber": "919876543210",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo_image": "",
+          "logo_width": 260
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "block_7220g9xtx": {
+            "type": "announcement",
+            "settings": {
+              "text": "✦ FREE SHIPPING SITEWIDE ✦"
+            }
+          },
+          "block_a782cu9vp": {
+            "type": "announcement",
+            "settings": {
+              "text": "✦ FREE GIFT ON ORDERS ABOVE ₹799 ✦"
+            }
+          },
+          "block_alp7uagt6": {
+            "type": "announcement",
+            "settings": {
+              "text": "✦ HANDCRAFTED WITH LOVE ✦"
+            }
+          }
+        },
+        "block_order": [
+          "block_7220g9xtx",
+          "block_a782cu9vp",
+          "block_alp7uagt6"
+        ],
+        "settings": {
+          "background_color": "#6E1F2A",
+          "text_color": "#FFFFFF",
+          "fallback_text": ""
+        }
+      }
+    },
+    "social_instagram_link": "https://www.instagram.com/delishakarigari/"
+  },
+  "presets": {
+    "Default": {
+      "color_primary": "#6E1F2A",
+      "color_background": "#F9F5EE",
+      "color_background_secondary": "#F2E5DD",
+      "color_gold": "#B89552",
+      "color_text": "#252525",
+      "font_heading": "playfair_display_n6",
+      "font_body": "poppins_n4",
+      "_id": "69ea1f90992db2ade9d6c39b",
+      "merchantId": "69ea1f62c949b02fd4c0c99f",
+      "__v": 0,
+      "accentColor": "#B89552",
+      "checkoutMode": "standard",
+      "currency": "INR",
+      "fontFamily": "Playfair Display",
+      "googleAdsConnected": false,
+      "metaAdsConnected": false,
+      "primaryColor": "#6E1F2A",
+      "shippingCharge": 0,
+      "storeName": "delishakarigari",
+      "taxRate": 0,
+      "trackAddToCart": true,
+      "trackInitiateCheckout": true,
+      "trackPageView": true,
+      "trackPurchase": true,
+      "trackViewContent": true,
+      "videoAutoplay": true,
+      "whatsappMessage": "Hello! I have a question about DELISHA KARIGARI products.",
+      "whatsappNumber": "919876543210",
+      "sections": {
+        "header": {
+          "type": "header",
+          "settings": {
+            "logo_image": "",
+            "logo_width": 260
+          }
+        },
+        "footer": {
+          "type": "footer",
+          "settings": {}
+        },
+        "announcement-bar": {
+          "type": "announcement-bar",
+          "blocks": {
+            "block_7220g9xtx": {
+              "type": "announcement",
+              "settings": {
+                "text": "✦ FREE SHIPPING SITEWIDE ✦"
+              }
+            },
+            "block_a782cu9vp": {
+              "type": "announcement",
+              "settings": {
+                "text": "✦ FREE GIFT ON ORDERS ABOVE ₹799 ✦"
+              }
+            },
+            "block_alp7uagt6": {
+              "type": "announcement",
+              "settings": {
+                "text": "✦ HANDCRAFTED WITH LOVE ✦"
+              }
+            }
+          },
+          "block_order": [
+            "block_7220g9xtx",
+            "block_a782cu9vp",
+            "block_alp7uagt6"
+          ],
+          "settings": {
+            "background_color": "#6E1F2A",
+            "text_color": "#FFFFFF",
+            "fallback_text": ""
+          }
+        }
+      },
+      "social_instagram_link": "https://www.instagram.com/delishakarigari/"
+    }
+  }
+}

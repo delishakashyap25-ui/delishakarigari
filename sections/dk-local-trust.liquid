@@ -6,7 +6,10 @@
   assign address_line1 = section.settings.address_line1 | default: 'DELISHA KARIGARI'
   assign address_line2 = section.settings.address_line2 | default: 'New Delhi, Delhi, India'
   assign map_link = section.settings.map_link | default: 'https://maps.app.goo.gl/mfP6h2cxUP7iuDdH7'
-  assign embed_url = section.settings.embed_url | default: 'https://maps.google.com/maps?q=28.688103,77.129776&hl=en&z=15&output=embed'
+  assign embed_url = section.settings.embed_url
+  if embed_url == blank or embed_url contains 'maps.google.com/maps?q='
+    assign embed_url = 'https://www.openstreetmap.org/export/embed.html?bbox=77.06,28.63,77.22,28.74&layer=mapnik&marker=28.688103,77.129776'
+  endif
   assign whatsapp_num = section.settings.whatsapp_number | default: '919211549097'
   assign whatsapp_msg = section.settings.whatsapp_message | default: 'Hello Delisha Karigari, I would like to connect with your Delhi craft base.' | url_encode
 -%}
@@ -552,8 +555,8 @@
     {
       "type": "text",
       "id": "embed_url",
-      "label": "Google Maps Embed URL",
-      "default": "https://maps.google.com/maps?q=28.688103,77.129776&hl=en&z=15&output=embed"
+      "label": "Map Embed URL",
+      "default": "https://www.openstreetmap.org/export/embed.html?bbox=77.06,28.63,77.22,28.74&layer=mapnik&marker=28.688103,77.129776"
     },
     {
       "type": "text",

@@ -5,9 +5,8 @@
 >
   <div class="container {% if section.settings.full_width %}dk-image-banner-full{% endif %}">
     <div class="dk-image-banner-wrap">
-      {%- if section.settings.link != blank -%}
-        <a href="{{ section.settings.link }}" class="dk-image-banner-link" aria-label="Delisha Karigari Trust & Gifting Promise">
-      {%- endif -%}
+      {%- assign ed_link = section.settings.link | default: routes.all_products_collection_url -%}
+      <a href="{{ ed_link }}" class="dk-image-banner-link" aria-label="Delisha Karigari Trust & Gifting Promise">
 
       <picture class="dk-image-banner-picture">
         {%- if section.settings.mobile_image != blank -%}
@@ -37,9 +36,7 @@
         {%- endif -%}
       </picture>
 
-      {%- if section.settings.link != blank -%}
-        </a>
-      {%- endif -%}
+      </a>
     </div>
   </div>
 </section>

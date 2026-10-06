@@ -65,6 +65,26 @@
   box-sizing: border-box;
 }
 
+/* Hide native OS cursor sitewide so only the custom Peacock-feather cursor is visible.
+   Touch / mobile devices are exempted. */
+@media (hover: hover) {
+  html, body, *, *::before, *::after,
+  a, button, [role="button"], select, summary, label {
+    cursor: none !important;
+  }
+  input[type="text"], input[type="search"], input[type="email"],
+  input[type="tel"], input[type="number"], input[type="password"],
+  textarea, [contenteditable="true"] {
+    cursor: text !important;
+  }
+}
+@media (hover: none) or (pointer: coarse) {
+  html, body, *, *::before, *::after,
+  a, button, [role="button"], select, summary, label {
+    cursor: auto !important;
+  }
+}
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
@@ -302,6 +322,8 @@ p {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  color: #FFFFFF;
+  text-decoration: none;
   opacity: 0;
   visibility: hidden;
   transform: translateY(8px);
@@ -316,6 +338,11 @@ p {
   visibility: visible;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+.dk-announcement-slide:hover .dk-announcement-text {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .dk-announcement-slide.is-exiting {
@@ -1063,18 +1090,18 @@ p {
   height: 100%;
   width: 100%;
   background-color: #FFFFFF;
-  border: 1px solid rgba(110, 31, 42, 0.12);
-  border-radius: 8px;
+  border: 1px solid rgba(184, 154, 98, 0.22);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 18px rgba(100, 26, 40, 0.05);
   transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.35s ease, border-color 0.35s ease;
   box-sizing: border-box;
 }
 
 .dk-product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(110, 31, 42, 0.15);
-  border-color: rgba(184, 149, 82, 0.45);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px -4px rgba(100, 26, 40, 0.14), 0 0 0 1px rgba(184, 154, 98, 0.4);
+  border-color: rgba(184, 154, 98, 0.5);
 }
 
 .dk-product-card__media {
@@ -1112,20 +1139,21 @@ p {
 
 .dk-badge {
   display: inline-block;
-  padding: 3px 8px;
+  padding: 3px 9px;
   font-family: var(--dk-font-body, 'Poppins', sans-serif);
   font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 3px;
-  background: var(--dk-color-primary, #6E1F2A);
+  letter-spacing: 0.8px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #7A1D2F 0%, #52121E 100%);
   color: #FFFFFF;
-  border: 1px solid rgba(184, 149, 82, 0.4);
+  border: 1px solid rgba(184, 154, 98, 0.4);
+  box-shadow: 0 2px 6px rgba(100, 26, 40, 0.22);
 }
 
 .dk-badge--sale {
-  background: var(--dk-color-primary, #6E1F2A);
+  background: linear-gradient(135deg, #7A1D2F 0%, #52121E 100%);
   color: #FFFFFF;
 }
 
@@ -1548,9 +1576,58 @@ p {
 }
 
 @media (max-width: 768px) {
-  /* In mobile top header row, hide cramped button to give full room to logo & menu */
+  /* Spacious, uncompressed mobile top header */
+  .dk-header__top {
+    padding: 9px 0;
+  }
+  .dk-header__top-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .dk-header__left {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
   .dk-header__left .dk-location-btn {
     display: none !important;
+  }
+  .dk-header__toggle {
+    display: inline-flex;
+    padding: 4px;
+    min-width: 32px;
+    min-height: 32px;
+  }
+  .dk-header__logo {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 4px;
+    overflow: hidden;
+  }
+  .dk-header__logo-img {
+    max-width: 140px !important;
+    max-height: 38px;
+    object-fit: contain;
+  }
+  .dk-header__actions {
+    flex: 0 0 auto;
+    gap: 6px;
+  }
+  .dk-header__icon-account {
+    display: none !important;
+  }
+  .dk-header__icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+  .dk-header__icon-btn svg {
+    width: 19px;
+    height: 19px;
   }
   
   /* Dedicated Mobile Precision Delivery Strip: 100% visible, crystal clear, elegant */
@@ -1627,9 +1704,6 @@ p {
   }
   .dk-mobile-location-cta svg {
     color: var(--dk-color-gold, #B89A62);
-  }
-  .dk-header__logo-img {
-    max-width: 175px !important;
   }
   .dk-location-modal__dialog {
     width: 95%;
@@ -1745,5 +1819,12 @@ p {
   .dk-cursor-dot,
   .dk-cursor-eye {
     display: none !important;
+  }
+}
+
+/* Ensure native system cursor is never shown on desktop across interactive elements */
+@media (hover: hover) {
+  body, a, button, select, summary, [role="button"], .dk-product-card, .dk-btn, svg {
+    cursor: none !important;
   }
 }

@@ -1,63 +1,60 @@
 {%- liquid
   assign eyebrow = section.settings.eyebrow | default: '✦ THE DELISHA PROMISE ✦'
-  assign heading = section.settings.heading | default: 'Not Just Made.<br> <em>Made Meaningful.</em>'
-  assign description = section.settings.description | default: 'Every Delisha Karigari piece begins with a celebration in mind — a doorway waiting to be adorned, a gift waiting to be opened, or a moment waiting to be remembered.'
+  assign heading = section.settings.heading | default: 'Not Just Made. <em>Made Meaningful.</em>'
 -%}
 
 <section
   id="dk-why-delisha-{{ section.id }}"
   class="dk-why-sec"
-  style="background-color: {{ section.settings.bg_color | default: '#FFFFFF' }}; padding-top: {{ section.settings.padding_top | default: 70 }}px; padding-bottom: {{ section.settings.padding_bottom | default: 75 }}px;"
+  style="padding-top: {{ section.settings.padding_top | default: 36 }}px; padding-bottom: {{ section.settings.padding_bottom | default: 42 }}px;"
 >
   <div class="dk-why-container">
     
-    <!-- EDITORIAL HEADER -->
-    <div class="dk-why-header">
-      {%- if eyebrow != blank -%}
-        <span class="dk-why-eyebrow">{{ eyebrow }}</span>
-      {%- endif -%}
-
-      {%- if heading != blank -%}
-        <h2 class="dk-why-title">{{ heading }}</h2>
-      {%- endif -%}
-
-      {%- if description != blank -%}
-        <p class="dk-why-desc">{{ description }}</p>
-      {%- endif -%}
-    </div>
-
-    <!-- 3 EDITORIAL PILLARS (NO GENERIC ICON CARDS) -->
-    <div class="dk-why-pillars">
+    <!-- COMPACT GLOSSY LUXURY STRIP -->
+    <div class="dk-why-glossy-card">
       
-      <!-- PILLAR 1 -->
-      <div class="dk-why-pillar">
-        <span class="dk-why-num">01</span>
-        <div class="dk-why-pillar-content">
-          <h3 class="dk-why-pillar-title">{{ section.settings.p1_title | default: 'Thoughtfully Designed' }}</h3>
-          <p class="dk-why-pillar-text">{{ section.settings.p1_text | default: 'Created around Indian celebrations, traditions and the people we celebrate with.' }}</p>
-        </div>
+      <!-- MINIMAL HEADER -->
+      <div class="dk-why-header-minimal">
+        <span class="dk-why-eyebrow">{{ eyebrow }}</span>
+        <h2 class="dk-why-title-compact">{{ heading }}</h2>
       </div>
 
-      <div class="dk-why-separator" aria-hidden="true"></div>
-
-      <!-- PILLAR 2 -->
-      <div class="dk-why-pillar">
-        <span class="dk-why-num">02</span>
-        <div class="dk-why-pillar-content">
-          <h3 class="dk-why-pillar-title">{{ section.settings.p2_title | default: 'Made With Care' }}</h3>
-          <p class="dk-why-pillar-text">{{ section.settings.p2_text | default: 'From intricate décor to personalised gifting, every detail is chosen with intention.' }}</p>
+      <!-- 3 GLOSSY PILLARS -->
+      <div class="dk-why-pillars-grid">
+        
+        <!-- PILLAR 1 -->
+        <div class="dk-why-pillar-card">
+          <div class="dk-pillar-icon-badge">
+            <span class="dk-pillar-num">01</span>
+          </div>
+          <div class="dk-pillar-body">
+            <h3 class="dk-why-pillar-title">{{ section.settings.p1_title | default: 'Thoughtfully Designed' }}</h3>
+            <p class="dk-why-pillar-text">{{ section.settings.p1_text | default: 'Created around Indian celebrations, traditions and loved ones.' }}</p>
+          </div>
         </div>
-      </div>
 
-      <div class="dk-why-separator" aria-hidden="true"></div>
-
-      <!-- PILLAR 3 -->
-      <div class="dk-why-pillar">
-        <span class="dk-why-num">03</span>
-        <div class="dk-why-pillar-content">
-          <h3 class="dk-why-pillar-title">{{ section.settings.p3_title | default: 'Celebration Ready' }}</h3>
-          <p class="dk-why-pillar-text">{{ section.settings.p3_text | default: 'Beautifully curated pieces made to bring warmth, colour and character to your special moments.' }}</p>
+        <!-- PILLAR 2 -->
+        <div class="dk-why-pillar-card">
+          <div class="dk-pillar-icon-badge">
+            <span class="dk-pillar-num">02</span>
+          </div>
+          <div class="dk-pillar-body">
+            <h3 class="dk-why-pillar-title">{{ section.settings.p2_title | default: 'Artisanal Devotion' }}</h3>
+            <p class="dk-why-pillar-text">{{ section.settings.p2_text | default: 'Individually handcrafted by master Indian artisans with pure gota & Kundan.' }}</p>
+          </div>
         </div>
+
+        <!-- PILLAR 3 -->
+        <div class="dk-why-pillar-card">
+          <div class="dk-pillar-icon-badge">
+            <span class="dk-pillar-num">03</span>
+          </div>
+          <div class="dk-pillar-body">
+            <h3 class="dk-why-pillar-title">{{ section.settings.p3_title | default: 'Celebration Ready' }}</h3>
+            <p class="dk-why-pillar-text">{{ section.settings.p3_text | default: 'Protected in keepsake festive gift packaging with express Pan-India dispatch.' }}</p>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -69,117 +66,132 @@
   .dk-why-sec {
     position: relative;
     width: 100%;
+    background: linear-gradient(180deg, #FBF8F3 0%, #F8F3EC 100%);
     overflow: hidden;
   }
   .dk-why-container {
-    max-width: 1320px;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 0 clamp(16px, 3.2vw, 36px);
+    padding: 0 clamp(16px, 3vw, 32px);
     box-sizing: border-box;
   }
-  .dk-why-header {
+
+  /* PREMIUM GLOSSY CARD CONTAINER */
+  .dk-why-glossy-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(254, 250, 245, 0.82) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(184, 154, 98, 0.28);
+    border-radius: 14px;
+    padding: clamp(24px, 3.2vw, 36px) clamp(20px, 3.6vw, 44px);
+    box-shadow: 0 12px 32px -8px rgba(100, 26, 40, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .dk-why-glossy-card:hover {
+    border-color: rgba(184, 154, 98, 0.45);
+    box-shadow: 0 18px 40px -10px rgba(100, 26, 40, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1);
+  }
+
+  .dk-why-header-minimal {
     text-align: center;
-    max-width: 780px;
-    margin: 0 auto clamp(40px, 4.5vw, 60px);
+    margin-bottom: clamp(20px, 2.5vw, 30px);
   }
   .dk-why-eyebrow {
     display: inline-block;
     font-family: var(--dk-font-body, 'Poppins', sans-serif);
-    font-size: 0.74rem;
+    font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 2.4px;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: #8C2234;
-    margin-bottom: 0.85rem;
+    color: var(--dk-color-primary, #641A28);
+    margin-bottom: 4px;
   }
-  .dk-why-title {
+  .dk-why-title-compact {
     font-family: var(--dk-font-heading, 'Playfair Display', serif);
-    font-size: clamp(2.2rem, 3.4vw, 3rem);
+    font-size: clamp(1.5rem, 2.3vw, 2rem);
     font-weight: 600;
-    line-height: 1.2;
+    line-height: 1.25;
     color: #211216;
-    margin: 0 0 1rem;
-    letter-spacing: -0.3px;
+    margin: 0;
+    letter-spacing: -0.2px;
   }
-  .dk-why-title em {
+  .dk-why-title-compact em {
     font-style: italic;
     font-weight: 400;
-    color: #641A28;
-  }
-  .dk-why-desc {
-    font-family: var(--dk-font-body, 'Poppins', sans-serif);
-    font-size: clamp(0.94rem, 1.1vw, 1.05rem);
-    line-height: 1.7;
-    color: #6A5B55;
-    margin: 0 auto;
-    max-width: 660px;
+    color: var(--dk-color-primary, #641A28);
   }
 
-  /* 3 EDITORIAL PILLARS */
-  .dk-why-pillars {
+  /* 3 PILLARS IN A BALANCED ROW */
+  .dk-why-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.4vw, 32px);
+  }
+
+  .dk-why-pillar-card {
     display: flex;
     align-items: flex-start;
-    justify-content: space-between;
-    gap: clamp(24px, 3vw, 48px);
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(184, 154, 98, 0.15);
+    transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
   }
-  .dk-why-pillar {
-    flex: 1;
+  .dk-why-pillar-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(184, 154, 98, 0.35);
+  }
+
+  .dk-pillar-icon-badge {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(184, 154, 98, 0.15) 0%, rgba(100, 26, 40, 0.08) 100%);
+    border: 1px solid rgba(184, 154, 98, 0.35);
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    position: relative;
-    padding-top: 10px;
+    align-items: center;
+    justify-content: center;
   }
-  .dk-why-num {
+  .dk-pillar-num {
     font-family: var(--dk-font-heading, 'Playfair Display', serif);
-    font-size: 1.75rem;
-    font-weight: 400;
+    font-size: 0.95rem;
+    font-weight: 600;
     font-style: italic;
-    color: #B89A62;
-    margin-bottom: 0.85rem;
-    display: block;
-    line-height: 1;
+    color: #8C6A2E;
+  }
+
+  .dk-pillar-body {
+    flex: 1;
   }
   .dk-why-pillar-title {
     font-family: var(--dk-font-heading, 'Playfair Display', serif);
-    font-size: clamp(1.2rem, 1.5vw, 1.45rem);
+    font-size: 1.05rem;
     font-weight: 600;
     color: #211216;
-    margin: 0 0 0.75rem;
-    line-height: 1.3;
+    margin: 0 0 4px;
+    line-height: 1.25;
   }
   .dk-why-pillar-text {
     font-family: var(--dk-font-body, 'Poppins', sans-serif);
-    font-size: 0.9rem;
-    line-height: 1.65;
+    font-size: 0.8rem;
+    line-height: 1.5;
     color: #6A5B55;
     margin: 0;
   }
-  .dk-why-separator {
-    width: 1px;
-    height: 120px;
-    background: linear-gradient(180deg, transparent, #E6D8CA 25%, #E6D8CA 75%, transparent);
-    flex-shrink: 0;
-    margin-top: 25px;
-  }
 
-  @media (max-width: 900px) {
-    .dk-why-pillars {
-      flex-direction: column;
-      gap: 36px;
+  @media (max-width: 860px) {
+    .dk-why-pillars-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
-    .dk-why-separator {
-      display: none;
+    .dk-why-glossy-card {
+      padding: 20px 16px;
     }
-    .dk-why-pillar {
-      width: 100%;
-      border-bottom: 1px solid #ECE4D8;
-      padding-bottom: 28px;
-    }
-    .dk-why-pillar:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .dk-why-pillar-card {
+      padding: 12px 14px;
     }
   }
 </style>

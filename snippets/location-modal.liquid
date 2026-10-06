@@ -1,0 +1,584 @@
+{%- comment -%}
+  DELISHA KARIGARI — DELIVERY LOCATION & PINCODE CHECKER MODAL
+  Independent, viewport-level modal component rendered in layout/theme.liquid
+{%- endcomment -%}
+
+<div class="dk-location-modal" id="dkLocationModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Select Delivery Location">
+  <div class="dk-location-modal__backdrop" onclick="closeDkLocationModal()"></div>
+  <div class="dk-location-modal__dialog">
+    
+    <!-- MODAL HEADER -->
+    <div class="dk-location-modal__header">
+      <div class="dk-location-modal__title-wrap">
+        <span class="dk-location-modal__icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </span>
+        <div>
+          <h3 class="dk-location-modal__title">Where to deliver?</h3>
+          <p class="dk-location-modal__subtitle">Check serviceability &amp; delivery speed across India</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="dk-location-modal__close"
+        onclick="closeDkLocationModal()"
+        aria-label="Close delivery location dialog"
+      >&times;</button>
+    </div>
+
+    <!-- MODAL BODY -->
+    <div class="dk-location-modal__body">
+      
+      <!-- PINCODE INPUT FORM -->
+      <div class="dk-location-input-group">
+        <div class="dk-location-input-wrap">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--dk-color-primary, #641A28)" stroke-width="2.2" class="dk-location-field-icon" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <input
+            type="text"
+            id="dkPincodeInput"
+            class="dk-location-input"
+            maxlength="6"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            placeholder="Enter 6-digit Pincode (e.g. 110001)"
+            autocomplete="postal-code"
+            onkeydown="if(event.key === 'Enter') { event.preventDefault(); dkCheckPincode(); }"
+          >
+        </div>
+        <button
+          type="button"
+          class="dk-location-check-btn"
+          id="dkPincodeCheckBtn"
+          onclick="dkCheckPincode()"
+        >
+          CHECK
+        </button>
+      </div>
+
+      <!-- FEEDBACK MESSAGE -->
+      <div id="dkPincodeFeedback" class="dk-location-feedback" style="display: none;" role="status" aria-live="polite"></div>
+
+      <!-- POPULAR DELIVERABLE CITIES -->
+      <div class="dk-location-quick-cities">
+        <span class="dk-location-quick-label">Popular Delivery Hubs:</span>
+        <div class="dk-location-city-chips">
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Delhi NCR', '110001')">📍 Delhi NCR</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Mumbai', '400001')">📍 Mumbai</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Bengaluru', '560001')">📍 Bengaluru</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Jaipur', '302001')">📍 Jaipur</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Kolkata', '700001')">📍 Kolkata</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Hyderabad', '500001')">📍 Hyderabad</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Chennai', '600001')">📍 Chennai</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Pune', '411001')">📍 Pune</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Ahmedabad', '380001')">📍 Ahmedabad</button>
+          <button type="button" class="dk-city-chip" onclick="dkSelectCity('Chandigarh', '160017')">📍 Chandigarh</button>
+        </div>
+      </div>
+
+      <!-- SERVICE GUARANTEES -->
+      <div class="dk-location-features">
+        <div class="dk-location-feature-item">
+          <span class="dk-location-feature-dot">✦</span>
+          <span>Pan-India Express Dispatch in 2–4 Business Days</span>
+        </div>
+        <div class="dk-location-feature-item">
+          <span class="dk-location-feature-dot">✦</span>
+          <span>Free Shipping on Orders Above ₹499</span>
+        </div>
+        <div class="dk-location-feature-item">
+          <span class="dk-location-feature-dot">✦</span>
+          <span>Safe &amp; Festive Luxury Gifting Packaging Guaranteed</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Standalone Viewport-Level Modal Styles */
+  .dk-location-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 100002 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.28s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0.28s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+  }
+
+  .dk-location-modal.is-active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
+  .dk-location-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(18, 8, 12, 0.68);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+  }
+
+  .dk-location-modal__dialog {
+    position: relative;
+    z-index: 2;
+    width: 92%;
+    max-width: 490px;
+    background: #FFFFFF;
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(184, 154, 98, 0.35);
+    overflow: hidden;
+    transform: scale(0.94) translateY(12px);
+    transition: transform 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  .dk-location-modal.is-active .dk-location-modal__dialog {
+    transform: scale(1) translateY(0);
+  }
+
+  .dk-location-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    background: #FAF6F0;
+    border-bottom: 1px solid #ECE2D5;
+  }
+
+  .dk-location-modal__title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dk-location-modal__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(100, 26, 40, 0.08);
+    color: var(--dk-color-primary, #641A28);
+    flex-shrink: 0;
+  }
+
+  .dk-location-modal__title {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #211216;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .dk-location-modal__subtitle {
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    font-size: 0.76rem;
+    color: #7A6C66;
+    margin: 3px 0 0;
+    line-height: 1.3;
+  }
+
+  .dk-location-modal__close {
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    color: #7A6C66;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+
+  .dk-location-modal__close:hover {
+    color: var(--dk-color-primary, #641A28);
+    background: rgba(100, 26, 40, 0.06);
+  }
+
+  .dk-location-modal__body {
+    padding: 22px;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  }
+
+  .dk-location-input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .dk-location-input-wrap {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .dk-location-field-icon {
+    position: absolute;
+    left: 12px;
+    pointer-events: none;
+  }
+
+  .dk-location-input {
+    width: 100%;
+    padding: 12px 14px 12px 38px;
+    border: 1.5px solid #E1D4C8;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+    outline: none;
+    color: #2D2522;
+    background: #FAF8F5;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    cursor: text !important;
+  }
+
+  .dk-location-input:focus {
+    border-color: var(--dk-color-primary, #641A28);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(100, 26, 40, 0.1);
+  }
+
+  .dk-location-check-btn {
+    padding: 12px 22px;
+    background: var(--dk-color-primary, #641A28);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.15s ease;
+    white-space: nowrap;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  }
+
+  .dk-location-check-btn:hover {
+    background: #4A111C;
+    transform: translateY(-1px);
+  }
+
+  .dk-location-feedback {
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin-bottom: 16px;
+    animation: dkFeedbackFade 0.25s ease;
+  }
+
+  @keyframes dkFeedbackFade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .dk-location-feedback--success {
+    background: #EDF7EE;
+    border: 1px solid #C4E3C7;
+    color: #1E6B24;
+  }
+
+  .dk-location-feedback--error {
+    background: #FDF0ED;
+    border: 1px solid #F6CEC3;
+    color: #A32814;
+  }
+
+  .dk-location-quick-cities {
+    margin-bottom: 18px;
+  }
+
+  .dk-location-quick-label {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #8C7B75;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+
+  .dk-location-city-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .dk-city-chip {
+    padding: 6px 12px;
+    background: #FAF6F0;
+    border: 1px solid #E6D8CA;
+    border-radius: 20px;
+    font-size: 0.77rem;
+    font-weight: 500;
+    color: #3B2A2E;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--dk-font-body, 'Poppins', sans-serif);
+  }
+
+  .dk-city-chip:hover {
+    background: var(--dk-color-primary, #641A28);
+    color: #FFFFFF;
+    border-color: var(--dk-color-primary, #641A28);
+    transform: translateY(-1px);
+  }
+
+  .dk-location-features {
+    padding-top: 14px;
+    border-top: 1px solid #ECE2D5;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .dk-location-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.77rem;
+    color: #6A5B55;
+  }
+
+  .dk-location-feature-dot {
+    color: var(--dk-color-gold, #B89A62);
+    font-size: 0.75rem;
+  }
+</style>
+
+<script>
+  (function initDelishaLocationSystem() {
+    // Map of Indian Pincode prefix to major regions/cities
+    const PIN_REGION_MAP = {
+      '11': 'Delhi NCR',
+      '12': 'Gurgaon / Haryana',
+      '13': 'Haryana',
+      '14': 'Punjab',
+      '15': 'Punjab',
+      '16': 'Chandigarh',
+      '17': 'Himachal Pradesh',
+      '18': 'Jammu & Kashmir',
+      '19': 'Jammu & Kashmir',
+      '20': 'Noida / Ghaziabad',
+      '21': 'Uttar Pradesh',
+      '22': 'Lucknow / UP',
+      '23': 'Uttar Pradesh',
+      '24': 'Uttar Pradesh',
+      '25': 'Uttar Pradesh',
+      '26': 'Uttar Pradesh',
+      '27': 'Uttar Pradesh',
+      '28': 'Agra / UP',
+      '30': 'Jaipur / Rajasthan',
+      '31': 'Rajasthan',
+      '32': 'Rajasthan',
+      '33': 'Rajasthan',
+      '34': 'Jodhpur / Rajasthan',
+      '36': 'Gujarat',
+      '37': 'Gujarat',
+      '38': 'Ahmedabad / Gujarat',
+      '39': 'Surat / Gujarat',
+      '40': 'Mumbai',
+      '41': 'Pune',
+      '42': 'Maharashtra',
+      '43': 'Maharashtra',
+      '44': 'Nagpur / Maharashtra',
+      '45': 'Indore / MP',
+      '46': 'Bhopal / MP',
+      '47': 'Gwalior / MP',
+      '48': 'Madhya Pradesh',
+      '49': 'Chhattisgarh',
+      '50': 'Hyderabad',
+      '51': 'Andhra Pradesh',
+      '52': 'Vijayawada / AP',
+      '53': 'Visakhapatnam',
+      '56': 'Bengaluru',
+      '57': 'Karnataka',
+      '58': 'Karnataka',
+      '59': 'Karnataka',
+      '60': 'Chennai',
+      '61': 'Tamil Nadu',
+      '62': 'Madurai / TN',
+      '63': 'Coimbatore / TN',
+      '64': 'Tamil Nadu',
+      '67': 'Kozhikode / Kerala',
+      '68': 'Kochi / Kerala',
+      '69': 'Thiruvananthapuram',
+      '70': 'Kolkata',
+      '71': 'West Bengal',
+      '72': 'West Bengal',
+      '73': 'Siliguri / WB',
+      '74': 'West Bengal',
+      '75': 'Bhubaneswar / Odisha',
+      '76': 'Odisha',
+      '77': 'Odisha',
+      '78': 'Guwahati / Assam',
+      '79': 'North East India',
+      '80': 'Patna / Bihar',
+      '81': 'Bihar',
+      '82': 'Bihar',
+      '83': 'Ranchi / Jharkhand',
+      '84': 'Bihar',
+      '85': 'Bihar'
+    };
+
+    function openDkLocationModal() {
+      const modal = document.getElementById('dkLocationModal');
+      if (!modal) return;
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(function() {
+        const input = document.getElementById('dkPincodeInput');
+        if (input) {
+          input.focus();
+          input.select();
+        }
+      }, 120);
+    }
+
+    function closeDkLocationModal() {
+      const modal = document.getElementById('dkLocationModal');
+      if (!modal) return;
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function dkSelectCity(cityName, pin) {
+      const input = document.getElementById('dkPincodeInput');
+      if (input) input.value = pin;
+      dkApplyDeliveryLocation(cityName, pin);
+    }
+
+    function dkCheckPincode() {
+      const input = document.getElementById('dkPincodeInput');
+      const feedback = document.getElementById('dkPincodeFeedback');
+      if (!input || !feedback) return;
+
+      const pin = input.value.trim();
+      if (!pin || pin.length !== 6 || !/^\d{6}$/.test(pin)) {
+        feedback.className = 'dk-location-feedback dk-location-feedback--error';
+        feedback.innerHTML = '⚠️ Please enter a valid 6-digit Indian Postal PIN code (e.g. 110001).';
+        feedback.style.display = 'block';
+        input.focus();
+        return;
+      }
+
+      const prefix = pin.substring(0, 2);
+      const region = PIN_REGION_MAP[prefix] || 'India (' + pin + ')';
+      dkApplyDeliveryLocation(region, pin);
+    }
+
+    function dkApplyDeliveryLocation(locationLabel, pin) {
+      const feedback = document.getElementById('dkPincodeFeedback');
+      const btnText = document.getElementById('dkLocationBtnText');
+      const mobileCity = document.getElementById('dkMobileLocationCity');
+      const mobilePin = document.getElementById('dkMobileLocationPin');
+      const mobileMuted = document.querySelector('.dk-mobile-location-muted');
+
+      if (feedback) {
+        feedback.className = 'dk-location-feedback dk-location-feedback--success';
+        feedback.innerHTML = '✓ <strong>Delivery available to ' + locationLabel + ' (' + pin + ')!</strong><br>Express artisanal dispatch in 2–4 business days with free delivery.';
+        feedback.style.display = 'block';
+      }
+
+      if (btnText) {
+        btnText.textContent = 'Deliver to ' + locationLabel;
+      }
+      if (mobileCity) {
+        mobileCity.textContent = locationLabel;
+      }
+      if (mobilePin) {
+        mobilePin.textContent = pin;
+        mobilePin.style.display = 'inline';
+      }
+      if (mobileMuted) {
+        mobileMuted.textContent = 'Deliver to:';
+      }
+
+      try {
+        localStorage.setItem('dk_user_delivery_pin', pin);
+        localStorage.setItem('dk_user_delivery_label', locationLabel);
+      } catch(e) {}
+
+      // Dispatch custom event for any other widget (e.g. product page or cart)
+      try {
+        window.dispatchEvent(new CustomEvent('delisha:location-changed', {
+          detail: { label: locationLabel, pincode: pin }
+        }));
+      } catch(e) {}
+
+      setTimeout(function() {
+        closeDkLocationModal();
+      }, 950);
+    }
+
+    // Restore saved delivery location on page load WITHOUT forcing dummy fallback
+    function restoreSavedLocation() {
+      try {
+        const savedLabel = localStorage.getItem('dk_user_delivery_label');
+        const savedPin = localStorage.getItem('dk_user_delivery_pin');
+        const btnText = document.getElementById('dkLocationBtnText');
+        const mobileCity = document.getElementById('dkMobileLocationCity');
+        const mobilePin = document.getElementById('dkMobileLocationPin');
+        const mobileMuted = document.querySelector('.dk-mobile-location-muted');
+
+        if (savedLabel && savedPin) {
+          if (btnText) btnText.textContent = 'Deliver to ' + savedLabel;
+          if (mobileCity) mobileCity.textContent = savedLabel;
+          if (mobilePin) {
+            mobilePin.textContent = savedPin;
+            mobilePin.style.display = 'inline';
+          }
+          if (mobileMuted) mobileMuted.textContent = 'Deliver to:';
+        } else {
+          // Clean default state when user has not yet specified a location
+          if (btnText) btnText.textContent = 'Where to deliver?';
+          if (mobileCity) mobileCity.textContent = 'Check Delivery';
+          if (mobilePin) mobilePin.style.display = 'none';
+          if (mobileMuted) mobileMuted.textContent = 'Deliver to:';
+        }
+      } catch(e) {}
+    }
+
+    // Escape key listener to close modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('dkLocationModal');
+        if (modal && modal.classList.contains('is-active')) {
+          closeDkLocationModal();
+        }
+      }
+    });
+
+    // Expose global methods
+    window.openDkLocationModal = openDkLocationModal;
+    window.closeDkLocationModal = closeDkLocationModal;
+    window.dkSelectCity = dkSelectCity;
+    window.dkCheckPincode = dkCheckPincode;
+    window.dkApplyDeliveryLocation = dkApplyDeliveryLocation;
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', restoreSavedLocation);
+    } else {
+      restoreSavedLocation();
+    }
+  })();
+</script>

@@ -2,6 +2,14 @@
   assign eyebrow = section.settings.eyebrow | default: '✦ OUR HANDCRAFTED JOURNEY ✦'
   assign heading = section.settings.heading | default: 'Little Things We’ve Made.<br> <em>Big Moments We’ve Been Part Of.</em>'
   assign subheading = section.settings.subheading | default: 'Every piece is handmade with devotion in our Delhi workshop, adding artisanal warmth to festive homes across India.'
+  assign stat_1_val = section.settings.stat_1_num | default: 10
+  if stat_1_val == 1000
+    assign stat_1_val = 10
+  endif
+  assign stat_1_suf = section.settings.stat_1_suffix | default: 'k+'
+  if stat_1_suf == '+'
+    assign stat_1_suf = 'k+'
+  endif
 -%}
 
 <section
@@ -35,9 +43,9 @@
           <div class="dk-number-circle__inner">
             <span
               class="dk-number-value"
-              data-target="{{ section.settings.stat_1_num | default: 1000 }}"
-              data-suffix="{{ section.settings.stat_1_suffix | default: '+' }}"
-            >0{{ section.settings.stat_1_suffix | default: '+' }}</span>
+              data-target="{{ stat_1_val }}"
+              data-suffix="{{ stat_1_suf }}"
+            >{{ stat_1_val }}{{ stat_1_suf }}</span>
           </div>
         </div>
         <h3 class="dk-number-label">{{ section.settings.stat_1_label | default: 'Celebrations Gifted' }}</h3>
@@ -344,13 +352,13 @@
       "type": "number",
       "id": "stat_1_num",
       "label": "Stat 1 Number",
-      "default": 1000
+      "default": 10
     },
     {
       "type": "text",
       "id": "stat_1_suffix",
       "label": "Stat 1 Suffix",
-      "default": "+"
+      "default": "k+"
     },
     {
       "type": "text",

@@ -1,41 +1,11 @@
 {%- liquid
-  assign is_all = false
+  assign display_title = collection.title | default: 'All Collections'
   if collection.handle == 'all' or collection.handle == blank
-    assign is_all = true
-  endif
-
-  if is_all
-    assign header_eyebrow = 'ALL COLLECTIONS'
-    assign header_title = 'Handcrafted Pieces for Beautiful Celebrations.'
-    assign header_desc = collection.description
-    if header_desc == blank
-      assign header_desc = 'Thoughtfully handcrafted décor, gifting and festive pieces made to make every celebration feel a little more special.'
-    endif
-  else
-    assign header_eyebrow = 'DELISHA KARIGARI • EDIT'
-    assign header_title = collection.title | default: section.settings.fallback_title | default: 'Collection'
-    assign header_desc = collection.description
-    if header_desc == blank
-      assign header_desc = 'Thoughtfully handcrafted pieces made to bring warmth, tradition, and artistry to your home.'
-    endif
+    assign display_title = 'All Collections'
   endif
 -%}
 
-<div
-  class="dk-collection-hero {% if section.settings.show_image and collection.image %}dk-collection-hero--has-image{% endif %}"
-  style="
-    background-color: {{ section.settings.banner_bg_color | default: '#F9F5EE' }};
-    {% if section.settings.show_image and collection.image %}
-      background-image: url('{{ collection.image | image_url: width: 2000 }}');
-    {% elsif section.settings.banner_image != blank %}
-      background-image: url('{{ section.settings.banner_image | image_url: width: 2000 }}');
-    {% endif %}
-  "
->
-  {% if section.settings.show_image and collection.image or section.settings.banner_image != blank %}
-    <div class="dk-collection-hero__overlay"></div>
-  {% endif %}
-
+<div class="dk-collection-hero">
   <div class="dk-collection-hero__inner">
     {% if section.settings.show_breadcrumb %}
       <nav class="dk-collection-hero__breadcrumb" aria-label="Breadcrumb">
@@ -43,25 +13,13 @@
         <span class="sep">/</span>
         <a href="{{ routes.collections_url | default: '/collections' }}">Collections</a>
         <span class="sep">/</span>
-        <span class="current">{{ collection.title | default: 'All Collections' }}</span>
+        <span class="current">{{ display_title }}</span>
       </nav>
     {% endif %}
 
-    <span class="dk-collection-hero__eyebrow">{{ header_eyebrow }}</span>
-
-    <h1 class="dk-collection-hero__title">
-      {%- if is_all -%}
-        Handcrafted Pieces for<br class="dk-hero-title-br"> <em>Beautiful Celebrations.</em>
-      {%- else -%}
-        {{ header_title }}
-      {%- endif -%}
+    <h1 class="dk-collection-hero__title-minimal">
+      {{ display_title }}
     </h1>
-
-    {% if section.settings.show_description and header_desc != blank %}
-      <div class="dk-collection-hero__description">
-        {{ header_desc }}
-      </div>
-    {% endif %}
   </div>
 </div>
 
@@ -69,26 +27,12 @@
   .dk-collection-hero {
     position: relative;
     width: 100%;
-    background-color: #F9F5EE;
+    background-color: #FAF7F2;
     border-bottom: 1px solid #ECE4D8;
-    padding: clamp(32px, 3.8vw, 54px) 20px clamp(28px, 3.4vw, 44px);
+    padding: 18px 16px 14px;
     box-sizing: border-box;
     text-align: center;
     overflow: hidden;
-  }
-
-  .dk-collection-hero--has-image {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  .dk-collection-hero__overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(249, 245, 238, 0.82) 0%, rgba(249, 245, 238, 0.94) 100%);
-    z-index: 1;
-    pointer-events: none;
   }
 
   .dk-collection-hero__inner {
@@ -99,6 +43,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 4px;
+  }
+
+  .dk-collection-hero__title-minimal {
+    font-family: var(--dk-font-heading, 'Playfair Display', serif);
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #211216;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 
   .dk-collection-hero__breadcrumb {

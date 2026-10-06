@@ -38,38 +38,40 @@
           assign b_sec_url = block.settings.secondary_btn_link | default: secondary_url
         -%}
         <div class="dk-hero-slide {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
-          <div class="dk-hero__media">
-            <picture class="dk-hero__picture">
-              {%- if block.settings.image_mobile != blank -%}
-                <source media="(max-width: 767px)" srcset="{{ block.settings.image_mobile | image_url: width: 800 }}">
-              {%- else -%}
-                <source media="(max-width: 767px)" srcset="{{ 'dk-hero-diwali-mobile.jpg' | asset_url }}">
-              {%- endif -%}
+          <a href="{{ b_pri_url }}" class="dk-hero__media-link" aria-label="{{ b_heading | default: 'Explore Delisha Karigari Collection' | escape }}">
+            <div class="dk-hero__media">
+              <picture class="dk-hero__picture">
+                {%- if block.settings.image_mobile != blank -%}
+                  <source media="(max-width: 767px)" srcset="{{ block.settings.image_mobile | image_url: width: 800 }}">
+                {%- else -%}
+                  <source media="(max-width: 767px)" srcset="{{ 'dk-hero-diwali-mobile.jpg' | asset_url }}">
+                {%- endif -%}
 
-              {%- if block.settings.image != blank -%}
-                <img
-                  src="{{ block.settings.image | image_url: width: 1920 }}"
-                  alt="{{ b_heading | escape }} — Delisha Karigari"
-                  class="dk-hero__img"
-                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                  {% if forloop.first %}fetchpriority="high"{% endif %}
-                  width="1920"
-                  height="1080"
-                >
-              {%- else -%}
-                <img
-                  src="{{ 'dk-hero-diwali.jpg' | asset_url }}"
-                  alt="{{ b_heading | escape }} — Delisha Karigari"
-                  class="dk-hero__img"
-                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-                  {% if forloop.first %}fetchpriority="high"{% endif %}
-                  width="1376"
-                  height="768"
-                >
-              {%- endif -%}
-            </picture>
-            <div class="dk-hero__overlay"></div>
-          </div>
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 1920 }}"
+                    alt="{{ b_heading | escape }} — Delisha Karigari"
+                    class="dk-hero__img"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    {% if forloop.first %}fetchpriority="high"{% endif %}
+                    width="1920"
+                    height="1080"
+                  >
+                {%- else -%}
+                  <img
+                    src="{{ 'dk-hero-diwali.jpg' | asset_url }}"
+                    alt="{{ b_heading | escape }} — Delisha Karigari"
+                    class="dk-hero__img"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    {% if forloop.first %}fetchpriority="high"{% endif %}
+                    width="1376"
+                    height="768"
+                  >
+                {%- endif -%}
+              </picture>
+              <div class="dk-hero__overlay"></div>
+            </div>
+          </a>
 
           <div class="dk-hero__content-container">
             <div class="dk-hero__content">
@@ -102,21 +104,23 @@
     {%- else -%}
       <!-- SLIDE 1: KARWA CHAUTH & GIFTING SPECIAL -->
       <div class="dk-hero-slide active dk-hero-slide--editorial dk-hero-slide--kc" data-slide="0">
-        <div class="dk-hero__media">
-          <picture class="dk-hero__picture">
-            <source media="(max-width: 767px)" srcset="{{ 'dk-hero-karwa-chauth-mobile.jpg' | asset_url }}">
-            <img
-              src="{{ 'dk-hero-karwa-chauth.jpg' | asset_url }}"
-              alt="Karwa Chauth Celebrations — Delisha Karigari"
-              class="dk-hero__img dk-hero__img--editorial"
-              loading="eager"
-              fetchpriority="high"
-              width="1920"
-              height="1080"
-            >
-          </picture>
-          <div class="dk-hero__overlay dk-hero__overlay--editorial dk-hero__overlay--kc"></div>
-        </div>
+        <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-hero__media-link" aria-label="Explore Karwa Chauth Special Collection">
+          <div class="dk-hero__media">
+            <picture class="dk-hero__picture">
+              <source media="(max-width: 767px)" srcset="{{ 'dk-hero-karwa-chauth-mobile.jpg' | asset_url }}">
+              <img
+                src="{{ 'dk-hero-karwa-chauth.jpg' | asset_url }}"
+                alt="Karwa Chauth Celebrations — Delisha Karigari"
+                class="dk-hero__img dk-hero__img--editorial"
+                loading="eager"
+                fetchpriority="high"
+                width="1920"
+                height="1080"
+              >
+            </picture>
+            <div class="dk-hero__overlay dk-hero__overlay--editorial dk-hero__overlay--kc"></div>
+          </div>
+        </a>
 
         <div class="dk-hero__content-container dk-hero__content-container--editorial">
           <div class="dk-hero__content dk-hero__content--editorial">
@@ -137,20 +141,22 @@
 
       <!-- SLIDE 2: HANDMADE BANDHANWAR & ENTRANCE TORANS -->
       <div class="dk-hero-slide dk-hero-slide--editorial dk-hero-slide--bw" data-slide="1">
-        <div class="dk-hero__media">
-          <picture class="dk-hero__picture">
-            <source media="(max-width: 767px)" srcset="{{ 'dk-hero-bandhanwar-mobile.jpg' | asset_url }}">
-            <img
-              src="{{ 'dk-hero-bandhanwar.jpg' | asset_url }}"
-              alt="Handcrafted Peacock Bandhanwars & Door Torans — Delisha Karigari"
-              class="dk-hero__img dk-hero__img--editorial"
-              loading="lazy"
-              width="1920"
-              height="1080"
-            >
-          </picture>
-          <div class="dk-hero__overlay dk-hero__overlay--editorial dk-hero__overlay--bw"></div>
-        </div>
+        <a href="{{ routes.collections_url }}/bandhanwar" class="dk-hero__media-link" aria-label="Explore Handcrafted Bandhanwars & Door Torans">
+          <div class="dk-hero__media">
+            <picture class="dk-hero__picture">
+              <source media="(max-width: 767px)" srcset="{{ 'dk-hero-bandhanwar-mobile.jpg' | asset_url }}">
+              <img
+                src="{{ 'dk-hero-bandhanwar.jpg' | asset_url }}"
+                alt="Handcrafted Peacock Bandhanwars & Door Torans — Delisha Karigari"
+                class="dk-hero__img dk-hero__img--editorial"
+                loading="lazy"
+                width="1920"
+                height="1080"
+              >
+            </picture>
+            <div class="dk-hero__overlay dk-hero__overlay--editorial dk-hero__overlay--bw"></div>
+          </div>
+        </a>
 
         <div class="dk-hero__content-container dk-hero__content-container--editorial">
           <div class="dk-hero__content dk-hero__content--editorial">
@@ -171,20 +177,22 @@
 
       <!-- SLIDE 3: BESPOKE FESTIVE GIFTING & LUXURY HAMPERS -->
       <div class="dk-hero-slide dk-hero-slide--editorial dk-hero-slide--gifting" data-slide="2">
-        <div class="dk-hero__media">
-          <picture class="dk-hero__picture">
-            <source media="(max-width: 767px)" srcset="{{ 'dk-banner-gifting-mobile.jpg' | asset_url }}">
-            <img
-              src="{{ 'dk-banner-gifting.jpg' | asset_url }}"
-              alt="The Art of Gifting, Handcrafted with Heart — Delisha Karigari"
-              class="dk-hero__img dk-hero__img--editorial"
-              loading="lazy"
-              width="1920"
-              height="1080"
-            >
-          </picture>
-          <div class="dk-hero__overlay dk-hero__overlay--editorial dk-hero__overlay--gifting"></div>
-        </div>
+        <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-hero__media-link" aria-label="Explore The Art of Gifting Collection">
+          <div class="dk-hero__media">
+            <picture class="dk-hero__picture">
+              <source media="(max-width: 767px)" srcset="{{ 'dk-banner-gifting-mobile.jpg' | asset_url }}">
+              <img
+                src="{{ 'dk-banner-gifting.jpg' | asset_url }}"
+                alt="The Art of Gifting, Handcrafted with Heart — Delisha Karigari"
+                class="dk-hero__img dk-hero__img--editorial"
+                loading="lazy"
+                width="1920"
+                height="1080"
+              >
+            </picture>
+            <div class="dk-hero__overlay dk-hero__overlay--editorial dk-hero__overlay--gifting"></div>
+          </div>
+        </a>
 
         <div class="dk-hero__content-container dk-hero__content-container--editorial">
           <div class="dk-hero__content dk-hero__content--editorial">
@@ -400,6 +408,30 @@
     opacity: 1;
     visibility: visible;
     z-index: 2;
+  }
+  .dk-hero__media-link {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .dk-hero__content-container,
+  .dk-hero__content-container--editorial {
+    pointer-events: none;
+  }
+  .dk-hero__content-container a,
+  .dk-hero__content-container button,
+  .dk-hero__content-container--editorial a,
+  .dk-hero__content-container--editorial button {
+    pointer-events: auto;
+  }
+  .dk-hero-arrow,
+  .dk-hero-dots {
+    z-index: 10;
   }
   .dk-hero__media {
     position: absolute;

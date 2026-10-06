@@ -12,26 +12,26 @@
   ==================================================== {%- endcomment -%}
   <div class="dk-header__announcement" id="dkAnnouncementBar">
     <div class="dk-header__announcement-slider" id="dkAnnouncementSlider">
-      <div class="dk-announcement-slide is-active" data-index="0">
+      <a href="{{ section.settings.announcement_link | default: routes.all_products_collection_url }}" class="dk-announcement-slide is-active" data-index="0">
         <span class="dk-announcement-star">✦</span>
         <span class="dk-announcement-text">FREE SHIPPING SITEWIDE</span>
         <span class="dk-announcement-star">✦</span>
-      </div>
-      <div class="dk-announcement-slide" data-index="1">
+      </a>
+      <a href="{{ section.settings.announcement_link | default: routes.all_products_collection_url }}" class="dk-announcement-slide" data-index="1">
         <span class="dk-announcement-star">✦</span>
         <span class="dk-announcement-text">HANDCRAFTED WITH LOVE</span>
         <span class="dk-announcement-star">✦</span>
-      </div>
-      <div class="dk-announcement-slide" data-index="2">
+      </a>
+      <a href="{{ section.settings.announcement_link | default: routes.all_products_collection_url }}" class="dk-announcement-slide" data-index="2">
         <span class="dk-announcement-star">✦</span>
         <span class="dk-announcement-text">EXPRESS DISPATCH ACROSS INDIA</span>
         <span class="dk-announcement-star">✦</span>
-      </div>
-      <div class="dk-announcement-slide" data-index="3">
+      </a>
+      <a href="{{ section.settings.announcement_link | default: routes.all_products_collection_url }}" class="dk-announcement-slide" data-index="3">
         <span class="dk-announcement-star">✦</span>
         <span class="dk-announcement-text">CUSTOMISATION OF PRODUCTS AVAILABLE</span>
         <span class="dk-announcement-star">✦</span>
-      </div>
+      </a>
     </div>
   </div>
 
@@ -195,11 +195,11 @@
       </span>
       <span class="dk-mobile-location-text">
         <span class="dk-mobile-location-muted">Deliver to:</span>
-        <strong class="dk-mobile-location-city" id="dkMobileLocationCity">Bengaluru</strong>
-        <span class="dk-mobile-location-pin" id="dkMobileLocationPin">560001</span>
+        <strong class="dk-mobile-location-city" id="dkMobileLocationCity">Select Location</strong>
+        <span class="dk-mobile-location-pin" id="dkMobileLocationPin" style="display: none;"></span>
       </span>
       <span class="dk-mobile-location-cta">
-        Change
+        Check
         <svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -238,14 +238,14 @@
 
           <!-- 5. GIFTING -->
           <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-header__menu-link {% if request.path contains 'gifts' or request.path contains 'for-her-accessories' %}is-active{% endif %}">
+            <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-header__menu-link {% if request.path contains 'gifting' or request.path contains 'for-her' %}is-active{% endif %}">
               GIFTING
             </a>
           </li>
 
           <!-- 6. UNDER @199 (HIGHLIGHTED) -->
           <li class="dk-header__menu-item">
-            <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-header__menu-link dk-header__menu-link--highlight {% if request.path contains 'under-199' %}is-active{% endif %}">
+            <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-header__menu-link dk-header__menu-link--highlight {% if request.path contains '199' %}is-active{% endif %}">
               UNDER @199
             </a>
           </li>
@@ -379,7 +379,7 @@
           <!-- 5. GIFTING -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-mobile-menu__link">
+              <a href="{{ routes.collections_url }}/gifting" class="dk-mobile-menu__link">
                 GIFTING
               </a>
             </div>
@@ -388,7 +388,7 @@
           <!-- 6. UNDER @199 (HIGHLIGHTED) -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
-              <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
+              <a href="{{ routes.collections_url }}/under-199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
                 UNDER @199
               </a>
             </div>
@@ -461,89 +461,29 @@
           <li class="dk-mobile-menu__item"><a href="{{ routes.collections_url }}/under-199" class="dk-mobile-menu__link dk-menu-highlight">UNDER @199 <span class="dk-menu-badge">OFFER</span></a></li>
         {%- endif -%}
       </ul>
+
+      <!-- QUICK LOCATION TRIGGER IN MOBILE DRAWER -->
+      <div class="dk-mobile-drawer__location" style="padding: 16px 20px; border-top: 1px solid #ECE2D5; margin-top: 14px; background: #FAF7F2;">
+        <button
+          type="button"
+          class="dk-mobile-drawer__location-btn"
+          onclick="toggleDkMobileMenu(); setTimeout(function(){ if (typeof openDkLocationModal === 'function') openDkLocationModal(); }, 200);"
+          style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 11px 16px; background: #FFFFFF; border: 1.5px solid #E2D4C8; border-radius: 8px; font-family: var(--dk-font-body, 'Poppins', sans-serif); font-size: 0.84rem; color: #2D2522; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.04);"
+        >
+          <span style="display: flex; align-items: center; gap: 9px; font-weight: 500;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--dk-color-primary, #641A28)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Check Delivery Location</span>
+          </span>
+          <span style="color: var(--dk-color-primary, #641A28); font-weight: 600; font-size: 0.8rem;">Check &rarr;</span>
+        </button>
+      </div>
     </div>
   </div>
 
   <div class="dk-mobile-overlay" id="dkMobileOverlay" onclick="toggleDkMobileMenu()"></div>
-
-  {%- comment -%} =====================================================
-    DELIVERY LOCATION CHECKER MODAL
-  ==================================================== {%- endcomment -%}
-  <div class="dk-location-modal" id="dkLocationModal" aria-hidden="true" role="dialog" aria-label="Select Delivery Location">
-    <div class="dk-location-modal__backdrop" onclick="closeDkLocationModal()"></div>
-    <div class="dk-location-modal__dialog">
-      <div class="dk-location-modal__header">
-        <div class="dk-location-modal__title-wrap">
-          <span class="dk-location-modal__icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-          </span>
-          <div>
-            <h3 class="dk-location-modal__title">Where to deliver?</h3>
-            <p class="dk-location-modal__subtitle">Check serviceability & delivery dates across India</p>
-          </div>
-        </div>
-        <button type="button" class="dk-location-modal__close" onclick="closeDkLocationModal()" aria-label="Close modal">&times;</button>
-      </div>
-
-      <div class="dk-location-modal__body">
-        <div class="dk-location-input-group">
-          <div class="dk-location-input-wrap">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--dk-color-primary, #641A28)" stroke-width="2" class="dk-location-field-icon">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <input
-              type="text"
-              id="dkPincodeInput"
-              class="dk-location-input"
-              maxlength="6"
-              inputmode="numeric"
-              pattern="[0-9]{6}"
-              placeholder="Enter 6-digit Pincode (e.g. 110001)"
-              onkeydown="if(event.key === 'Enter') { event.preventDefault(); dkCheckPincode(); }"
-            >
-          </div>
-          <button type="button" class="dk-location-check-btn" onclick="dkCheckPincode()">
-            CHECK
-          </button>
-        </div>
-
-        <div id="dkPincodeFeedback" class="dk-location-feedback" style="display: none;"></div>
-
-        <div class="dk-location-quick-cities">
-          <span class="dk-location-quick-label">Popular Deliverable Regions:</span>
-          <div class="dk-location-city-chips">
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Delhi NCR', '110001')">📍 Delhi NCR</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Mumbai', '400001')">📍 Mumbai</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Bengaluru', '560001')">📍 Bengaluru</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Kolkata', '700001')">📍 Kolkata</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Hyderabad', '500001')">📍 Hyderabad</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Chennai', '600001')">📍 Chennai</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Pune', '411001')">📍 Pune</button>
-            <button type="button" class="dk-city-chip" onclick="dkSelectCity('Jaipur', '302001')">📍 Jaipur</button>
-          </div>
-        </div>
-
-        <div class="dk-location-features">
-          <div class="dk-location-feature-item">
-            <span class="dk-location-feature-dot">✦</span>
-            <span>Pan India Express Delivery in 2–4 Business Days</span>
-          </div>
-          <div class="dk-location-feature-item">
-            <span class="dk-location-feature-dot">✦</span>
-            <span>Free Shipping on Orders Above ₹499</span>
-          </div>
-          <div class="dk-location-feature-item">
-            <span class="dk-location-feature-dot">✦</span>
-            <span>Safe & Festive Luxury Gifting Packaging Guaranteed</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </header>
 
 <script>
@@ -584,104 +524,6 @@
     }
   }
 
-  /* DELIVERY LOCATION MODAL HANDLERS */
-  function openDkLocationModal() {
-    const modal = document.getElementById('dkLocationModal');
-    if (modal) {
-      modal.classList.add('is-active');
-      document.body.classList.add('overflow-hidden');
-      setTimeout(function() {
-        const input = document.getElementById('dkPincodeInput');
-        if (input) input.focus();
-      }, 150);
-    }
-  }
-
-  function closeDkLocationModal() {
-    const modal = document.getElementById('dkLocationModal');
-    if (modal) {
-      modal.classList.remove('is-active');
-      document.body.classList.remove('overflow-hidden');
-    }
-  }
-
-  function dkSelectCity(cityName, pin) {
-    const input = document.getElementById('dkPincodeInput');
-    if (input) input.value = pin;
-    dkApplyDeliveryLocation(cityName, pin);
-  }
-
-  function dkCheckPincode() {
-    const input = document.getElementById('dkPincodeInput');
-    const feedback = document.getElementById('dkPincodeFeedback');
-    if (!input || !feedback) return;
-
-    const pin = input.value.trim();
-    if (!pin || pin.length !== 6 || !/^\d{6}$/.test(pin)) {
-      feedback.className = 'dk-location-feedback dk-location-feedback--error';
-      feedback.innerHTML = '⚠️ Please enter a valid 6-digit Indian PIN code.';
-      feedback.style.display = 'block';
-      return;
-    }
-
-    dkApplyDeliveryLocation(pin, pin);
-  }
-
-  function dkApplyDeliveryLocation(locationLabel, pin) {
-    const feedback = document.getElementById('dkPincodeFeedback');
-    const btnText = document.getElementById('dkLocationBtnText');
-    const mobileCity = document.getElementById('dkMobileLocationCity');
-    const mobilePin = document.getElementById('dkMobileLocationPin');
-
-    if (feedback) {
-      feedback.className = 'dk-location-feedback dk-location-feedback--success';
-      feedback.innerHTML = '✓ <strong>Delivery available to ' + locationLabel + '!</strong><br>Express dispatch in 2–4 business days with free shipping.';
-      feedback.style.display = 'block';
-    }
-
-    if (btnText) {
-      btnText.textContent = 'Deliver to ' + locationLabel;
-    }
-    if (mobileCity) {
-      mobileCity.textContent = locationLabel;
-    }
-    if (mobilePin) {
-      mobilePin.textContent = (pin && pin !== locationLabel) ? pin : '';
-      mobilePin.style.display = (pin && pin !== locationLabel) ? 'inline' : 'none';
-    }
-
-    try {
-      localStorage.setItem('dk_user_delivery_pin', pin);
-      localStorage.setItem('dk_user_delivery_label', locationLabel);
-    } catch(e) {}
-
-    setTimeout(function() {
-      closeDkLocationModal();
-    }, 1200);
-  }
-
-  // Restore saved delivery location on page load
-  document.addEventListener('DOMContentLoaded', function() {
-    try {
-      const savedLabel = localStorage.getItem('dk_user_delivery_label') || 'Bengaluru';
-      const savedPin = localStorage.getItem('dk_user_delivery_pin') || '560001';
-      const btnText = document.getElementById('dkLocationBtnText');
-      const mobileCity = document.getElementById('dkMobileLocationCity');
-      const mobilePin = document.getElementById('dkMobileLocationPin');
-
-      if (btnText) {
-        btnText.textContent = 'Deliver to ' + savedLabel;
-      }
-      if (mobileCity) {
-        mobileCity.textContent = savedLabel;
-      }
-      if (mobilePin) {
-        mobilePin.textContent = (savedPin && savedPin !== savedLabel) ? savedPin : '';
-        mobilePin.style.display = (savedPin && savedPin !== savedLabel) ? 'inline' : 'none';
-      }
-    } catch(e) {}
-  });
-
   // Rotating Announcement Bar Slider (One by One)
   (function initAnnouncementSlider() {
     function startSlider() {
@@ -710,7 +552,12 @@
       document.addEventListener('DOMContentLoaded', startSlider);
     } else {
       startSlider();
+    }
   })();
+
+  // Expose global methods for inline HTML onclick handlers
+  window.toggleDkMobileMenu = toggleDkMobileMenu;
+  window.toggleDkAccordion = toggleDkAccordion;
 
   // Compact Transition on Scroll (Ratnaya-Style Persistent Sticky Header)
   (function initStickyHeader() {
@@ -751,6 +598,12 @@
 {
   "name": "Header",
   "settings": [
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement Bar Link",
+      "default": "/collections/all"
+    },
     {
       "type": "image_picker",
       "id": "logo_image",

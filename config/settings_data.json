@@ -41,6 +41,21 @@
     "sections": {
       "header": {
         "type": "header",
+        "blocks": {
+          "mega_menu_7RFFc6": {
+            "type": "mega_menu",
+            "settings": {
+              "menu_item": "",
+              "featured_tag": "CURATED GIFTING",
+              "featured_heading": "Raksha Bandhan Special Sets",
+              "featured_link": "",
+              "featured_button_text": "Explore Collection"
+            }
+          }
+        },
+        "block_order": [
+          "mega_menu_7RFFc6"
+        ],
         "settings": {
           "announcement_link": "shopify://collections/all",
           "logo_width": 260,

@@ -60,24 +60,26 @@
         </button>
 
         <!-- WHERE TO DELIVER BUTTON -->
-        <button
-          type="button"
-          class="dk-location-btn"
-          id="dkLocationBtn"
-          onclick="openDkLocationModal()"
-          aria-label="Where to deliver? Check delivery location"
-        >
-          <span class="dk-location-btn__icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
+        {%- if section.settings.show_delivery_location != false -%}
+          <button
+            type="button"
+            class="dk-location-btn"
+            id="dkLocationBtn"
+            onclick="openDkLocationModal()"
+            aria-label="{{ section.settings.delivery_location_text | default: 'Where to deliver?' | escape }}"
+          >
+            <span class="dk-location-btn__icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </span>
+            <span class="dk-location-btn__text" id="dkLocationBtnText">{{ section.settings.delivery_location_text | default: 'Where to deliver?' }}</span>
+            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" class="dk-location-btn__chevron">
+              <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </span>
-          <span class="dk-location-btn__text" id="dkLocationBtnText">Where to deliver?</span>
-          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8" class="dk-location-btn__chevron">
-            <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
+          </button>
+        {%- endif -%}
       </div>
 
       <!-- BRAND LOGO / WORDMARK -->
@@ -178,34 +180,36 @@
   {%- comment -%} =====================================================
     MOBILE PRECISION DELIVERY LOCATION BAR (MINIMAL, ELEGANT & PRECISE ON MOBILE/IOS)
   ==================================================== {%- endcomment -%}
-  <div
-    class="dk-header__mobile-location"
-    id="dkMobileLocationBar"
-    onclick="openDkLocationModal()"
-    role="button"
-    tabindex="0"
-    aria-label="Delivery location: Check delivery details"
-  >
-    <div class="dk-mobile-location-inner">
-      <span class="dk-mobile-location-icon">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-      </span>
-      <span class="dk-mobile-location-text">
-        <span class="dk-mobile-location-muted">Deliver to:</span>
-        <strong class="dk-mobile-location-city" id="dkMobileLocationCity">Select Location</strong>
-        <span class="dk-mobile-location-pin" id="dkMobileLocationPin" style="display: none;"></span>
-      </span>
-      <span class="dk-mobile-location-cta">
-        Check
-        <svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </span>
+  {%- if section.settings.show_delivery_location != false -%}
+    <div
+      class="dk-header__mobile-location"
+      id="dkMobileLocationBar"
+      onclick="openDkLocationModal()"
+      role="button"
+      tabindex="0"
+      aria-label="Delivery location: Check delivery details"
+    >
+      <div class="dk-mobile-location-inner">
+        <span class="dk-mobile-location-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </span>
+        <span class="dk-mobile-location-text">
+          <span class="dk-mobile-location-muted">Deliver to:</span>
+          <strong class="dk-mobile-location-city" id="dkMobileLocationCity">Select Location</strong>
+          <span class="dk-mobile-location-pin" id="dkMobileLocationPin" style="display: none;"></span>
+        </span>
+        <span class="dk-mobile-location-cta">
+          Check
+          <svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
     </div>
-  </div>
+  {%- endif -%}
 
   {%- comment -%} =====================================================
     DESKTOP CATEGORY NAVIGATION ROW (CLEAN EDITORIAL OFF-WHITE BAR - PHOTO 4)
@@ -221,32 +225,52 @@
             </a>
           </li>
 
-
-          <!-- 3. BANDHANWAR -->
+          <!-- 2. BANDHANWAR -->
           <li class="dk-header__menu-item">
             <a href="{{ routes.collections_url }}/bandhanwar" class="dk-header__menu-link {% if request.path contains 'bandhanwar' %}is-active{% endif %}">
               BANDHANWAR
             </a>
           </li>
 
-          <!-- 4. LATKANS -->
+          <!-- 3. LATKANS -->
           <li class="dk-header__menu-item">
             <a href="{{ routes.collections_url }}/latkan" class="dk-header__menu-link {% if request.path contains 'latkan' %}is-active{% endif %}">
               LATKANS
             </a>
           </li>
 
-          <!-- 5. GIFTING -->
+          <!-- 4. KARWA CHAUTH -->
+          <li class="dk-header__menu-item">
+            <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-header__menu-link {% if request.path contains 'karwa' %}is-active{% endif %}">
+              KARWA CHAUTH
+            </a>
+          </li>
+
+          <!-- 5. DIWALI DÉCOR -->
+          <li class="dk-header__menu-item">
+            <a href="{{ routes.collections_url }}/diwali-decor" class="dk-header__menu-link {% if request.path contains 'diwali' %}is-active{% endif %}">
+              DIWALI DÉCOR
+            </a>
+          </li>
+
+          <!-- 6. GIFTING -->
           <li class="dk-header__menu-item">
             <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-header__menu-link {% if request.path contains 'gifting' or request.path contains 'for-her' %}is-active{% endif %}">
               GIFTING
             </a>
           </li>
 
-          <!-- 6. UNDER @199 (HIGHLIGHTED) -->
+          <!-- 7. UNDER @199 (HIGHLIGHTED) -->
           <li class="dk-header__menu-item">
             <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-header__menu-link dk-header__menu-link--highlight {% if request.path contains '199' %}is-active{% endif %}">
               UNDER @199
+            </a>
+          </li>
+
+          <!-- 8. POTLIS -->
+          <li class="dk-header__menu-item">
+            <a href="{{ routes.collections_url }}/handmade-potli" class="dk-header__menu-link {% if request.path contains 'potli' %}is-active{% endif %}">
+              POTLIS
             </a>
           </li>
 
@@ -357,8 +381,7 @@
             </div>
           </li>
 
-
-          <!-- 3. BANDHANWAR -->
+          <!-- 2. BANDHANWAR -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
               <a href="{{ routes.collections_url }}/bandhanwar" class="dk-mobile-menu__link">
@@ -367,7 +390,7 @@
             </div>
           </li>
 
-          <!-- 4. LATKANS -->
+          <!-- 3. LATKANS -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
               <a href="{{ routes.collections_url }}/latkan" class="dk-mobile-menu__link">
@@ -376,20 +399,47 @@
             </div>
           </li>
 
-          <!-- 5. GIFTING -->
+          <!-- 4. KARWA CHAUTH -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/gifting" class="dk-mobile-menu__link">
+              <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-mobile-menu__link">
+                KARWA CHAUTH
+              </a>
+            </div>
+          </li>
+
+          <!-- 5. DIWALI DÉCOR -->
+          <li class="dk-mobile-menu__item">
+            <div class="dk-mobile-menu__row">
+              <a href="{{ routes.collections_url }}/diwali-decor" class="dk-mobile-menu__link">
+                DIWALI DÉCOR
+              </a>
+            </div>
+          </li>
+
+          <!-- 6. GIFTING -->
+          <li class="dk-mobile-menu__item">
+            <div class="dk-mobile-menu__row">
+              <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-mobile-menu__link">
                 GIFTING
               </a>
             </div>
           </li>
 
-          <!-- 6. UNDER @199 (HIGHLIGHTED) -->
+          <!-- 7. UNDER @199 (HIGHLIGHTED) -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/under-199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
-                UNDER @199
+              <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
+                UNDER @199 <span class="dk-menu-badge" style="background: #9E743A; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">OFFER</span>
+              </a>
+            </div>
+          </li>
+
+          <!-- 8. POTLIS -->
+          <li class="dk-mobile-menu__item">
+            <div class="dk-mobile-menu__row">
+              <a href="{{ routes.collections_url }}/handmade-potli" class="dk-mobile-menu__link">
+                POTLIS
               </a>
             </div>
           </li>
@@ -630,17 +680,39 @@
       "default": 160
     },
     {
+      "type": "header",
+      "content": "Navigation Categories"
+    },
+    {
       "type": "checkbox",
       "id": "use_custom_menu",
-      "label": "Use Delisha Curated Menu (Home, Shop All, Catalogue, Under @199)",
+      "label": "Show Delisha Festive Category Bar (All Collections, Bandhanwar, Latkans, Karwa Chauth, Diwali, Gifting, Under @199, Potlis)",
       "default": true,
-      "info": "Displays the brand-specific navigation with Home, Shop All, Catalogue dropdown, and Under @199."
+      "info": "Turn this off if you want to display your custom menu created in Shopify Admin > Online Store > Navigation."
     },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Main Navigation Menu",
-      "default": "main-menu"
+      "label": "Shopify Admin Navigation Menu",
+      "default": "main-menu",
+      "info": "Used when the curated category bar is turned off, or for nested mega menus."
+    },
+    {
+      "type": "header",
+      "content": "Delivery Location (Pincode Checker)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_delivery_location",
+      "label": "Show 'Where to deliver?' Button",
+      "default": true,
+      "info": "Enables customers to enter their 6-digit Indian PIN code to check instant delivery speed & express dispatch."
+    },
+    {
+      "type": "text",
+      "id": "delivery_location_text",
+      "label": "Location Button Label",
+      "default": "Where to deliver?"
     },
     {
       "type": "checkbox",

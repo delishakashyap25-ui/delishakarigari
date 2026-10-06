@@ -62,6 +62,8 @@
           "mobile_logo_width": 160,
           "use_custom_menu": true,
           "menu": "main-menu",
+          "show_delivery_location": true,
+          "delivery_location_text": "Where to deliver?",
           "enable_sticky": true,
           "show_search": true,
           "show_account": true,

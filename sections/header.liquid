@@ -112,66 +112,58 @@
 
       <!-- HEADER ACTION ICONS (SEARCH / ACCOUNT / WISHLIST / CART) -->
       <div class="dk-header__actions">
-        {%- if section.settings.show_search -%}
-          <button
-            type="button"
-            class="dk-header__icon-btn dk-header__icon-search"
-            aria-label="Search"
-            onclick="if(typeof openSearchModal === 'function') { openSearchModal(); } else { window.location.href='{{ routes.search_url }}'; }"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="7"></circle>
-              <line x1="20" y1="20" x2="16" y2="16"></line>
-            </svg>
-          </button>
-        {%- endif -%}
+        <button
+          type="button"
+          class="dk-header__icon-btn dk-header__icon-search"
+          aria-label="Search"
+          onclick="if(typeof openSearchModal === 'function') { openSearchModal(); } else { window.location.href='{{ routes.search_url }}'; }"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="20" y1="20" x2="16" y2="16"></line>
+          </svg>
+        </button>
 
-        {%- if section.settings.show_account -%}
-          {%- assign account_url = routes.account_url -%}
-          {%- assign login_url = routes.account_login_url -%}
-          <a
-            href="{% if customer != blank %}{{ account_url }}{% else %}{{ login_url }}{% endif %}"
-            class="dk-header__icon-btn dk-header__icon-account"
-            aria-label="Account"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4"></circle>
-              <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
-            </svg>
-          </a>
-        {%- endif -%}
+        {%- assign account_url = routes.account_url -%}
+        {%- assign login_url = routes.account_login_url -%}
+        <a
+          href="{% if customer != blank %}{{ account_url }}{% else %}{{ login_url }}{% endif %}"
+          class="dk-header__icon-btn dk-header__icon-account"
+          aria-label="Account"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6"></path>
+          </svg>
+        </a>
 
-        {%- if section.settings.show_wishlist -%}
-          <a
-            href="#"
-            class="dk-header__icon-btn dk-header__icon-wishlist"
-            id="HeaderWishlistIcon"
-            aria-label="Wishlist"
-            onclick="if(typeof window.openWishlist === 'function') { window.openWishlist(); return false; }"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-            </svg>
-            <span class="wishlist-count" id="WishlistCount">0</span>
-          </a>
-        {%- endif -%}
+        <a
+          href="#"
+          class="dk-header__icon-btn dk-header__icon-wishlist"
+          id="HeaderWishlistIcon"
+          aria-label="Wishlist"
+          onclick="if(typeof window.openWishlist === 'function') { window.openWishlist(); return false; }"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="wishlist-count" id="WishlistCount">0</span>
+        </a>
 
-        {%- if section.settings.show_cart -%}
-          <a
-            href="{{ routes.cart_url }}"
-            class="dk-header__icon-btn dk-header__icon-cart"
-            id="HeaderCartIcon"
-            aria-label="Cart"
-            onclick="if(typeof ShopifyCart !== 'undefined' && typeof ShopifyCart.openDrawer === 'function') { ShopifyCart.openDrawer(); return false; }"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
-            <span class="cart-count" id="HeaderCartCount">{{ cart.item_count | default: 0 }}</span>
-          </a>
-        {%- endif -%}
+        <a
+          href="{{ routes.cart_url }}"
+          class="dk-header__icon-btn dk-header__icon-cart"
+          id="HeaderCartIcon"
+          aria-label="Cart"
+          onclick="if(typeof ShopifyCart !== 'undefined' && typeof ShopifyCart.openDrawer === 'function') { ShopifyCart.openDrawer(); return false; }"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-count" id="HeaderCartCount">{{ cart.item_count | default: 0 }}</span>
+        </a>
       </div>
 
     </div>
@@ -216,110 +208,61 @@
   ==================================================== {%- endcomment -%}
   <nav class="dk-header__nav" aria-label="Main Navigation">
     <div class="container dk-header__nav-container">
-      <ul class="dk-header__menu" role="list">
-        {%- if section.settings.use_custom_menu != false -%}
-          <!-- 1. ALL COLLECTIONS -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.all_products_collection_url }}" class="dk-header__menu-link {% if request.path == routes.all_products_collection_url %}is-active{% endif %}">
-              ALL COLLECTIONS
-            </a>
-          </li>
+        <!-- 1. ALL COLLECTIONS -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.all_products_collection_url }}" class="dk-header__menu-link {% if request.path == routes.all_products_collection_url %}is-active{% endif %}">
+            ALL COLLECTIONS
+          </a>
+        </li>
 
-          <!-- 2. BANDHANWAR -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/bandhanwar" class="dk-header__menu-link {% if request.path contains 'bandhanwar' %}is-active{% endif %}">
-              BANDHANWAR
-            </a>
-          </li>
+        <!-- 2. BANDHANWAR -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.collections_url }}/bandhanwar" class="dk-header__menu-link {% if request.path contains 'bandhanwar' %}is-active{% endif %}">
+            BANDHANWAR
+          </a>
+        </li>
 
-          <!-- 3. LATKANS -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/latkan" class="dk-header__menu-link {% if request.path contains 'latkan' %}is-active{% endif %}">
-              LATKANS
-            </a>
-          </li>
+        <!-- 3. LATKANS -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.collections_url }}/latkan" class="dk-header__menu-link {% if request.path contains 'latkan' %}is-active{% endif %}">
+            LATKANS
+          </a>
+        </li>
 
-          <!-- 4. KARWA CHAUTH -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-header__menu-link {% if request.path contains 'karwa' %}is-active{% endif %}">
-              KARWA CHAUTH
-            </a>
-          </li>
+        <!-- 4. KARWA CHAUTH -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-header__menu-link {% if request.path contains 'karwa' %}is-active{% endif %}">
+            KARWA CHAUTH
+          </a>
+        </li>
 
-          <!-- 5. DIWALI DÉCOR -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/diwali-decor" class="dk-header__menu-link {% if request.path contains 'diwali' %}is-active{% endif %}">
-              DIWALI DÉCOR
-            </a>
-          </li>
+        <!-- 5. DIWALI DÉCOR -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.collections_url }}/diwali-decor" class="dk-header__menu-link {% if request.path contains 'diwali' %}is-active{% endif %}">
+            DIWALI DÉCOR
+          </a>
+        </li>
 
-          <!-- 6. GIFTING -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-header__menu-link {% if request.path contains 'gifting' or request.path contains 'for-her' %}is-active{% endif %}">
-              GIFTING
-            </a>
-          </li>
+        <!-- 6. GIFTING -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-header__menu-link {% if request.path contains 'gifting' or request.path contains 'for-her' %}is-active{% endif %}">
+            GIFTING
+          </a>
+        </li>
 
-          <!-- 7. UNDER @199 (HIGHLIGHTED) -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-header__menu-link dk-header__menu-link--highlight {% if request.path contains '199' %}is-active{% endif %}">
-              UNDER @199
-            </a>
-          </li>
+        <!-- 7. UNDER @199 (HIGHLIGHTED) -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-header__menu-link dk-header__menu-link--highlight {% if request.path contains '199' %}is-active{% endif %}">
+            UNDER @199
+          </a>
+        </li>
 
-          <!-- 8. POTLIS -->
-          <li class="dk-header__menu-item">
-            <a href="{{ routes.collections_url }}/handmade-potli" class="dk-header__menu-link {% if request.path contains 'potli' %}is-active{% endif %}">
-              POTLIS
-            </a>
-          </li>
-
-        {%- elsif menu_links != blank -%}
-          {%- for link in menu_links -%}
-            {%- assign has_dropdown = false -%}
-            {%- if link.links != blank -%}
-              {%- assign has_dropdown = true -%}
-            {%- endif -%}
-
-            {%- assign mega_block = blank -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'mega_menu' and block.settings.menu_item == link.title -%}
-                {%- assign mega_block = block -%}
-                {%- assign has_dropdown = true -%}
-              {%- endif -%}
-            {%- endfor -%}
-
-            <li class="dk-header__menu-item {% if has_dropdown %}has-dropdown{% endif %}">
-              <a
-                href="{{ link.url }}"
-                class="dk-header__menu-link {% if link.active %}is-active{% endif %}"
-                {% if has_dropdown %}aria-expanded="false" aria-haspopup="true"{% endif %}
-              >
-                {{ link.title | escape }}
-                {%- if has_dropdown -%}
-                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5" class="dk-header__menu-arrow">
-                    <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                {%- endif -%}
-              </a>
-
-              {%- if has_dropdown -%}
-                <div class="dk-header__dropdown">
-                  {%- if link.links != blank or mega_block != blank -%}
-                    {%- render 'mega-menu', link: link, mega_menu_block: mega_block -%}
-                  {%- endif -%}
-                </div>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-        {%- else -%}
-          <li class="dk-header__menu-item"><a href="{{ routes.root_url }}" class="dk-header__menu-link">HOME</a></li>
-          <li class="dk-header__menu-item"><a href="{{ routes.all_products_collection_url }}" class="dk-header__menu-link">SHOP ALL</a></li>
-          <li class="dk-header__menu-item"><a href="{{ routes.collections_url }}/diwali-decor" class="dk-header__menu-link">DIWALI EDIT</a></li>
-          <li class="dk-header__menu-item"><a href="{{ routes.collections_url }}/bandhanwar" class="dk-header__menu-link">BANDHANWAR</a></li>
-          <li class="dk-header__menu-item"><a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-header__menu-link">KARWA CHAUTH</a></li>
-          <li class="dk-header__menu-item"><a href="{{ routes.collections_url }}/gifts" class="dk-header__menu-link">GIFTS</a></li>
-        {%- endif -%}
+        <!-- 8. POTLIS -->
+        <li class="dk-header__menu-item">
+          <a href="{{ routes.collections_url }}/handmade-potli" class="dk-header__menu-link {% if request.path contains 'potli' %}is-active{% endif %}">
+            POTLIS
+          </a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -371,145 +314,77 @@
 
     <div class="dk-mobile-drawer__body">
       <ul class="dk-mobile-menu" role="list">
-        {%- if section.settings.use_custom_menu != false -%}
-          <!-- 1. ALL COLLECTIONS -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.all_products_collection_url }}" class="dk-mobile-menu__link">
-                ALL COLLECTIONS
-              </a>
-            </div>
-          </li>
+        <!-- 1. ALL COLLECTIONS -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.all_products_collection_url }}" class="dk-mobile-menu__link">
+              ALL COLLECTIONS
+            </a>
+          </div>
+        </li>
 
-          <!-- 2. BANDHANWAR -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/bandhanwar" class="dk-mobile-menu__link">
-                BANDHANWAR
-              </a>
-            </div>
-          </li>
+        <!-- 2. BANDHANWAR -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.collections_url }}/bandhanwar" class="dk-mobile-menu__link">
+              BANDHANWAR
+            </a>
+          </div>
+        </li>
 
-          <!-- 3. LATKANS -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/latkan" class="dk-mobile-menu__link">
-                LATKANS
-              </a>
-            </div>
-          </li>
+        <!-- 3. LATKANS -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.collections_url }}/latkan" class="dk-mobile-menu__link">
+              LATKANS
+            </a>
+          </div>
+        </li>
 
-          <!-- 4. KARWA CHAUTH -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-mobile-menu__link">
-                KARWA CHAUTH
-              </a>
-            </div>
-          </li>
+        <!-- 4. KARWA CHAUTH -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-mobile-menu__link">
+              KARWA CHAUTH
+            </a>
+          </div>
+        </li>
 
-          <!-- 5. DIWALI DÉCOR -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/diwali-decor" class="dk-mobile-menu__link">
-                DIWALI DÉCOR
-              </a>
-            </div>
-          </li>
+        <!-- 5. DIWALI DÉCOR -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.collections_url }}/diwali-decor" class="dk-mobile-menu__link">
+              DIWALI DÉCOR
+            </a>
+          </div>
+        </li>
 
-          <!-- 6. GIFTING -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-mobile-menu__link">
-                GIFTING
-              </a>
-            </div>
-          </li>
+        <!-- 6. GIFTING -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-mobile-menu__link">
+              GIFTING
+            </a>
+          </div>
+        </li>
 
-          <!-- 7. UNDER @199 (HIGHLIGHTED) -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
-                UNDER @199 <span class="dk-menu-badge" style="background: #9E743A; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">OFFER</span>
-              </a>
-            </div>
-          </li>
+        <!-- 7. UNDER @199 (HIGHLIGHTED) -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
+              UNDER @199 <span class="dk-menu-badge" style="background: #9E743A; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">OFFER</span>
+            </a>
+          </div>
+        </li>
 
-          <!-- 8. POTLIS -->
-          <li class="dk-mobile-menu__item">
-            <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/handmade-potli" class="dk-mobile-menu__link">
-                POTLIS
-              </a>
-            </div>
-          </li>
-
-        {%- elsif menu_links != blank -%}
-          {%- for link in menu_links -%}
-            <li class="dk-mobile-menu__item {% if link.links != blank %}has-accordion{% endif %}">
-              <div class="dk-mobile-menu__row">
-                <a href="{{ link.url }}" class="dk-mobile-menu__link">
-                  {{ link.title | escape }}
-                </a>
-                {%- if link.links != blank -%}
-                  <button
-                    type="button"
-                    class="dk-mobile-menu__accordion-toggle"
-                    aria-label="Toggle {{ link.title }} Submenu"
-                    onclick="toggleDkAccordion(this)"
-                  >
-                    <svg width="12" height="8" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
-                      <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                {%- endif -%}
-              </div>
-
-              {%- if link.links != blank -%}
-                <ul class="dk-mobile-submenu" role="list" style="display: none;">
-                  {%- for childlink in link.links -%}
-                    <li class="dk-mobile-submenu__item {% if childlink.links != blank %}has-nested{% endif %}">
-                      <div class="dk-mobile-submenu__row">
-                        <a href="{{ childlink.url }}" class="dk-mobile-submenu__link">
-                          {{ childlink.title | escape }}
-                        </a>
-                        {%- if childlink.links != blank -%}
-                          <button
-                            type="button"
-                            class="dk-mobile-menu__accordion-toggle"
-                            aria-label="Toggle {{ childlink.title }} Submenu"
-                            onclick="toggleDkAccordion(this)"
-                          >
-                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8">
-                              <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                          </button>
-                        {%- endif -%}
-                      </div>
-
-                      {%- if childlink.links != blank -%}
-                        <ul class="dk-mobile-grandchild-menu" role="list" style="display: none;">
-                          {%- for grandchild in childlink.links -%}
-                            <li>
-                              <a href="{{ grandchild.url }}" class="dk-mobile-grandchild-link">
-                                {{ grandchild.title | escape }}
-                              </a>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                      {%- endif -%}
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- endif -%}
-            </li>
-          {%- endfor -%}
-        {%- else -%}
-          <li class="dk-mobile-menu__item"><a href="{{ routes.root_url }}" class="dk-mobile-menu__link">HOME</a></li>
-          <li class="dk-mobile-menu__item"><a href="{{ routes.all_products_collection_url }}" class="dk-mobile-menu__link">SHOP ALL</a></li>
-          <li class="dk-mobile-menu__item"><a href="{{ routes.collections_url }}" class="dk-mobile-menu__link">CATALOGUE</a></li>
-          <li class="dk-mobile-menu__item"><a href="{{ routes.collections_url }}/under-199" class="dk-mobile-menu__link dk-menu-highlight">UNDER @199 <span class="dk-menu-badge">OFFER</span></a></li>
-        {%- endif -%}
+        <!-- 8. POTLIS -->
+        <li class="dk-mobile-menu__item">
+          <div class="dk-mobile-menu__row">
+            <a href="{{ routes.collections_url }}/handmade-potli" class="dk-mobile-menu__link">
+              POTLIS
+            </a>
+          </div>
+        </li>
       </ul>
 
       <!-- QUICK LOCATION TRIGGER IN MOBILE DRAWER -->
@@ -681,24 +556,6 @@
     },
     {
       "type": "header",
-      "content": "Navigation Categories"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_custom_menu",
-      "label": "Show Delisha Festive Category Bar (All Collections, Bandhanwar, Latkans, Karwa Chauth, Diwali, Gifting, Under @199, Potlis)",
-      "default": true,
-      "info": "Turn this off if you want to display your custom menu created in Shopify Admin > Online Store > Navigation."
-    },
-    {
-      "type": "link_list",
-      "id": "menu",
-      "label": "Shopify Admin Navigation Menu",
-      "default": "main-menu",
-      "info": "Used when the curated category bar is turned off, or for nested mega menus."
-    },
-    {
-      "type": "header",
       "content": "Delivery Location (Pincode Checker)"
     },
     {
@@ -706,85 +563,13 @@
       "id": "show_delivery_location",
       "label": "Show 'Where to deliver?' Button",
       "default": true,
-      "info": "Enables customers to enter their 6-digit Indian PIN code to check instant delivery speed & express dispatch."
+      "info": "Allows customers to enter their 6-digit Indian PIN code to check instant delivery speed & express dispatch."
     },
     {
       "type": "text",
       "id": "delivery_location_text",
       "label": "Location Button Label",
       "default": "Where to deliver?"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sticky",
-      "label": "Enable Sticky Header",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_search",
-      "label": "Show Search Icon",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_account",
-      "label": "Show Account Icon",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_wishlist",
-      "label": "Show Wishlist Icon",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_cart",
-      "label": "Show Cart Icon",
-      "default": true
-    }
-  ],
-  "blocks": [
-    {
-      "type": "mega_menu",
-      "name": "Mega Menu Item",
-      "settings": [
-        {
-          "type": "text",
-          "id": "menu_item",
-          "label": "Matching Menu Item Title",
-          "info": "Enter exact menu title e.g. 'SHOP' or 'RAKHI'"
-        },
-        {
-          "type": "image_picker",
-          "id": "featured_image",
-          "label": "Featured Promo Image"
-        },
-        {
-          "type": "text",
-          "id": "featured_tag",
-          "label": "Featured Subtitle Tag",
-          "default": "CURATED GIFTING"
-        },
-        {
-          "type": "text",
-          "id": "featured_heading",
-          "label": "Featured Heading",
-          "default": "Raksha Bandhan Special Sets"
-        },
-        {
-          "type": "url",
-          "id": "featured_link",
-          "label": "Featured Card Link"
-        },
-        {
-          "type": "text",
-          "id": "featured_button_text",
-          "label": "Featured CTA Text",
-          "default": "Explore Collection"
-        }
-      ]
     }
   ]
 }

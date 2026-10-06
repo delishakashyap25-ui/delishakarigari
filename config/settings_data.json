@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_primary": "#6E1F2A",
@@ -28,17 +37,30 @@
     "videoAutoplay": true,
     "whatsappMessage": "Hello! I have a question about DELISHA KARIGARI products.",
     "whatsappNumber": "919876543210",
+    "social_instagram_link": "https://www.instagram.com/delishakarigari/",
     "sections": {
       "header": {
         "type": "header",
         "settings": {
-          "logo_image": "",
-          "logo_width": 260
+          "announcement_link": "shopify://collections/all",
+          "logo_width": 260,
+          "mobile_logo_width": 160,
+          "use_custom_menu": true,
+          "menu": "main-menu",
+          "enable_sticky": true,
+          "show_search": true,
+          "show_account": true,
+          "show_wishlist": true,
+          "show_cart": true
         }
       },
       "footer": {
         "type": "footer",
-        "settings": {}
+        "settings": {
+          "social_facebook_link": "",
+          "social_instagram_link": "",
+          "social_pinterest_link": ""
+        }
       },
       "announcement-bar": {
         "type": "announcement-bar",
@@ -72,9 +94,247 @@
           "text_color": "#FFFFFF",
           "fallback_text": ""
         }
+      },
+      "dk-hero": {
+        "type": "dk-hero",
+        "settings": {
+          "eyebrow": "✦ KARWA CHAUTH SPECIAL • HANDMADE WITH LOVE ✦",
+          "heading": "Celebrations Feel More Beautiful.",
+          "subheading": "From handcrafted Karwa Chauth thalis and bespoke chhalnis to thoughtful gifts — discover pieces made to elevate your most cherished moments.",
+          "primary_btn_text": "EXPLORE KARWA CHAUTH →",
+          "primary_btn_link": "",
+          "secondary_btn_text": "EXPLORE GIFTING",
+          "secondary_btn_link": "",
+          "desktop_height": 80,
+          "mobile_height": 72,
+          "bg_color": "#211a18",
+          "autoplay": true,
+          "autoplay_speed": 7500
+        }
+      },
+      "dk-editorial-banner": {
+        "type": "dk-editorial-banner",
+        "settings": {
+          "full_width": false,
+          "link": "",
+          "bg_color": "#f9f5ee",
+          "padding_top": 20,
+          "padding_bottom": 20
+        }
+      },
+      "dk-recipient-grid": {
+        "type": "dk-recipient-grid",
+        "blocks": {
+          "recipient_tile_zP3cim": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Bandhanwars",
+              "link": ""
+            }
+          },
+          "recipient_tile_3bX9qB": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Door Latkan",
+              "link": ""
+            }
+          },
+          "recipient_tile_EPCGtN": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Karwa Chauth",
+              "link": ""
+            }
+          },
+          "recipient_tile_zaRBYQ": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Diwali Decor",
+              "link": ""
+            }
+          },
+          "recipient_tile_LTdQnD": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Gifts For Her",
+              "link": ""
+            }
+          },
+          "recipient_tile_aP4fhq": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Under ₹199",
+              "link": ""
+            }
+          },
+          "recipient_tile_LMYXXi": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Navratri Decor",
+              "link": ""
+            }
+          },
+          "recipient_tile_LcTKaL": {
+            "type": "recipient_tile",
+            "settings": {
+              "title": "Handmade Potli",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "recipient_tile_zP3cim",
+          "recipient_tile_3bX9qB",
+          "recipient_tile_EPCGtN",
+          "recipient_tile_zaRBYQ",
+          "recipient_tile_LTdQnD",
+          "recipient_tile_aP4fhq",
+          "recipient_tile_LMYXXi",
+          "recipient_tile_LcTKaL"
+        ],
+        "settings": {
+          "subheading": "SHOP BY CATEGORY",
+          "heading": "Find your signature piece.",
+          "view_all_text": "VIEW ALL CATEGORIES →",
+          "view_all_link": "",
+          "bg_color": "#faf6f0",
+          "padding_top": 45,
+          "padding_bottom": 50
+        }
+      },
+      "dk-occasion-grid": {
+        "type": "dk-occasion-grid",
+        "settings": {
+          "subheading": "RAKHI 2026",
+          "heading": "Rakhi & Lumba, Curated by Delisha Karigari",
+          "description": "",
+          "bg_color": "#f2e5dd",
+          "padding_top": 40,
+          "padding_bottom": 40
+        }
+      },
+      "dk-featured-products": {
+        "type": "dk-featured-products",
+        "settings": {
+          "subheading": "HANDCRAFTED TREASURES",
+          "heading": "Our Favourites",
+          "description": "Most cherished pieces handcrafted for your celebrations.",
+          "collection": "",
+          "products_to_show": 10,
+          "show_view_all": true,
+          "view_all_label": "VIEW ALL FAVOURITES",
+          "bg_color": "#f9f5ee",
+          "padding_top": 50,
+          "padding_bottom": 60
+        }
+      },
+      "dk-why-delisha": {
+        "type": "dk-why-delisha",
+        "settings": {
+          "eyebrow": "✦ THE DELISHA PROMISE ✦",
+          "heading": "Not Just Made.<br> <em>Made Meaningful.</em>",
+          "description": "Every Delisha Karigari piece begins with a celebration in mind — a doorway waiting to be adorned, a gift waiting to be opened, or a moment waiting to be remembered.",
+          "bg_color": "#ffffff",
+          "p1_title": "Thoughtfully Designed",
+          "p1_text": "Created around Indian celebrations, traditions and the people we celebrate with.",
+          "p2_title": "Made With Care",
+          "p2_text": "From intricate décor to personalised gifting, every detail is chosen with intention.",
+          "p3_title": "Celebration Ready",
+          "p3_text": "Beautifully curated pieces made to bring warmth, colour and character to your special moments.",
+          "padding_top": 70,
+          "padding_bottom": 75
+        }
+      },
+      "dk-numbers": {
+        "type": "dk-numbers",
+        "settings": {
+          "eyebrow": "✦ OUR HANDCRAFTED JOURNEY ✦",
+          "heading": "Little Things We’ve Made.<br> <em>Big Moments We’ve Been Part Of.</em>",
+          "subheading": "Every piece is handmade with devotion in our Delhi workshop, adding artisanal warmth to festive homes across India.",
+          "bg_color": "#f9f5ee",
+          "stat_1_num": 10,
+          "stat_1_suffix": "k+",
+          "stat_1_label": "Celebrations Gifted",
+          "stat_2_num": 200,
+          "stat_2_suffix": "+",
+          "stat_2_label": "Handcrafted Designs",
+          "stat_3_num": 5000,
+          "stat_3_suffix": "+",
+          "stat_3_label": "Pieces Made With Care",
+          "stat_4_num": 100,
+          "stat_4_suffix": "%",
+          "stat_4_label": "Made For Meaningful Moments",
+          "padding_top": 60,
+          "padding_bottom": 65
+        }
+      },
+      "dk-product-carousel": {
+        "type": "dk-product-carousel",
+        "settings": {
+          "subheading": "JUST ARRIVED",
+          "heading": "Trending Now",
+          "collection": "",
+          "products_to_show": 8,
+          "bg_color": "#f2e5dd",
+          "padding_top": 70,
+          "padding_bottom": 70
+        }
+      },
+      "dk-local-trust": {
+        "type": "dk-local-trust",
+        "settings": {
+          "eyebrow": "CRAFTED IN DELHI · SENT ACROSS INDIA",
+          "heading": "Made in Delhi.<br> <em>Meant for celebrations everywhere.</em>",
+          "copy": "From our Delhi workspace, every Delisha Karigari piece begins with an eye for detail and a love for Indian celebrations. Our collections bring together handmade décor, thoughtful gifting and festive traditions—carefully prepared and packed for homes across India.",
+          "trust_line": "A Delhi-rooted brand, creating for celebrations across India.",
+          "address_line1": "DELISHA KARIGARI",
+          "address_line2": "New Delhi, Delhi, India",
+          "map_link": "",
+          "embed_url": "https://www.openstreetmap.org/export/embed.html?bbox=77.06,28.63,77.22,28.74&layer=mapnik&marker=28.688103,77.129776",
+          "whatsapp_number": "919211549097",
+          "whatsapp_message": "Hello Delisha Karigari, I would like to connect with your Delhi team.",
+          "bg_color": "#faf7f2",
+          "padding_top": 80,
+          "padding_bottom": 85
+        }
+      },
+      "dk-social-gallery": {
+        "type": "dk-social-gallery",
+        "settings": {
+          "subheading": "✦ THE SOCIAL JOURNAL ✦",
+          "heading": "Follow Our Karigari",
+          "description": "Handcrafted moments, festive doorways and bespoke gifting stories from our Delhi workshop.",
+          "instagram_handle": "delishakarigari",
+          "feed_mode": "auto",
+          "feed_api_url": "",
+          "embed_code": "",
+          "bg_color": "#faf6f0",
+          "padding_top": 70,
+          "padding_bottom": 70
+        }
+      },
+      "dk-newsletter": {
+        "type": "dk-newsletter",
+        "settings": {
+          "subheading": "JOIN OUR FAMILY",
+          "heading": "Stay in the DELISHA Circle",
+          "text": "Be the first to discover new collections, festive edits, artisanal stories and special member offers.",
+          "button_label": "JOIN US",
+          "bg_color": "#6e1f2a",
+          "padding_top": 80,
+          "padding_bottom": 80
+        }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      },
+      "wishlist-drawer": {
+        "type": "wishlist-drawer",
+        "settings": {}
       }
     },
-    "social_instagram_link": "https://www.instagram.com/delishakarigari/"
+    "content_for_index": []
   },
   "presets": {
     "Default": {

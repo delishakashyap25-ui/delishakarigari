@@ -570,21 +570,11 @@ p {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: none;
   padding: 0;
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-.dk-header__nav::-webkit-scrollbar {
-  display: none;
 }
 
 .dk-header__nav-container {
   display: flex;
   justify-content: center;
-  width: 100%;
-  padding: 0 16px;
-  box-sizing: border-box;
 }
 
 .dk-header__menu {
@@ -594,8 +584,8 @@ p {
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: clamp(12px, 2.4vw, 36px);
-  white-space: nowrap;
+  gap: clamp(14px, 3.2vw, 44px);
+  flex-wrap: wrap;
 }
 
 .dk-header__menu-item {
@@ -1080,28 +1070,7 @@ p {
 /* Responsive Header Breakpoints */
 @media (max-width: 992px) {
   .dk-header__nav {
-    display: block !important;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
-  }
-  .dk-header__nav-container {
-    justify-content: flex-start;
-    padding: 0 12px;
-    width: max-content;
-    min-width: 100%;
-  }
-  .dk-header__menu {
-    justify-content: flex-start;
-    gap: 16px;
-    padding: 2px 4px;
-    flex-wrap: nowrap;
-  }
-  .dk-header__menu-link {
-    font-size: 0.74rem;
-    letter-spacing: 1.2px;
-    padding: 10px 4px;
-    white-space: nowrap;
+    display: none;
   }
   .dk-header__toggle {
     display: inline-flex;
@@ -1620,17 +1589,10 @@ p {
   }
   .dk-header__left {
     flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
   .dk-header__left .dk-location-btn {
-    display: inline-flex !important;
-    padding: 5px 10px;
-    font-size: 0.72rem;
-  }
-  .dk-location-btn__text {
-    max-width: 105px;
+    display: none !important;
   }
   .dk-header__toggle {
     display: inline-flex;
@@ -1748,12 +1710,6 @@ p {
   }
   .dk-location-modal__body {
     padding: 16px 18px;
-  }
-}
-
-@media (max-width: 576px) {
-  .dk-header__left .dk-location-btn {
-    display: none !important;
   }
 }
 

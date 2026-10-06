@@ -5,22 +5,22 @@
     assign raw_handle = request.path | split: '/collections/' | last | split: '?' | first | split: '/' | first
     
     case raw_handle
-      when 'latkan', 'door-latkan'
+      when 'latkan'
         assign page_title = 'Door Latkans'
-      when 'gifting', 'gifts', 'gifts-for-her', 'for-her-accessories'
-        assign page_title = 'Gifts For Her'
+      when 'gifting'
+        assign page_title = 'Gifting Treasures'
       when 'under-199'
         assign page_title = 'Curations Under ₹199'
-      when 'bandhanwar', 'bandhanwars'
+      when 'bandhanwar'
         assign page_title = 'Handcrafted Bandhanwars & Torans'
-      when 'diwali-decor', 'diwali'
+      when 'for-her-accessories'
+        assign page_title = 'Gifts For Her'
+      when 'diwali-decor'
         assign page_title = 'Festive Diwali Décor'
-      when 'karwa-chauth-special', 'karwa-chauth'
+      when 'karwa-chauth-special'
         assign page_title = 'Karwa Chauth Specials'
-      when 'navratri-decor', 'navratri'
+      when 'navratri-decor'
         assign page_title = 'Navratri Décor'
-      when 'handmade-potli', 'potli', 'potlis'
-        assign page_title = 'Handmade Festive Potlis'
       else
         assign page_title = raw_handle | replace: '-', ' ' | capitalize
     endcase
@@ -47,39 +47,30 @@
           {{ page_title }}
         </h1>
         <div style="display: inline-block; padding: 6px 18px; background: rgba(184, 154, 98, 0.12); border: 1px solid rgba(184, 154, 98, 0.3); border-radius: 20px; font-size: 0.8rem; color: #7A5B28; font-weight: 500;">
-          ✦ Handcrafted in Delhi • Pan-India express delivery • Thoughtfully curated ✦
+          ✦ Artisanal restocking in progress • Explore our available handcrafted bestsellers below
         </div>
       </div>
 
       <!-- HORIZONTAL NAVIGATION -->
       <nav class="dk-category-nav" aria-label="Collections" style="width: 100%; margin-bottom: 30px; border-bottom: 1px solid #ECE3D6; overflow-x: auto;">
-        <div class="dk-category-nav__track" style="display: flex; align-items: center; justify-content: center; gap: clamp(8px, 1.8vw, 24px); white-space: nowrap; padding-bottom: 12px; overflow-x: auto;">
+        <div class="dk-category-nav__track" style="display: flex; align-items: center; justify-content: center; gap: clamp(8px, 1.8vw, 24px); white-space: nowrap; padding-bottom: 12px;">
           <a href="{{ routes.all_products_collection_url }}" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
             All Collections
           </a>
-          <a href="{{ routes.collections_url }}/bandhanwar" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Bandhanwars
+          <a href="{{ routes.collections_url }}/bhaiya-bhabhi" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
+            Bhaiya Bhabhi &amp; Lumba
           </a>
-          <a href="{{ routes.collections_url }}/latkan" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Door Latkans
+          <a href="{{ routes.collections_url }}/royal-pearl-rakhi-collection" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
+            Royal Pearl
           </a>
-          <a href="{{ routes.collections_url }}/karwa-chauth-special" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Karwa Chauth
+          <a href="{{ routes.collections_url }}/nazariya-collection" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
+            Nazariya &amp; Evil Eye
           </a>
-          <a href="{{ routes.collections_url }}/diwali-decor" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Diwali Décor
+          <a href="{{ routes.collections_url }}/blessed-collection" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
+            Blessed Collection
           </a>
-          <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Gifts for Her
-          </a>
-          <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Under ₹199
-          </a>
-          <a href="{{ routes.collections_url }}/navratri-decor" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Navratri Décor
-          </a>
-          <a href="{{ routes.collections_url }}/handmade-potli" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
-            Handmade Potli
+          <a href="{{ routes.collections_url }}/rakhi-combos-trios" class="dk-category-nav__item" style="color: #555; text-decoration: none; font-size: 0.82rem; font-weight: 600; text-transform: uppercase;">
+            Combos &amp; Sets
           </a>
         </div>
       </nav>
@@ -87,7 +78,8 @@
       <!-- SHOWCASE STORE PRODUCTS -->
       <div class="dk-collection-content">
         <div class="dk-product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
-          {%- for product in collections.all.products limit: 16 -%}
+          {%- assign showcase_collection = collections['all'] | default: collections.first -%}
+          {%- for product in collections.all.products limit: 12 -%}
             <div class="dk-grid-cell">
               {% render 'product-card', product: product %}
             </div>
@@ -122,7 +114,7 @@
           <input
             type="search"
             name="q"
-            placeholder="Search for Bandhanwars, Latkans, Karwa Chauth, Gifts..."
+            placeholder="Search for Rakhis, Lumbas, Gifts..."
             style="flex: 1; padding: 12px 18px; border: 1.5px solid rgba(110,31,42,0.2); border-radius: 4px; font-family: var(--dk-font-body, 'Poppins', sans-serif); font-size: 0.9rem; outline: none; background: #FFFFFF;"
           >
           <button

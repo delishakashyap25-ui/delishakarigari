@@ -2,10 +2,7 @@
   assign eyebrow = section.settings.subheading | default: '— SHOP BY CATEGORY'
   assign heading = section.settings.heading | default: 'Find your signature piece.'
   assign view_all_text = section.settings.view_all_text | default: 'VIEW ALL CATEGORIES →'
-  assign view_all_link = section.settings.view_all_link
-  if view_all_link == blank
-    assign view_all_link = routes.all_products_collection_url
-  endif
+  assign view_all_link = section.settings.view_all_link | default: routes.all_products_collection_url
 -%}
 
 <section
@@ -52,29 +49,7 @@
         {%- if section.blocks.size > 0 -%}
           {%- for block in section.blocks -%}
             {%- assign cat_title = block.settings.title | default: 'Collection' -%}
-            {%- assign cat_url = block.settings.link -%}
-            {%- if cat_url == blank -%}
-              {%- assign title_low = cat_title | downcase -%}
-              {%- if title_low contains 'bandhanwar' -%}
-                {%- assign cat_url = routes.collections_url | append: '/bandhanwar' -%}
-              {%- elsif title_low contains 'latkan' -%}
-                {%- assign cat_url = routes.collections_url | append: '/latkan' -%}
-              {%- elsif title_low contains 'karwa' -%}
-                {%- assign cat_url = routes.collections_url | append: '/karwa-chauth-special' -%}
-              {%- elsif title_low contains 'diwali' -%}
-                {%- assign cat_url = routes.collections_url | append: '/diwali-decor' -%}
-              {%- elsif title_low contains 'for her' or title_low contains 'gifts for her' or title_low contains 'gift' -%}
-                {%- assign cat_url = routes.collections_url | append: '/for-her-accessories' -%}
-              {%- elsif title_low contains '199' -%}
-                {%- assign cat_url = routes.all_products_collection_url | append: '?filter.v.price.lte=199' -%}
-              {%- elsif title_low contains 'navratri' -%}
-                {%- assign cat_url = routes.collections_url | append: '/navratri-decor' -%}
-              {%- elsif title_low contains 'potli' -%}
-                {%- assign cat_url = routes.collections_url | append: '/handmade-potli' -%}
-              {%- else -%}
-                {%- assign cat_url = routes.all_products_collection_url -%}
-              {%- endif -%}
-            {%- endif -%}
+            {%- assign cat_url = block.settings.link | default: routes.all_products_collection_url -%}
 
             <a href="{{ cat_url }}" class="dk-cat-box-card" {{ block.shopify_attributes }}>
               <div class="dk-cat-box-card__media">
@@ -88,35 +63,16 @@
                     height="450"
                   >
                 {%- else -%}
-                  {%- assign t_low = cat_title | downcase -%}
-                  {%- if t_low contains 'bandhanwar' -%}
-                    {%- assign fallback_img = 'dk-cat-bandhanwar.jpg' -%}
-                  {%- elsif t_low contains 'latkan' -%}
-                    {%- assign fallback_img = 'dk-cat-latkan.jpg' -%}
-                  {%- elsif t_low contains 'karwa' -%}
-                    {%- assign fallback_img = 'dk-cat-karwa-chauth.jpg' -%}
-                  {%- elsif t_low contains 'diwali' -%}
-                    {%- assign fallback_img = 'dk-cat-diwali-decor.jpg' -%}
-                  {%- elsif t_low contains 'for her' or t_low contains 'gift' -%}
-                    {%- assign fallback_img = 'dk-cat-for-her.jpg' -%}
-                  {%- elsif t_low contains '199' -%}
-                    {%- assign fallback_img = 'dk-cat-under199.jpg' -%}
-                  {%- elsif t_low contains 'navratri' -%}
-                    {%- assign fallback_img = 'dk-cat-festive.jpg' -%}
-                  {%- elsif t_low contains 'potli' -%}
-                    {%- assign fallback_img = 'dk-occ-her.jpg' -%}
-                  {%- else -%}
-                    {%- case forloop.index -%}
-                      {%- when 1 -%}{%- assign fallback_img = 'dk-cat-bandhanwar.jpg' -%}
-                      {%- when 2 -%}{%- assign fallback_img = 'dk-cat-latkan.jpg' -%}
-                      {%- when 3 -%}{%- assign fallback_img = 'dk-cat-karwa-chauth.jpg' -%}
-                      {%- when 4 -%}{%- assign fallback_img = 'dk-cat-diwali-decor.jpg' -%}
-                      {%- when 5 -%}{%- assign fallback_img = 'dk-cat-for-her.jpg' -%}
-                      {%- when 6 -%}{%- assign fallback_img = 'dk-cat-under199.jpg' -%}
-                      {%- when 7 -%}{%- assign fallback_img = 'dk-cat-festive.jpg' -%}
-                      {%- else -%}{%- assign fallback_img = 'dk-occ-her.jpg' -%}
-                    {%- endcase -%}
-                  {%- endif -%}
+                  {%- case forloop.index -%}
+                    {%- when 1 -%}{%- assign fallback_img = 'dk-cat-bandhanwar.jpg' -%}
+                    {%- when 2 -%}{%- assign fallback_img = 'dk-cat-latkan.jpg' -%}
+                    {%- when 3 -%}{%- assign fallback_img = 'dk-cat-karwa-chauth.jpg' -%}
+                    {%- when 4 -%}{%- assign fallback_img = 'dk-cat-diwali-decor.jpg' -%}
+                    {%- when 5 -%}{%- assign fallback_img = 'dk-cat-for-her.jpg' -%}
+                    {%- when 6 -%}{%- assign fallback_img = 'dk-cat-under199.jpg' -%}
+                    {%- when 7 -%}{%- assign fallback_img = 'dk-cat-festive.jpg' -%}
+                    {%- else -%}{%- assign fallback_img = 'dk-occ-her.jpg' -%}
+                  {%- endcase -%}
                   <img
                     src="{{ fallback_img | asset_url }}"
                     alt="{{ cat_title | escape }}"
@@ -141,7 +97,7 @@
         {%- else -%}
           {%- assign default_titles = "Bandhanwars|Door Latkans|Karwa Chauth|Diwali Décor|Gifts for Her|Under ₹199|Navratri Décor|Handmade Potlis" | split: "|" -%}
           {%- assign default_imgs = "dk-cat-bandhanwar.jpg|dk-cat-latkan.jpg|dk-cat-karwa-chauth.jpg|dk-cat-diwali-decor.jpg|dk-cat-for-her.jpg|dk-cat-under199.jpg|dk-cat-festive.jpg|dk-occ-her.jpg" | split: "|" -%}
-          {%- assign default_links = "/collections/bandhanwar|/collections/latkan|/collections/karwa-chauth-special|/collections/diwali-decor|/collections/for-her-accessories|/collections/all?filter.v.price.lte=199|/collections/navratri-decor|/collections/handmade-potli" | split: "|" -%}
+          {%- assign default_links = "/collections/bandhanwar|/collections/latkan|/collections/karwa-chauth-special|/collections/diwali-decor|/collections/for-her-accessories|/collections/all?filter.v.price.lte=199|/collections/navratri-decor|/collections/for-her-accessories" | split: "|" -%}
 
           {%- for i in (0..7) -%}
             {%- assign t_title = default_titles[i] -%}

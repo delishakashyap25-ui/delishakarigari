@@ -1070,7 +1070,32 @@ p {
 /* Responsive Header Breakpoints */
 @media (max-width: 992px) {
   .dk-header__nav {
+    display: block !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .dk-header__nav::-webkit-scrollbar {
     display: none;
+  }
+  .dk-header__nav-container {
+    justify-content: flex-start;
+    padding: 0 12px;
+    width: max-content;
+    min-width: 100%;
+  }
+  .dk-header__menu {
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 0 4px;
+    flex-wrap: nowrap;
+  }
+  .dk-header__menu-link {
+    font-size: 0.74rem;
+    letter-spacing: 1.2px;
+    padding: 10px 4px;
+    white-space: nowrap;
   }
   .dk-header__toggle {
     display: inline-flex;
@@ -1589,10 +1614,18 @@ p {
   }
   .dk-header__left {
     flex: 0 0 auto;
+    display: flex;
+    align-items: center;
     gap: 6px;
   }
   .dk-header__left .dk-location-btn {
-    display: none !important;
+    display: inline-flex !important;
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    gap: 4px;
+  }
+  .dk-location-btn__text {
+    max-width: 95px;
   }
   .dk-header__toggle {
     display: inline-flex;
@@ -1710,6 +1743,15 @@ p {
   }
   .dk-location-modal__body {
     padding: 16px 18px;
+  }
+}
+
+@media (max-width: 440px) {
+  .dk-header__left .dk-location-btn {
+    display: none !important;
+  }
+  .dk-header__mobile-location {
+    display: block !important;
   }
 }
 

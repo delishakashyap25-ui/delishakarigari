@@ -60,6 +60,7 @@
         </button>
 
         <!-- WHERE TO DELIVER BUTTON -->
+        {%- if section.settings.show_delivery_location != false -%}
         <button
           type="button"
           class="dk-location-btn"
@@ -78,6 +79,7 @@
             <path d="M1 1L5 5L9 1" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
+        {%- endif -%}
       </div>
 
       <!-- BRAND LOGO / WORDMARK -->
@@ -379,7 +381,7 @@
           <!-- 5. GIFTING -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/gifting" class="dk-mobile-menu__link">
+              <a href="{{ routes.collections_url }}/for-her-accessories" class="dk-mobile-menu__link">
                 GIFTING
               </a>
             </div>
@@ -388,7 +390,7 @@
           <!-- 6. UNDER @199 (HIGHLIGHTED) -->
           <li class="dk-mobile-menu__item">
             <div class="dk-mobile-menu__row">
-              <a href="{{ routes.collections_url }}/under-199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
+              <a href="{{ routes.all_products_collection_url }}?filter.v.price.lte=199" class="dk-mobile-menu__link dk-mobile-menu__link--highlight">
                 UNDER @199
               </a>
             </div>
@@ -631,10 +633,17 @@
     },
     {
       "type": "checkbox",
-      "id": "use_custom_menu",
-      "label": "Use Delisha Curated Menu (Home, Shop All, Catalogue, Under @199)",
+      "id": "show_delivery_location",
+      "label": "Show 'Where to deliver?' Location Button",
       "default": true,
-      "info": "Displays the brand-specific navigation with Home, Shop All, Catalogue dropdown, and Under @199."
+      "info": "Display pincode checker and delivery time estimator for Indian PIN codes."
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_menu",
+      "label": "Use Delisha Curated Menu (ALL COLLECTIONS, BANDHANWAR, LATKANS, GIFTING, UNDER @199)",
+      "default": true,
+      "info": "Displays the brand-specific navigation with ALL COLLECTIONS, BANDHANWAR, LATKANS, GIFTING, and UNDER @199."
     },
     {
       "type": "link_list",
